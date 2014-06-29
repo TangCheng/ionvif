@@ -1,0 +1,45 @@
+## Process this file with automake to produce Makefile.in
+
+AM_CPPFLAGS = \
+	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
+	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
+	$(IONVIF_CFLAGS)
+
+AM_CFLAGS = \
+	 -Wall \
+	 -g
+
+bin_PROGRAMS =  \
+	discovery
+
+BUILT_SOURCES = \
+	soapC.c \
+	soapH.h \
+	soapServer.c \
+	soapClient.c \
+	soapStub.h \
+	RemoteDiscoveryBinding.nsmap \
+	wsdd.nsmap
+
+discovery_SOURCES =  \
+	onvif.h \
+	$(BUILT_SOURCES) \
+	wsaapi.c \
+	wsddapi.c \
+	main.c
+
+discovery_LDFLAGS = 
+
+discovery_LDADD = $(IONVIF_LIBS)
+
+ONVIF_WSDL = \
+	$(top_srcdir)/src/wsdl/ver10/network/wsdl/remotediscovery.wsdl
+
+onvif.h: $(ONVIF_WSDL)
+	$(WSDL2H) -o $@ -c -s -t $(top_srcdir)/src/typemap.dat $^
+
+$(BUILT_SOURCES): onvif.h
+	$(SOAPCPP2) -c -2 -L -x onvif.h -I$(G_SOAP_DIR)/share/gsoap/import
+
+CLEANFILES = onvif.h $(BUILT_SOURCES)
