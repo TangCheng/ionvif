@@ -1,12 +1,13 @@
 #include "soapH.h"
 #include "onvif_impl.h"
+#include "onvif-authentication.h"
 
 int __trt__GetVideoSources(struct soap* soap,
 		struct _trt__GetVideoSources *trt__GetVideoSources,
 		struct _trt__GetVideoSourcesResponse *trt__GetVideoSourcesResponse) {
 
 
-	DBG_LINE;
+	ACCESS_CONTROL;
 	trt__GetVideoSourcesResponse->__sizeVideoSources = 1;
 
 	CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources)
@@ -50,7 +51,7 @@ int __trt__GetProfile(struct soap* soap,
 		struct _trt__GetProfile *trt__GetProfile,
 		struct _trt__GetProfileResponse *trt__GetProfileResponse) {
 
-	DBG_LINE;
+	ACCESS_CONTROL;
 
 	printf("token:%s\n", trt__GetProfile->ProfileToken);
 
@@ -95,7 +96,7 @@ int __trt__GetProfiles(struct soap* soap,
 		struct _trt__GetProfiles *trt__GetProfiles,
 		struct _trt__GetProfilesResponse *trt__GetProfilesResponse) {
 
-	DBG_LINE;
+	ACCESS_CONTROL;
 
 	trt__GetProfilesResponse->__sizeProfiles = 1;
 
@@ -142,10 +143,10 @@ int __trt__GetProfiles(struct soap* soap,
 int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetStreamUri, struct _trt__GetStreamUriResponse *trt__GetStreamUriResponse)
 {
 	/* Return incomplete response with default data values */
-	DBG_LINE
+	ACCESS_CONTROL
 
 	CHECK_FIELD(trt__GetStreamUriResponse->MediaUri)
-	soap_set_field_string(soap, &trt__GetStreamUriResponse->MediaUri->Uri, "rtsp://192.168.1.5:8554/1.mkv");
+	soap_set_field_string(soap, &trt__GetStreamUriResponse->MediaUri->Uri, "rtsp://192.168.1.2:8554/1.mkv");
 
 	return SOAP_OK;
 }

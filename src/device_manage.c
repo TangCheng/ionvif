@@ -1,6 +1,7 @@
 #include "soapH.h"
 #include <assert.h>
 #include "onvif_impl.h"
+#include "onvif-authentication.h"
 
 int save_file_data(const char* path, void const* buffer, int length) {
 	FILE* pf = fopen(path, "wb");
@@ -13,15 +14,16 @@ int save_file_data(const char* path, void const* buffer, int length) {
 	}
 	return 0;
 }
+
 //******************************************************************************************************************************************************************
 int __tds__GetServices(struct soap* soap,
 		struct _tds__GetServices *tds__GetServices,
 		struct _tds__GetServicesResponse *tds__GetServicesResponse) {
-
 	int major, minor;
 
 
-	DBG_LINE;
+	ACCESS_CONTROL;
+
 	onvif_dm_get_service_version(&major, &minor);
 
 	tds__GetServicesResponse->__sizeService = 1;
@@ -40,7 +42,8 @@ int __tds__GetServices(struct soap* soap,
 int __tds__GetDeviceInformation(struct soap* soap,
 		struct _tds__GetDeviceInformation *tds__GetDeviceInformation,
 		struct _tds__GetDeviceInformationResponse *tds__GetDeviceInformationResponse) {
-	DBG_LINE;
+	ACCESS_CONTROL;
+
 
 	soap_set_field_string(soap, &tds__GetDeviceInformationResponse->FirmwareVersion,
 			onvif_dm_get_firmware_version());
@@ -58,7 +61,7 @@ int __tds__GetDeviceInformation(struct soap* soap,
 int __tds__UpgradeSystemFirmware(struct soap* soap,
 		struct _tds__UpgradeSystemFirmware *tds__UpgradeSystemFirmware,
 		struct _tds__UpgradeSystemFirmwareResponse *tds__UpgradeSystemFirmwareResponse) {
-	DBG_LINE;
+	ACCESS_CONTROL;
 
 	if (tds__UpgradeSystemFirmware->Firmware == NULL) {
 		printf("Firmware is NULL\n");
@@ -90,7 +93,7 @@ int __tds__UpgradeSystemFirmware(struct soap* soap,
 int __tds__GetWsdlUrl(struct soap* soap,
 		struct _tds__GetWsdlUrl *tds__GetWsdlUrl,
 		struct _tds__GetWsdlUrlResponse *tds__GetWsdlUrlResponse) {
-	DBG_LINE;
+	ACCESS_CONTROL;
 
 	soap_set_field_string(soap,  &tds__GetWsdlUrlResponse->WsdlUrl, onvif_dm_get_wsdl_url());
 
@@ -221,11 +224,3 @@ int __tds__SetAccessPolicy(struct soap *soap, struct _tds__SetAccessPolicy *tds_
 	DBG_LINE
 	return SOAP_OK;
 }
-
-
-
-
-
-
-
-

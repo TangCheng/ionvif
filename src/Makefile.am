@@ -6,32 +6,15 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
-	$(IONVIF_CFLAGS)
+	$(IONVIF_CFLAGS) \
+	$(OPENSSL_CFLAGS) \
+	$(GSOAP_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall\
 	 -g
 
 bin_PROGRAMS = ionvif
-
-ionvif_SOURCES = \
-	onvif.h \
-	$(BUILT_SOURCES) \
-	duration.c \
-	soapTester.c \
-	onvif_impl.c \
-	device_manage.c \
-	media.c \
-	main.c
-
-ionvif_LDFLAGS = 
-
-ionvif_LDADD = $(IONVIF_LIBS)
-
-ONVIF_WSDL = \
-	wsdl/ver10/device/wsdl/devicemgmt.wsdl \
-	wsdl/ver10/media/wsdl/media.wsdl \
-	wsdl/ver20/imaging/wsdl/imaging.wsdl
 
 BUILT_SOURCES = \
 	soapC.c \
@@ -42,13 +25,49 @@ BUILT_SOURCES = \
 	MediaBinding.nsmap \
 	ImagingBinding.nsmap
 
-onvif.h: $(ONVIF_WSDL)
+ionvif_SOURCES = \
+	onvif.h \
+	$(BUILT_SOURCES) \
+	duration.c \
+	onvif-authentication.c \
+	onvif-authentication.h \
+	soapTester.c \
+	onvif_impl.c \
+	device_manage.c \
+	media.c \
+	main.c
+
+ionvif_DEPENDENCIES = \
+	onvif-generated.h
+
+if ENABLE_OPENSSL
+ionvif_SOURCES += \
+	gsoap-plugins/mecevp.c \
+	gsoap-plugins/smdevp.c \
+	gsoap-plugins/wsseapi.c \
+	gsoap-plugins/wsaapi.c
+endif
+
+ionvif_LDFLAGS = 
+
+ionvif_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS) $(GSOAP_LIBS)
+
+ONVIF_WSDL = \
+	wsdl/ver10/device/wsdl/devicemgmt.wsdl \
+	wsdl/ver10/media/wsdl/media.wsdl \
+	wsdl/ver20/imaging/wsdl/imaging.wsdl
+
+onvif-generated.h: $(ONVIF_WSDL)
 	$(WSDL2H) -o $@ -c -s -t $(srcdir)/typemap.dat $^
 
-$(BUILT_SOURCES): onvif.h
-	$(SOAPCPP2) -c -2 -L -x -S onvif.h -I$(G_SOAP_DIR)/share/gsoap -I$(G_SOAP_DIR)/share/gsoap/import -I.
+GSOAP_IMPORT = \
+	-I$(GSOAP_PREFIX)/share/gsoap \
+	-I$(GSOAP_PREFIX)/share/gsoap/import
 
-CLEANFILES = onvif.h $(BUILT_SOURCES)
+$(BUILT_SOURCES): onvif-generated.h
+	$(SOAPCPP2) -c -2 -L -x -w -S $(srcdir)/onvif.h -I. $(GSOAP_IMPORT)
+
+CLEANFILES = onvif-generated.h $(BUILT_SOURCES)
 
 SUBDIRS = \
 	discovery
