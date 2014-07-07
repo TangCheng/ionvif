@@ -25,8 +25,9 @@
 
 
 /*WS-Discovery specialization address and port of UDP*/
-#define MULTICAST_GROUP ("239.255.255.250")  
-#define PORT (3702) 
+#define ONVIF_MULTICAST_GROUP ("239.255.255.250")  
+#define ONVIF_DISCOVERY_PORT  (3702)
+#define ONVIF_SERVICE_PORT    (8080)
 
 /*
 char  g_scopes[] = "onvif://www.onvif.org/Profile/Streaming \
@@ -42,7 +43,7 @@ int main(int argc, char * argv[]) {
 
 	soap_init1(&soap, SOAP_IO_UDP);
 
-	m = soap_bind(&soap, NULL,  PORT, 100);
+	m = soap_bind(&soap, NULL,  ONVIF_DISCOVERY_PORT, 100);
  	/* reuse address */
  	soap.bind_flags = SO_REUSEADDR;
 	if (!soap_valid_socket(m)) {
@@ -50,9 +51,9 @@ int main(int argc, char * argv[]) {
 		exit(-1);
 	}
 	/* optionally join a multicast group */
-	if (MULTICAST_GROUP) { 
+	if (ONVIF_MULTICAST_GROUP) { 
 		struct ip_mreq mreq;
-		mreq.imr_multiaddr.s_addr = inet_addr(MULTICAST_GROUP);
+		mreq.imr_multiaddr.s_addr = inet_addr(ONVIF_MULTICAST_GROUP);
 		mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 		if (setsockopt(soap.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
 			printf("setsockopt failed\n");
@@ -113,7 +114,11 @@ void wsdd_event_Bye(struct soap *soap, unsigned int InstanceId, const char *Sequ
 
 soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 		const char *ReplyTo, const char *Types, const char *Scopes,
-		const char *MatchBy, struct wsdd__ProbeMatchesType *matches) {
+		const char *MatchBy, struct wsdd__ProbeMatchesType *matches)
+{
+	char *xaddrs = NULL;
+	char *ep_ref = NULL;
+
 	printf("%s,%d\n", __FUNCTION__, __LINE__);
 	printf("MessageID:%s\n", MessageID);
 	printf("ReplyTo:%s\n", ReplyTo);
@@ -122,24 +127,30 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 	printf("MatchBy:%s\n", MatchBy);
 	printf("\n");
 
-
 	soap->header->wsa__RelatesTo = (struct wsa__Relationship*) soap_malloc(
 			soap, sizeof(struct wsa__Relationship));
 
-	soap->header->wsa__To = (char *)ReplyTo;//soap->header->wsa__ReplyTo->Address;
-	soap->header->wsa__RelatesTo->__item = (char *)MessageID;//soap->header->wsa__MessageID;
+	soap->header->wsa__To = soap_strdup(soap, ReplyTo);
+	soap->header->wsa__RelatesTo->__item = soap_strdup(soap, MessageID);
 	soap->header->wsa__RelatesTo->RelationshipType = NULL;
 	soap->header->wsa__RelatesTo->__anyAttribute = NULL;
 	soap->header->wsa__Action = "http://schemas.xmlsoap.org/ws/2005/04/discovery/ProbeMatches";
 	soap->header->wsa__ReplyTo = NULL;
 
 	soap_wsdd_init_ProbeMatches(soap, matches);
+
+	asprintf(&xaddrs, "http://%s:%d/onvif/device_service", 
+	         "192.168.1.5",
+	         ONVIF_SERVICE_PORT);
+	ep_ref = "urn:uuid:464A4854-4656-5242-4530-313035394100";
 	soap_wsdd_add_ProbeMatch(soap, matches,
-				"urn:uuid:464A4854-4656-5242-4530-313035394100",
-				"tdn:NetworkVideoTransmitter", g_scopes,
+				soap_strdup(soap, ep_ref),
+				"tdn:NetworkVideoTransmitter",
+				g_scopes,
 				NULL,
-				"http://192.168.1.5:8080/onvif/device_service",
+				soap_strdup(soap, xaddrs),
 				10);
+	free(xaddrs);
 
 	return SOAP_WSDD_MANAGED;
 }

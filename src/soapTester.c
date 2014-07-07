@@ -161,19 +161,23 @@ int __tds__GetSystemSupportInformation(struct soap *soap, struct _tds__GetSystem
 }
 
 
+#if 0
 /** Auto-test server operation __tds__GetScopes */
 int __tds__GetScopes(struct soap *soap, struct _tds__GetScopes *tds__GetScopes, struct _tds__GetScopesResponse *tds__GetScopesResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetScopes */
 int __tds__SetScopes(struct soap *soap, struct _tds__SetScopes *tds__SetScopes, struct _tds__SetScopesResponse *tds__SetScopesResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __tds__AddScopes */

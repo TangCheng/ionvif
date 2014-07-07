@@ -20,8 +20,8 @@
 extern int access_control(struct soap* soap);
 
 #define ACCESS_CONTROL \
-{\
+do {\
 	DBG_LINE;\
 	int ret = access_control(soap);\
 	if (ret != SOAP_OK) return ret;\
-}
+} while(0)

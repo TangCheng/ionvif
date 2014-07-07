@@ -15,24 +15,68 @@ int save_file_data(const char* path, void const* buffer, int length) {
 	return 0;
 }
 
+
+/** Auto-test server operation __tds__GetScopes */
+int __tds__GetScopes(struct soap *soap, struct _tds__GetScopes *tds__GetScopes, struct _tds__GetScopesResponse *tds__GetScopesResponse)
+{
+	char **scopes = NULL;
+	int nr_scopes = 0;
+	int i;
+
+	ACCESS_CONTROL;
+
+	nr_scopes = onvif_dm_get_scopes(soap, &scopes);
+
+	tds__GetScopesResponse->__sizeScopes = nr_scopes;
+
+	SOAP_CALLOC(soap, tds__GetScopesResponse->Scopes, nr_scopes);
+
+	for (i = 0; i < nr_scopes; i++) {
+		SOAP_SET_VALUE_FIELD(soap, tds__GetScopesResponse->Scopes[i].ScopeDef, tt__ScopeDefinition__Fixed);
+		SOAP_SET_STRING_FIELD(soap, tds__GetScopesResponse->Scopes[i].ScopeItem, scopes[i]);
+	}
+
+	return SOAP_OK;
+}
+
+/** Auto-test server operation __tds__SetScopes */
+int __tds__SetScopes(struct soap *soap, struct _tds__SetScopes *tds__SetScopes, struct _tds__SetScopesResponse *tds__SetScopesResponse)
+{
+	int i;
+
+	ACCESS_CONTROL;
+
+	printf("%s(\n", __func__);
+	for (i = 0; i < tds__SetScopes->__sizeScopes; i++) {
+		printf("\t\"%s\"\n", tds__SetScopes->Scopes[i]);
+	}
+	printf(")\n");
+
+	onvif_dm_set_scopes(soap, tds__SetScopes->__sizeScopes, tds__SetScopes->Scopes);
+
+	return SOAP_OK;
+}
+
+
 //******************************************************************************************************************************************************************
 int __tds__GetServices(struct soap* soap,
 		struct _tds__GetServices *tds__GetServices,
-		struct _tds__GetServicesResponse *tds__GetServicesResponse) {
+		struct _tds__GetServicesResponse *tds__GetServicesResponse)
+{
 	int major, minor;
 
 
 	ACCESS_CONTROL;
 
-	onvif_dm_get_service_version(&major, &minor);
+	onvif_dm_get_service_version(soap, &major, &minor);
 
 	tds__GetServicesResponse->__sizeService = 1;
 
-	CHECK_FIELD(tds__GetServicesResponse->Service)
-	CHECK_FIELD(tds__GetServicesResponse->Service[0].Version)
+	CHECK_FIELD(tds__GetServicesResponse->Service);
+	CHECK_FIELD(tds__GetServicesResponse->Service[0].Version);
 
-	soap_set_field_string(soap, &tds__GetServicesResponse->Service[0].XAddr, onvif_dm_get_service_url());
-	soap_set_field_string(soap, &tds__GetServicesResponse->Service[0].Namespace, onvif_dm_get_service_namespace());
+	soap_set_field_string(soap, &tds__GetServicesResponse->Service[0].XAddr, onvif_dm_get_service_url(soap));
+	soap_set_field_string(soap, &tds__GetServicesResponse->Service[0].Namespace, onvif_dm_get_service_namespace(soap));
 	tds__GetServicesResponse->Service[0].Version->Major = major;
 	tds__GetServicesResponse->Service[0].Version->Minor = minor;
 
@@ -41,26 +85,28 @@ int __tds__GetServices(struct soap* soap,
 
 int __tds__GetDeviceInformation(struct soap* soap,
 		struct _tds__GetDeviceInformation *tds__GetDeviceInformation,
-		struct _tds__GetDeviceInformationResponse *tds__GetDeviceInformationResponse) {
+		struct _tds__GetDeviceInformationResponse *tds__GetDeviceInformationResponse)
+{
 	ACCESS_CONTROL;
 
 
 	soap_set_field_string(soap, &tds__GetDeviceInformationResponse->FirmwareVersion,
-			onvif_dm_get_firmware_version());
+			onvif_dm_get_firmware_version(soap));
 	soap_set_field_string(soap, &tds__GetDeviceInformationResponse->HardwareId,
-			onvif_dm_get_hardware_id());
+			onvif_dm_get_hardware_id(soap));
 	soap_set_field_string(soap, &tds__GetDeviceInformationResponse->Manufacturer,
-			onvif_dm_get_manufacturer());
+			onvif_dm_get_manufacturer(soap));
 	soap_set_field_string(soap, &tds__GetDeviceInformationResponse->Model,
-			onvif_dm_get_model());
+			onvif_dm_get_model(soap));
 	soap_set_field_string(soap, &tds__GetDeviceInformationResponse->SerialNumber,
-			onvif_dm_get_serial_number());
+			onvif_dm_get_serial_number(soap));
 	return SOAP_OK;
 }
 
 int __tds__UpgradeSystemFirmware(struct soap* soap,
 		struct _tds__UpgradeSystemFirmware *tds__UpgradeSystemFirmware,
-		struct _tds__UpgradeSystemFirmwareResponse *tds__UpgradeSystemFirmwareResponse) {
+		struct _tds__UpgradeSystemFirmwareResponse *tds__UpgradeSystemFirmwareResponse)
+{
 	ACCESS_CONTROL;
 
 	if (tds__UpgradeSystemFirmware->Firmware == NULL) {
@@ -80,9 +126,7 @@ int __tds__UpgradeSystemFirmware(struct soap* soap,
 			if (ret) {
 				printf("*************save firmware OK\n");
 			}
-
 		}
-
 	}
 
 
@@ -92,10 +136,11 @@ int __tds__UpgradeSystemFirmware(struct soap* soap,
 
 int __tds__GetWsdlUrl(struct soap* soap,
 		struct _tds__GetWsdlUrl *tds__GetWsdlUrl,
-		struct _tds__GetWsdlUrlResponse *tds__GetWsdlUrlResponse) {
+		struct _tds__GetWsdlUrlResponse *tds__GetWsdlUrlResponse)
+{
 	ACCESS_CONTROL;
 
-	soap_set_field_string(soap,  &tds__GetWsdlUrlResponse->WsdlUrl, onvif_dm_get_wsdl_url());
+	soap_set_field_string(soap,  &tds__GetWsdlUrlResponse->WsdlUrl, onvif_dm_get_wsdl_url(soap));
 
 	return SOAP_OK;
 }
@@ -103,24 +148,25 @@ int __tds__GetWsdlUrl(struct soap* soap,
 
 int __tds__GetCapabilities(struct soap* soap,
 		struct _tds__GetCapabilities *tds__GetCapabilities,
-		struct _tds__GetCapabilitiesResponse *tds__GetCapabilitiesResponse) {
+		struct _tds__GetCapabilitiesResponse *tds__GetCapabilitiesResponse)
+{
 
 	DBG_LINE;
 
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTPMulticast)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Extension)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Extension->DeviceIO)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Device)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Device->System)
-	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Device->System->SupportedVersions)
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTPMulticast);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Extension);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Extension->DeviceIO);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Device);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Device->System);
+	CHECK_FIELD(tds__GetCapabilitiesResponse->Capabilities->Device->System->SupportedVersions);
 
 
-	soap_set_field_string(soap, &tds__GetCapabilitiesResponse->Capabilities->Media->XAddr, onvif_dm_get_ipv4_address());
+	soap_set_field_string(soap, &tds__GetCapabilitiesResponse->Capabilities->Media->XAddr, onvif_dm_get_ipv4_address(soap));
 	*tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTPMulticast = xsd__boolean__false_;
 	*tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP = xsd__boolean__true_;
 	*tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP = xsd__boolean__true_;
@@ -150,7 +196,7 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
 	LOAD(now.tm_zone , tds__SetSystemDateAndTime->TimeZone->TZ);
 	LOAD(now.tm_isdst , tds__SetSystemDateAndTime->DaylightSavings);
 
-	onvif_dm_set_system_date_time(tds__SetSystemDateAndTime->DateTimeType, &now);
+	onvif_dm_set_system_date_time(soap, tds__SetSystemDateAndTime->DateTimeType, &now);
 
 	return SOAP_OK;
 }
@@ -163,7 +209,7 @@ int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAnd
 	struct tm now;
 	int ntp;
 
-	onvif_dm_get_system_date_time(&ntp, &now);
+	onvif_dm_get_system_date_time(soap, &ntp, &now);
 
 	CHECK_FIELD(tds__GetSystemDateAndTimeResponse->SystemDateAndTime);
 	CHECK_FIELD(tds__GetSystemDateAndTimeResponse->SystemDateAndTime->UTCDateTime);
@@ -193,7 +239,7 @@ int __tds__SetSystemFactoryDefault(struct soap *soap,
 		struct _tds__SetSystemFactoryDefault *tds__SetSystemFactoryDefault,
 		struct _tds__SetSystemFactoryDefaultResponse *tds__SetSystemFactoryDefaultResponse)
 {
-	onvif_dm_set_system_factory_default(tds__SetSystemFactoryDefault->FactoryDefault);
+	onvif_dm_set_system_factory_default(soap, tds__SetSystemFactoryDefault->FactoryDefault);
 	return SOAP_OK;
 }
 
@@ -204,7 +250,7 @@ int __tds__SystemReboot(struct soap *soap,
 		struct _tds__SystemRebootResponse *tds__SystemRebootResponse)
 {
 	/* Return incomplete response with default data values */
-	onvif_dm_reboot_system();
+	onvif_dm_reboot_system(soap);
 	return SOAP_OK;
 }
 

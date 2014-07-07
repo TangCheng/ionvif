@@ -1,8 +1,8 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * main.c
+ * onvif-server.h
  * Copyright (C) 2014 Watson Xu <xuhuashan@gmail.com>
- * 
+ *
  * ionvif is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
@@ -17,12 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ionvif.h"
+#ifndef _ONVIF_SERVER_H_
+#define _ONVIF_SERVER_H_
 
-int main()
-{
-	IpcamIOnvif *ionvif = g_object_new(IPCAM_TYPE_IONVIF, "name", "ionvif", NULL);
-	ipcam_base_service_start(IPCAM_BASE_SERVICE(ionvif));
-	return (0);
-}
+#include <glib-object.h>
+
+gpointer onvif_server_thread_func(gpointer data);
+
+#endif /* _ONVIF_SERVER_H_ */
 

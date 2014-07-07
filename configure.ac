@@ -11,11 +11,13 @@ AM_SILENT_RULES([yes])
 
 AC_PROG_CC
 
+AC_USE_SYSTEM_EXTENSIONS
+
 
 LT_INIT
 
 
-PKG_CHECK_MODULES(IONVIF, [json-glib-1.0 glib-2.0 gobject-2.0])
+PKG_CHECK_MODULES(IONVIF, [json-glib-1.0 glib-2.0 gobject-2.0 libipcam_base-0.1.0])
 
 AC_ARG_ENABLE([openssl],
 	AS_HELP_STRING([--enable-openssl],[Build with OpenSSL support (default: enabled)]),
@@ -69,5 +71,6 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 src/discovery/Makefile
+src/config/Makefile
 
 ])

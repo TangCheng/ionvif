@@ -12,6 +12,7 @@ AM_CFLAGS = \
 	 -Wall \
 	 -g
 
+bindir = $(prefix)/ionvif
 bin_PROGRAMS =  \
 	discovery
 

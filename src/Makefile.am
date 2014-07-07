@@ -14,6 +14,7 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
+bindir = $(prefix)/ionvif
 bin_PROGRAMS = ionvif
 
 BUILT_SOURCES = \
@@ -35,6 +36,9 @@ ionvif_SOURCES = \
 	onvif_impl.c \
 	device_manage.c \
 	media.c \
+	onvif-server.c \
+	ionvif.c \
+	ionvif.h \
 	main.c
 
 ionvif_DEPENDENCIES = \
@@ -70,4 +74,5 @@ $(BUILT_SOURCES): onvif-generated.h
 CLEANFILES = onvif-generated.h $(BUILT_SOURCES)
 
 SUBDIRS = \
-	discovery
+	discovery \
+	config
