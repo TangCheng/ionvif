@@ -1,0 +1,10 @@
+token: ionvif_token
+onvif:
+  netif: wlp8s0
+  server-port: 8080
+  rtsp-port: 8554
+  profile:
+    MainProfileToken: MainVideo.mkv
+    SubProfileToken: SubVideo.mkv
+connect:
+  test_app: tcp://127.0.0.1:3000
