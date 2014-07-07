@@ -35,6 +35,7 @@ ionvif_SOURCES = \
 	soapTester.c \
 	onvif_impl.c \
 	device_manage.c \
+	user_mgmt.c \
 	media.c \
 	onvif-server.c \
 	ionvif.c \

@@ -256,33 +256,41 @@ int __tds__SetRemoteUser(struct soap *soap, struct _tds__SetRemoteUser *tds__Set
 }
 
 
+#if 0
 /** Auto-test server operation __tds__GetUsers */
 int __tds__GetUsers(struct soap *soap, struct _tds__GetUsers *tds__GetUsers, struct _tds__GetUsersResponse *tds__GetUsersResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__CreateUsers */
 int __tds__CreateUsers(struct soap *soap, struct _tds__CreateUsers *tds__CreateUsers, struct _tds__CreateUsersResponse *tds__CreateUsersResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__DeleteUsers */
 int __tds__DeleteUsers(struct soap *soap, struct _tds__DeleteUsers *tds__DeleteUsers, struct _tds__DeleteUsersResponse *tds__DeleteUsersResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetUser */
 int __tds__SetUser(struct soap *soap, struct _tds__SetUser *tds__SetUser, struct _tds__SetUserResponse *tds__SetUserResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
 #if 0

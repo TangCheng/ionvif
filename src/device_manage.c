@@ -234,7 +234,6 @@ int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAnd
 }
 
 
-/** Auto-test server operation __tds__SetSystemFactoryDefault */
 int __tds__SetSystemFactoryDefault(struct soap *soap,
 		struct _tds__SetSystemFactoryDefault *tds__SetSystemFactoryDefault,
 		struct _tds__SetSystemFactoryDefaultResponse *tds__SetSystemFactoryDefaultResponse)
@@ -244,7 +243,6 @@ int __tds__SetSystemFactoryDefault(struct soap *soap,
 }
 
 
-/** Auto-test server operation __tds__SystemReboot */
 int __tds__SystemReboot(struct soap *soap,
 		struct _tds__SystemReboot *tds__SystemReboot,
 		struct _tds__SystemRebootResponse *tds__SystemRebootResponse)
@@ -255,7 +253,6 @@ int __tds__SystemReboot(struct soap *soap,
 }
 
 
-/** Auto-test server operation __tds__GetAccessPolicy */
 int __tds__GetAccessPolicy(struct soap *soap, struct _tds__GetAccessPolicy *tds__GetAccessPolicy, struct _tds__GetAccessPolicyResponse *tds__GetAccessPolicyResponse)
 {
 	/* Return incomplete response with default data values */
@@ -264,9 +261,9 @@ int __tds__GetAccessPolicy(struct soap *soap, struct _tds__GetAccessPolicy *tds_
 }
 
 
-/** Auto-test server operation __tds__SetAccessPolicy */
 int __tds__SetAccessPolicy(struct soap *soap, struct _tds__SetAccessPolicy *tds__SetAccessPolicy, struct _tds__SetAccessPolicyResponse *tds__SetAccessPolicyResponse)
 {
 	DBG_LINE
 	return SOAP_OK;
 }
+
