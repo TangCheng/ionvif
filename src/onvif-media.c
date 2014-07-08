@@ -1,6 +1,6 @@
 #include "soapH.h"
 #include "onvif_impl.h"
-#include "onvif-authentication.h"
+#include "onvif-auth.h"
 
 int __trt__GetVideoSources(struct soap* soap,
 		struct _trt__GetVideoSources *trt__GetVideoSources,
@@ -21,21 +21,21 @@ int __trt__GetVideoSources(struct soap* soap,
 	for (i = 0; i < video_sources->numVideoSources; i++) {
 		ONVIF_VIDEO_SOURCE *vs = &video_sources->VideoSources[i];
 
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Resolution);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Brightness);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->ColorSaturation);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Contrast);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->IrCutFilter);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Sharpness);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->BacklightCompensation);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->WideDynamicRange);
-		CHECK_FIELD(trt__GetVideoSourcesResponse->VideoSources[i].Imaging->WhiteBalance);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Resolution);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Brightness);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->ColorSaturation);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Contrast);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->IrCutFilter);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Sharpness);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->BacklightCompensation);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->WideDynamicRange);
+		SOAP_CALLOC_1(soap, trt__GetVideoSourcesResponse->VideoSources[i].Imaging->WhiteBalance);
 
 		trt__GetVideoSourcesResponse->VideoSources[i].Framerate = vs->Framerate;
 		trt__GetVideoSourcesResponse->VideoSources[i].Resolution->Height = vs->Resolution.Height;
 		trt__GetVideoSourcesResponse->VideoSources[i].Resolution->Width = vs->Resolution.Width;
-		soap_set_field_string(soap, &trt__GetVideoSourcesResponse->VideoSources[i].token, vs->token);
+		SOAP_SET_STRING_FIELD(soap, trt__GetVideoSourcesResponse->VideoSources[i].token, vs->token);
 
 		trt__GetVideoSourcesResponse->VideoSources[i].Imaging->Brightness[0] = vs->Imaging.Brightness;
 		trt__GetVideoSourcesResponse->VideoSources[i].Imaging->ColorSaturation[0] = vs->Imaging.ColorSaturation;
@@ -69,19 +69,19 @@ int __trt__GetProfile(struct soap* soap,
 	if (!onvif_media_get_profile(soap, trt__GetProfile->ProfileToken, &profile))
 		return SOAP_NO_DATA;
 
-	CHECK_FIELD(trt__GetProfileResponse->Profile);
-	CHECK_FIELD(trt__GetProfileResponse->Profile->VideoSourceConfiguration);
-	CHECK_FIELD(trt__GetProfileResponse->Profile->VideoSourceConfiguration->Bounds);
+	SOAP_CALLOC_1(soap, trt__GetProfileResponse->Profile);
+	SOAP_CALLOC_1(soap, trt__GetProfileResponse->Profile->VideoSourceConfiguration);
+	SOAP_CALLOC_1(soap, trt__GetProfileResponse->Profile->VideoSourceConfiguration->Bounds);
 
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->Name,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->Name,
 	                      profile->Name);
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->token,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->token,
 	                      profile->token);
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->VideoSourceConfiguration->Name,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->VideoSourceConfiguration->Name,
 	                      profile->VideoSourceConfig->Name);
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->VideoSourceConfiguration->token,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->VideoSourceConfiguration->token,
 	                      profile->VideoSourceConfig->token);
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->VideoSourceConfiguration->SourceToken,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->VideoSourceConfiguration->SourceToken,
 	                      profile->VideoSourceConfig->SourceToken);
 
 	trt__GetProfileResponse->Profile->VideoSourceConfiguration->UseCount = profile->VideoSourceConfig->UseCount;
@@ -92,13 +92,13 @@ int __trt__GetProfile(struct soap* soap,
 
 
 
-	CHECK_FIELD(trt__GetProfileResponse->Profile->VideoEncoderConfiguration);
-	CHECK_FIELD(trt__GetProfileResponse->Profile->VideoEncoderConfiguration->Resolution);
-	CHECK_FIELD(trt__GetProfileResponse->Profile->VideoEncoderConfiguration->RateControl);
+	SOAP_CALLOC_1(soap, trt__GetProfileResponse->Profile->VideoEncoderConfiguration);
+	SOAP_CALLOC_1(soap, trt__GetProfileResponse->Profile->VideoEncoderConfiguration->Resolution);
+	SOAP_CALLOC_1(soap, trt__GetProfileResponse->Profile->VideoEncoderConfiguration->RateControl);
 
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->VideoEncoderConfiguration->Name,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->VideoEncoderConfiguration->Name,
 	                      profile->VideoEncoderConfig->Name);
-	soap_set_field_string(soap, &trt__GetProfileResponse->Profile->VideoEncoderConfiguration->token,
+	SOAP_SET_STRING_FIELD(soap, trt__GetProfileResponse->Profile->VideoEncoderConfiguration->token,
 	                      profile->VideoEncoderConfig->token);
 	trt__GetProfileResponse->Profile->VideoEncoderConfiguration->UseCount = profile->VideoEncoderConfig->UseCount;
 	trt__GetProfileResponse->Profile->VideoEncoderConfiguration->Quality = profile->VideoEncoderConfig->Quality;
@@ -172,12 +172,29 @@ int __trt__GetProfiles(struct soap* soap,
 /** Auto-test server operation __trt__GetStreamUri */
 int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetStreamUri, struct _trt__GetStreamUriResponse *trt__GetStreamUriResponse)
 {
-	/* Return incomplete response with default data values */
+	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
+	char *uri;
+	char *key;
+	char *ipaddr;
+	char *path = NULL;
+
 	ACCESS_CONTROL;
 
-	SOAP_CALLOC(soap, trt__GetStreamUriResponse->MediaUri, 1);
+	if (asprintf(&key, "onvif:profile:%s", trt__GetStreamUri->ProfileToken) > 0) {
+		path = (char *)ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), key);
+		free(key);
+	}
+	ipaddr = ipcam_ionvif_get_server_addr(ionvif);
+	asprintf(&uri, "rtsp://%s:%d/%s",
+	         ipaddr,
+	         ipcam_ionvif_get_rtsp_port (ionvif), 
+	         path);
+	free(ipaddr);
 
-	trt__GetStreamUriResponse->MediaUri->Uri = onvif_media_get_stream_uri(soap, trt__GetStreamUri->ProfileToken);
+	SOAP_CALLOC(soap, trt__GetStreamUriResponse->MediaUri, 1);
+	SOAP_SET_STRING_FIELD(soap, trt__GetStreamUriResponse->MediaUri->Uri, uri);
+
+	free(uri);
 
 	return SOAP_OK;
 }

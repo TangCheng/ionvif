@@ -1,5 +1,5 @@
 /*
- * onvif-authentication.c
+ * onvif-authentication.h
  *
  * Copyright (C) 2014 - Watson Xu
  *
@@ -17,20 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef WITH_OPENSSL
-#include "gsoap-plugins/wsseapi.h"
-#endif
+int onvif_access_control(struct soap* soap);
 
-int access_control(struct soap* soap) {
-#ifdef WITH_OPENSSL
-	const char *username = soap_wsse_get_Username(soap);
-      const char *password;
-      if (!username)
-        return soap->error; // no username: return FailedAuthentication
-
-      password = "123456"; // lookup password of username
-      if (soap_wsse_verify_Password(soap, password))
-        return soap->error; // password verification failed: return FailedAuthentic
-#endif
-      return SOAP_OK;
-}
+#define ACCESS_CONTROL \
+do {\
+	DBG_LINE;\
+	int ret = onvif_access_control(soap);\
+	if (ret != SOAP_OK) return ret;\
+} while(0)

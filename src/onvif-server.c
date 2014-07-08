@@ -93,7 +93,7 @@ gpointer onvif_server_thread_func(gpointer data)
 
 	soap_init1(&soap, SOAP_ENC_MTOM);
 
-	soap.user = onvif_server_context_new(ionvif);
+	soap.user = ionvif;
 
 	m = soap_bind(&soap, NULL, port, 100);
 	if (!soap_valid_socket(m)) {
@@ -121,8 +121,6 @@ gpointer onvif_server_thread_func(gpointer data)
 		soap_destroy(&soap);
 		soap_end(&soap);
 	}
-
-	onvif_server_context_destroy (soap.user);
 
 	soap_done(&soap);
 	return 0;

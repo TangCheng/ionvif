@@ -3,20 +3,12 @@
 
 #include <time.h>
 #include <glib-object.h>
+#include <json-glib/json-glib.h>
 #include "ionvif.h"
 
+#define ARRAY_SIZE(x)   (sizeof(x) / sizeof(x[0]))
+
 #define DBG_LINE printf("enter: %s\n", __FUNCTION__);
-#define DBG_TAG(l) printf("dbg:%s %s\n", __FUNCTION__, l);
-
-
-#define CHECK_FIELD(em) \
-do { \
-	if (em == NULL) { \
-		size_t size = sizeof(*em); \
-		em = soap_malloc(soap, size); \
-		memset(em, 0, size); \
-	}\
-} while(0)
 
 #define SOAP_CALLOC(soap, ptr, cnt) \
 do { \
@@ -24,6 +16,8 @@ do { \
 	ptr = soap_malloc(soap, __size); \
 	memset(ptr, 0, __size); \
 } while(0)
+
+#define SOAP_CALLOC_1(soap, ptr)	SOAP_CALLOC(soap, ptr, 1)
 
 #define SOAP_SET_STRING_FIELD(soap, var, val) \
 do { \
@@ -35,27 +29,11 @@ do { \
 	var = val; \
 } while(0)
 
-#define LOAD_FIELD(obj1, name1, obj2, name2) \
-	(obj1).(name1) = (obj2).(name2);
+#define SOAP_GET_VALUE_FIELD(soap, var, val) \
+do { \
+	val = var; \
+} while(0)
 
-#define STORE_FIELD(obj1, name1, obj2, name2) \
-	 (obj2).(name2) = (obj1).(name1);
-
-
-
-#define LOAD(val1, val2) \
-	val1 = val2;
-
-#define STORE(val1, val2) \
-	 val2 = val1;
-
-struct _OnvifServerContext;
-typedef struct _OnvifServerContext OnvifServerContext; 
-
-OnvifServerContext *onvif_server_context_new(IpcamIOnvif *ionvif);
-void onvif_server_context_destroy(OnvifServerContext *ctx);
-
-void soap_set_field_string(struct soap* soap, char ** p_field, const char* val);
 
 int onvif_dm_get_scopes(struct soap *soap, char ***scopes);
 void onvif_dm_set_scopes(struct soap *soap, int nr_scopes, char **scopes);
@@ -194,5 +172,8 @@ gboolean onvif_media_get_video_sources(struct soap *soap,
                                       ONVIF_VIDEO_SOURCES **video_sources);
 
 char *onvif_media_get_stream_uri(struct soap *soap, char *profile_token);
+
+gboolean onvif_invocate_action(IpcamIOnvif *ionvif, const char *action,
+                               JsonNode *request, JsonNode **response);
 
 #endif

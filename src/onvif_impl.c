@@ -1,16 +1,48 @@
 #include "soapH.h"
 #include <assert.h>
+#include <json-glib/json-glib.h>
+#include "request_message.h"
 #include "onvif_impl.h"
 #include "ionvif.h"
 
-#define ARRAY_SIZE(x)   (sizeof(x) / sizeof(x[0]))
+gboolean onvif_invocate_action(IpcamIOnvif *ionvif, const char *action,
+                               JsonNode *request, JsonNode **response)
+{
+	const gchar *token;
+	IpcamRequestMessage *req_msg;
+	IpcamMessage *resp_msg;
+	gboolean ret = FALSE;
 
-//following functions used to simplify set xxxResponse fields
-void soap_set_field_string(struct soap* soap, char ** p_field, const char* val) {
-	assert(val != 0);
-	*p_field = soap_malloc(soap, strlen(val) + 1);
-	strcpy(*p_field, val);
+	token = ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), "token");
+
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", action,
+	                       "body", request,
+	                       NULL);
+
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif),
+	                            IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token, NULL, 10);
+
+	ret = ipcam_base_app_wait_response(IPCAM_BASE_APP(ionvif),
+	                                   ipcam_request_message_get_id(req_msg),
+	                                   5000, &resp_msg);
+	if (ret)
+	{
+		JsonNode *resp_body;
+
+		g_object_get(G_OBJECT(resp_msg), "body", &resp_body, NULL);
+
+		*response = json_node_copy(resp_body);
+
+		g_object_unref(resp_msg);
+	}
+
+	g_object_unref(req_msg);
+
+	return ret;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //an device implement can overwrite these functions.
@@ -22,81 +54,9 @@ void soap_set_field_string(struct soap* soap, char ** p_field, const char* val) 
 #define SERVICE_NAMESPACE "http://www.onvif.org/ver10/events/wsdl"
 
 
-struct _OnvifServerContext
-{
-	IpcamIOnvif *ionvif;
-	int nr_onvif_scopes;
-	char **onvif_scopes;
-};
-
-
-const static char *__fixed_onvif_scopes[] = {
-	"onvif://www.onvif.org/name/IPCAM",
-	"onvif://www.onvif.org/location/China"
-};
-
-OnvifServerContext *onvif_server_context_new(IpcamIOnvif *ionvif)
-{
-	OnvifServerContext *cxt = calloc(1, sizeof(OnvifServerContext));
-	int i;
-
-	if (cxt == NULL)
-		return NULL;
-
-	cxt->ionvif = ionvif;
-
-	cxt->nr_onvif_scopes = ARRAY_SIZE(__fixed_onvif_scopes);
-	cxt->onvif_scopes = malloc(sizeof(*cxt->onvif_scopes) * cxt->nr_onvif_scopes);
-	for (i = 0; i < ARRAY_SIZE(__fixed_onvif_scopes); i++)
-		cxt->onvif_scopes[i] = strdup(__fixed_onvif_scopes[i]);
-
-	return cxt;
-}
-
-void onvif_server_context_destroy(OnvifServerContext *ctx)
-{
-	int i;
-
-	for (i = 0; i < ctx->nr_onvif_scopes; i++)
-		free(ctx->onvif_scopes[i]);
-	free(ctx->onvif_scopes);
-}
-
 const char * onvif_dm_get_ipv4_address(struct soap* soap)
 {
 	return IPV4_ADDRESS;
-}
-
-int onvif_dm_get_scopes(struct soap *soap, char ***scopes)
-{
-	OnvifServerContext *cxt = (OnvifServerContext *)soap->user;
-
-	*scopes = cxt->onvif_scopes;
-
-	return cxt->nr_onvif_scopes;
-}
-
-void onvif_dm_set_scopes(struct soap *soap, int nr_scopes, char **scopes)
-{
-	OnvifServerContext *cxt = (OnvifServerContext *)soap->user;
-	char **onvif_scopes;
-	int nr_onvif_scopes;
-	int i;
-
-	if (nr_scopes <= 0)
-		return;
-
-	nr_onvif_scopes = cxt->nr_onvif_scopes + nr_scopes;
-
-	/* Realloc memory */
-	onvif_scopes = realloc(cxt->onvif_scopes, sizeof(*onvif_scopes) * nr_onvif_scopes);
-	if (onvif_scopes) {
-		for (i = 0; i < nr_scopes; i++)
-			onvif_scopes[i + cxt->nr_onvif_scopes] = strdup(scopes[i]);
-
-		cxt->onvif_scopes = onvif_scopes;
-		cxt->nr_onvif_scopes = nr_onvif_scopes;
-	}
 }
 
 const char * onvif_dm_get_wsdl_url(struct soap* soap) {
@@ -263,27 +223,4 @@ onvif_media_get_profiles(struct soap *soap,
 {
 	*profiles = &__onvif_profiles;
 	return TRUE;
-}
-
-char *
-onvif_media_get_stream_uri(struct soap *soap, char *profile_token)
-{
-	OnvifServerContext *cxt = (OnvifServerContext *)soap->user;
-	gchar *addr = ipcam_ionvif_get_server_addr(cxt->ionvif);
-	guint rtsp_port = ipcam_ionvif_get_rtsp_port (cxt->ionvif);
-	char *uri;
-	char *key;
-	char *stream_path = NULL;
-
-	if (asprintf(&key, "onvif:profile:%s", profile_token) > 0) {
-		stream_path = (char *)ipcam_base_app_get_config(IPCAM_BASE_APP(cxt->ionvif), key);
-		free(key);
-	}
-
-	asprintf(&uri, "rtsp://%s:%d/%s", addr, rtsp_port, stream_path);
-	char *ret = soap_strdup(soap, uri);
-	free(addr);
-	free(uri);
-
-	return ret;
 }

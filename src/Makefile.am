@@ -30,13 +30,13 @@ ionvif_SOURCES = \
 	onvif.h \
 	$(BUILT_SOURCES) \
 	duration.c \
-	onvif-authentication.c \
-	onvif-authentication.h \
+	onvif-auth.c \
+	onvif-auth.h \
 	soapTester.c \
 	onvif_impl.c \
-	device_manage.c \
-	user_mgmt.c \
-	media.c \
+	onvif-device-mgmt.c \
+	onvif-user-mgmt.c \
+	onvif-media.c \
 	onvif-server.c \
 	ionvif.c \
 	ionvif.h \
