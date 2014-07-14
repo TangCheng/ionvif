@@ -18,7 +18,7 @@
  */
 
 #ifdef WITH_OPENSSL
-#include "gsoap-plugins/wsseapi.h"
+#include "plugin/wsseapi.h"
 #endif
 #include "soapH.h"
 
