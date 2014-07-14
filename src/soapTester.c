@@ -225,12 +225,14 @@ int __tds__SetRemoteDiscoveryMode(struct soap *soap, struct _tds__SetRemoteDisco
 }
 
 
+#if 0
 /** Auto-test server operation __tds__GetDPAddresses */
 int __tds__GetDPAddresses(struct soap *soap, struct _tds__GetDPAddresses *tds__GetDPAddresses, struct _tds__GetDPAddressesResponse *tds__GetDPAddressesResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __tds__GetEndpointReference */
@@ -313,169 +315,213 @@ int __tds__GetCapabilities(struct soap *soap, struct _tds__GetCapabilities *tds_
 #endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetDPAddresses */
 int __tds__SetDPAddresses(struct soap *soap, struct _tds__SetDPAddresses *tds__SetDPAddresses, struct _tds__SetDPAddressesResponse *tds__SetDPAddressesResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetHostname */
 int __tds__GetHostname(struct soap *soap, struct _tds__GetHostname *tds__GetHostname, struct _tds__GetHostnameResponse *tds__GetHostnameResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetHostname */
 int __tds__SetHostname(struct soap *soap, struct _tds__SetHostname *tds__SetHostname, struct _tds__SetHostnameResponse *tds__SetHostnameResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetHostnameFromDHCP */
 int __tds__SetHostnameFromDHCP(struct soap *soap, struct _tds__SetHostnameFromDHCP *tds__SetHostnameFromDHCP, struct _tds__SetHostnameFromDHCPResponse *tds__SetHostnameFromDHCPResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetDNS */
 int __tds__GetDNS(struct soap *soap, struct _tds__GetDNS *tds__GetDNS, struct _tds__GetDNSResponse *tds__GetDNSResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetDNS */
 int __tds__SetDNS(struct soap *soap, struct _tds__SetDNS *tds__SetDNS, struct _tds__SetDNSResponse *tds__SetDNSResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetNTP */
 int __tds__GetNTP(struct soap *soap, struct _tds__GetNTP *tds__GetNTP, struct _tds__GetNTPResponse *tds__GetNTPResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetNTP */
 int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _tds__SetNTPResponse *tds__SetNTPResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetDynamicDNS */
 int __tds__GetDynamicDNS(struct soap *soap, struct _tds__GetDynamicDNS *tds__GetDynamicDNS, struct _tds__GetDynamicDNSResponse *tds__GetDynamicDNSResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetDynamicDNS */
 int __tds__SetDynamicDNS(struct soap *soap, struct _tds__SetDynamicDNS *tds__SetDynamicDNS, struct _tds__SetDynamicDNSResponse *tds__SetDynamicDNSResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetNetworkInterfaces */
 int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterfaces *tds__GetNetworkInterfaces, struct _tds__GetNetworkInterfacesResponse *tds__GetNetworkInterfacesResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetNetworkInterfaces */
 int __tds__SetNetworkInterfaces(struct soap *soap, struct _tds__SetNetworkInterfaces *tds__SetNetworkInterfaces, struct _tds__SetNetworkInterfacesResponse *tds__SetNetworkInterfacesResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetNetworkProtocols */
 int __tds__GetNetworkProtocols(struct soap *soap, struct _tds__GetNetworkProtocols *tds__GetNetworkProtocols, struct _tds__GetNetworkProtocolsResponse *tds__GetNetworkProtocolsResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetNetworkProtocols */
 int __tds__SetNetworkProtocols(struct soap *soap, struct _tds__SetNetworkProtocols *tds__SetNetworkProtocols, struct _tds__SetNetworkProtocolsResponse *tds__SetNetworkProtocolsResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetNetworkDefaultGateway */
 int __tds__GetNetworkDefaultGateway(struct soap *soap, struct _tds__GetNetworkDefaultGateway *tds__GetNetworkDefaultGateway, struct _tds__GetNetworkDefaultGatewayResponse *tds__GetNetworkDefaultGatewayResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetNetworkDefaultGateway */
 int __tds__SetNetworkDefaultGateway(struct soap *soap, struct _tds__SetNetworkDefaultGateway *tds__SetNetworkDefaultGateway, struct _tds__SetNetworkDefaultGatewayResponse *tds__SetNetworkDefaultGatewayResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetZeroConfiguration */
 int __tds__GetZeroConfiguration(struct soap *soap, struct _tds__GetZeroConfiguration *tds__GetZeroConfiguration, struct _tds__GetZeroConfigurationResponse *tds__GetZeroConfigurationResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetZeroConfiguration */
 int __tds__SetZeroConfiguration(struct soap *soap, struct _tds__SetZeroConfiguration *tds__SetZeroConfiguration, struct _tds__SetZeroConfigurationResponse *tds__SetZeroConfigurationResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__GetIPAddressFilter */
 int __tds__GetIPAddressFilter(struct soap *soap, struct _tds__GetIPAddressFilter *tds__GetIPAddressFilter, struct _tds__GetIPAddressFilterResponse *tds__GetIPAddressFilterResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__SetIPAddressFilter */
 int __tds__SetIPAddressFilter(struct soap *soap, struct _tds__SetIPAddressFilter *tds__SetIPAddressFilter, struct _tds__SetIPAddressFilterResponse *tds__SetIPAddressFilterResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__AddIPAddressFilter */
 int __tds__AddIPAddressFilter(struct soap *soap, struct _tds__AddIPAddressFilter *tds__AddIPAddressFilter, struct _tds__AddIPAddressFilterResponse *tds__AddIPAddressFilterResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __tds__RemoveIPAddressFilter */
 int __tds__RemoveIPAddressFilter(struct soap *soap, struct _tds__RemoveIPAddressFilter *tds__RemoveIPAddressFilter, struct _tds__RemoveIPAddressFilterResponse *tds__RemoveIPAddressFilterResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
 #if 0
@@ -718,57 +764,71 @@ int __timg__GetServiceCapabilities(struct soap *soap, struct _timg__GetServiceCa
 }
 
 
+#if 0
 /** Auto-test server operation __timg__GetImagingSettings */
 int __timg__GetImagingSettings(struct soap *soap, struct _timg__GetImagingSettings *timg__GetImagingSettings, struct _timg__GetImagingSettingsResponse *timg__GetImagingSettingsResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __timg__SetImagingSettings */
 int __timg__SetImagingSettings(struct soap *soap, struct _timg__SetImagingSettings *timg__SetImagingSettings, struct _timg__SetImagingSettingsResponse *timg__SetImagingSettingsResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __timg__GetOptions */
 int __timg__GetOptions(struct soap *soap, struct _timg__GetOptions *timg__GetOptions, struct _timg__GetOptionsResponse *timg__GetOptionsResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __timg__Move */
 int __timg__Move(struct soap *soap, struct _timg__Move *timg__Move, struct _timg__MoveResponse *timg__MoveResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __timg__Stop */
 int __timg__Stop(struct soap *soap, struct _timg__Stop *timg__Stop, struct _timg__StopResponse *timg__StopResponse)
 {	
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __timg__GetStatus */
 int __timg__GetStatus(struct soap *soap, struct _timg__GetStatus *timg__GetStatus, struct _timg__GetStatusResponse *timg__GetStatusResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __timg__GetMoveOptions */
 int __timg__GetMoveOptions(struct soap *soap, struct _timg__GetMoveOptions *timg__GetMoveOptions, struct _timg__GetMoveOptionsResponse *timg__GetMoveOptionsResponse)
 {	
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__GetServiceCapabilities */

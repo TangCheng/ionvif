@@ -5,20 +5,6 @@
 #include "onvif_impl.h"
 #include "onvif-auth.h"
 
-#define ARRAY_SIZE(x)	   (sizeof(x) / sizeof(x[0]))
-
-int save_file_data(const char* path, void const* buffer, int length) {
-	FILE* pf = fopen(path, "wb");
-	if (pf != NULL) {
-		fwrite(buffer, length, 1, pf);
-		fclose(pf);
-		return 1;
-	} else {
-		printf("open file failed %s\n", path);
-	}
-	return 0;
-}
-
 
 const static char *__fixed_onvif_scopes[] = {
 	"onvif://www.onvif.org/name/IPCAM",
@@ -174,6 +160,19 @@ int __tds__GetDeviceInformation(struct soap* soap,
 	return SOAP_OK;
 }
 
+
+static int save_file_data(const char* path, void const* buffer, int length) {
+	FILE* pf = fopen(path, "wb");
+	if (pf != NULL) {
+		fwrite(buffer, length, 1, pf);
+		fclose(pf);
+		return 1;
+	} else {
+		printf("open file failed %s\n", path);
+	}
+	return 0;
+}
+
 int __tds__UpgradeSystemFirmware(struct soap* soap,
 		struct _tds__UpgradeSystemFirmware *tds__UpgradeSystemFirmware,
 		struct _tds__UpgradeSystemFirmwareResponse *tds__UpgradeSystemFirmwareResponse)
@@ -200,7 +199,6 @@ int __tds__UpgradeSystemFirmware(struct soap* soap,
 		}
 	}
 
-
 	return SOAP_OK;
 }
 
@@ -226,6 +224,7 @@ int __tds__GetCapabilities(struct soap* soap,
 	DBG_LINE;
 
 	SOAP_CALLOC_1(soap, Response->Capabilities);
+	SOAP_CALLOC_1(soap, Response->Capabilities->Imaging);
 	SOAP_CALLOC_1(soap, Response->Capabilities->Media);
 	SOAP_CALLOC_1(soap, Response->Capabilities->Media->StreamingCapabilities);
 	SOAP_CALLOC_1(soap, Response->Capabilities->Media->StreamingCapabilities->RTPMulticast);
@@ -238,6 +237,7 @@ int __tds__GetCapabilities(struct soap* soap,
 	SOAP_CALLOC_1(soap, Response->Capabilities->Device->System->SupportedVersions);
 
 
+	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Imaging->XAddr, onvif_dm_get_ipv4_address(soap));
 	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Media->XAddr, onvif_dm_get_ipv4_address(soap));
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTPMulticast[0], xsd__boolean__false_);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP[0], xsd__boolean__true_);

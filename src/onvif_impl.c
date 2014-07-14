@@ -77,31 +77,19 @@ void onvif_dm_get_service_version(struct soap* soap, int* major, int * minor) {
 }
 
 const char* onvif_dm_get_manufacturer(struct soap* soap) {
-	return "NewBee";
+	return "IPCAM";
 }
 const char* onvif_dm_get_model(struct soap* soap) {
 	return "102";
 }
 const char* onvif_dm_get_firmware_version(struct soap* soap) {
-	return "1.1";
+	return "V1.0.0";
 }
 const char* onvif_dm_get_serial_number(struct soap* soap) {
 	return "333-133-333";
 }
 const char* onvif_dm_get_hardware_id(struct soap* soap) {
-	return "free_scale_333";
-}
-
-void onvif_dm_set_system_date_time(struct soap* soap, int is_ntp, struct tm* now) {
-}
-
-void onvif_dm_get_system_date_time(struct soap* soap, int* is_ntp, struct tm* now) {
-}
-
-void onvif_dm_set_system_factory_default(struct soap* soap, int type) {
-}
-
-void onvif_dm_reboot_system(struct soap* soap) {
+	return "Hi3518";
 }
 
 

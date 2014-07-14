@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include "soapStub.h"
 #include "RemoteDiscoveryBinding.nsmap"
-#include "../gsoap-plugins/wsddapi.h"
+#include <plugin/wsddapi.h>
 
 
 /*WS-Discovery specialization address and port of UDP*/

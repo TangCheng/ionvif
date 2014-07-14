@@ -35,9 +35,6 @@ do { \
 } while(0)
 
 
-int onvif_dm_get_scopes(struct soap *soap, char ***scopes);
-void onvif_dm_set_scopes(struct soap *soap, int nr_scopes, char **scopes);
-
 const char * onvif_dm_get_ipv4_address(struct soap* soap);
 const char * onvif_dm_get_wsdl_url(struct soap* soap);
 const char * onvif_dm_get_service_url(struct soap* soap);
@@ -50,12 +47,6 @@ const char* onvif_dm_get_firmware_version(struct soap* soap);
 const char* onvif_dm_get_serial_number(struct soap* soap);
 const char* onvif_dm_get_hardware_id(struct soap* soap);
 
-
-void onvif_dm_set_system_date_time(struct soap* soap, int is_ntp, struct tm* now);
-void onvif_dm_get_system_date_time(struct soap* soap, int* is_ntp, struct tm* now);
-
-void onvif_dm_set_system_factory_default(struct soap* soap, int type);
-void onvif_dm_reboot_system(struct soap* soap);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

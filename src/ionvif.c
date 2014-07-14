@@ -32,7 +32,7 @@
 
 struct _IpcamIOnvifPrivate
 {
-	GThread *onvif_thread;
+	GThread *service_thread;
 	gboolean terminating;
 };
 
@@ -46,7 +46,7 @@ ipcam_ionvif_init (IpcamIOnvif *ipcam_ionvif)
 {
 	ipcam_ionvif->priv = G_TYPE_INSTANCE_GET_PRIVATE (ipcam_ionvif, IPCAM_TYPE_IONVIF, IpcamIOnvifPrivate);
 
-	ipcam_ionvif->priv->onvif_thread = NULL;
+	ipcam_ionvif->priv->service_thread = NULL;
 	ipcam_ionvif->priv->terminating = FALSE;
 }
 
@@ -57,7 +57,7 @@ ipcam_ionvif_finalize (GObject *object)
 	IpcamIOnvifPrivate *priv = ionvif->priv;
 
 	priv->terminating = TRUE;
-	g_thread_join(priv->onvif_thread);
+	g_thread_join(priv->service_thread);
 
 	G_OBJECT_CLASS (ipcam_ionvif_parent_class)->finalize (object);
 }
@@ -79,14 +79,16 @@ ipcam_ionvif_class_init (IpcamIOnvifClass *klass)
 	base_service_class->in_loop = ipcam_ionvif_in_loop;
 }
 
+gpointer onvif_discovery_thread_func(gpointer data);
+
 static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 {
 	IpcamIOnvif *ionvif = IPCAM_IONVIF(base_service);
 	IpcamIOnvifPrivate *priv = ionvif->priv;
 
-	priv->onvif_thread = g_thread_new("onvif-server",
-	                                  onvif_server_thread_func,
-	                                  ionvif);
+	priv->service_thread = g_thread_new("onvif-server",
+	                                    onvif_server_thread_func,
+	                                    ionvif);
 }
 
 static void ipcam_ionvif_in_loop(IpcamBaseService *base_service)
@@ -108,7 +110,7 @@ static gchar *get_network_ipaddr(const char *ifname)
     if (sockfd < 0)
         return NULL;
 
-	strcpy(ifr.ifr_name, ifname);
+	strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
 	if (ioctl(sockfd, SIOCGIFADDR, &ifr) == 0)
         ipaddr = strdup(inet_ntoa(((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr));
 

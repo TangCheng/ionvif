@@ -93,12 +93,16 @@ gpointer onvif_server_thread_func(gpointer data)
 
 	soap_init1(&soap, SOAP_ENC_MTOM);
 
+#include "DeviceBinding.nsmap"
+	soap_set_namespaces(&soap, namespaces);
+
 	soap.user = ionvif;
 
-	m = soap_bind(&soap, NULL, port, 100);
-	if (!soap_valid_socket(m)) {
-		soap_print_fault(&soap, stderr);
-		exit(-1);
+	while (!ipcam_ionvif_is_terminating(ionvif)) {
+		m = soap_bind(&soap, NULL, port, 100);
+		if (soap_valid_socket(m))
+			break;
+		usleep(1000000);
 	}
 
 	printf("socket bind success %d\n", m);
@@ -108,8 +112,8 @@ gpointer onvif_server_thread_func(gpointer data)
 	soap.fmimewrite = mime_server_write;
 
 	for (;!ipcam_ionvif_is_terminating(ionvif);) {
-		printf("socket connect %d\n", s);
 		s = soap_accept(&soap);
+		printf("socket connect %d\n", s);
 		if (!soap_valid_socket(s)) {
 			soap_print_fault(&soap, stderr);
 

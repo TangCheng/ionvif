@@ -198,3 +198,77 @@ int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetSt
 
 	return SOAP_OK;
 }
+
+
+int __timg__GetOptions(struct soap *soap, struct _timg__GetOptions *timg__GetOptions, struct _timg__GetOptionsResponse *timg__GetOptionsResponse)
+{
+	struct _timg__GetOptionsResponse *Response = timg__GetOptionsResponse;
+
+	SOAP_CALLOC_1(soap, Response->ImagingOptions);
+	SOAP_CALLOC_1(soap, Response->ImagingOptions->Brightness);
+	SOAP_CALLOC_1(soap, Response->ImagingOptions->ColorSaturation);
+	SOAP_CALLOC_1(soap, Response->ImagingOptions->Contrast);
+
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Brightness->Min, 0.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Brightness->Max, 255.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->ColorSaturation->Min, 0.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->ColorSaturation->Max, 255.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Contrast->Min, 0.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Contrast->Max, 7.0);
+
+	return SOAP_OK;
+}
+
+
+int __timg__GetImagingSettings(struct soap *soap, struct _timg__GetImagingSettings *timg__GetImagingSettings, struct _timg__GetImagingSettingsResponse *timg__GetImagingSettingsResponse)
+{
+	struct _timg__GetImagingSettingsResponse *Response = timg__GetImagingSettingsResponse;
+
+	printf("%s(%s)\n", __func__, timg__GetImagingSettings->VideoSourceToken);
+
+	SOAP_CALLOC_1(soap, Response->ImagingSettings);
+	SOAP_CALLOC_1(soap, Response->ImagingSettings->Brightness);
+	SOAP_CALLOC_1(soap, Response->ImagingSettings->ColorSaturation);
+	SOAP_CALLOC_1(soap, Response->ImagingSettings->Contrast);
+	SOAP_SET_VALUE_FIELD(soap, *Response->ImagingSettings->Brightness, 128.0);
+	SOAP_SET_VALUE_FIELD(soap, *Response->ImagingSettings->ColorSaturation, 128.0);
+	SOAP_SET_VALUE_FIELD(soap, *Response->ImagingSettings->Contrast, 4.0);
+
+	return SOAP_OK;
+}
+
+
+int __timg__SetImagingSettings(struct soap *soap, struct _timg__SetImagingSettings *timg__SetImagingSettings, struct _timg__SetImagingSettingsResponse *timg__SetImagingSettingsResponse)
+{	
+	return SOAP_OK;
+}
+
+
+/** Auto-test server operation __timg__Move */
+int __timg__Move(struct soap *soap, struct _timg__Move *timg__Move, struct _timg__MoveResponse *timg__MoveResponse)
+{	
+	return SOAP_OK;
+}
+
+
+/** Auto-test server operation __timg__Stop */
+int __timg__Stop(struct soap *soap, struct _timg__Stop *timg__Stop, struct _timg__StopResponse *timg__StopResponse)
+{	
+	return SOAP_OK;
+}
+
+
+/** Auto-test server operation __timg__GetStatus */
+int __timg__GetStatus(struct soap *soap, struct _timg__GetStatus *timg__GetStatus, struct _timg__GetStatusResponse *timg__GetStatusResponse)
+{	
+	/* Return incomplete response with default data values */
+	return SOAP_OK;
+}
+
+
+/** Auto-test server operation __timg__GetMoveOptions */
+int __timg__GetMoveOptions(struct soap *soap, struct _timg__GetMoveOptions *timg__GetMoveOptions, struct _timg__GetMoveOptionsResponse *timg__GetMoveOptionsResponse)
+{	
+	/* Return incomplete response with default data values */
+	return SOAP_OK;
+}
