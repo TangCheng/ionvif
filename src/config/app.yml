@@ -6,7 +6,7 @@ onvif:
   profile:
     MainProfileToken: MainVideo.mkv
     SubProfileToken: SubVideo.mkv
-bind:
-  ionvif: tcp://127.0.0.1:3010
+subscirbe:
+  iconfig_pub: tcp://127.0.0.1:3010
 connect:
   iconfig: tcp://127.0.0.1:3000
