@@ -20,7 +20,6 @@
 #ifndef _IONVIF_H_
 #define _IONVIF_H_
 
-#include <json-glib/json-glib.h>
 #include <base_app.h>
 
 G_BEGIN_DECLS
@@ -53,35 +52,11 @@ GType ipcam_ionvif_get_type (void) G_GNUC_CONST;
 
 gboolean ipcam_ionvif_is_terminating(IpcamIOnvif *ionvif);
 
-const gpointer ipcam_ionvif_get_property(IpcamIOnvif *ionvif, const gchar *key);
-void ipcam_ionvif_set_property(IpcamIOnvif *ionvif, gchar *key, gpointer value);
+gchar *ipcam_ionvif_get_server_addr(IpcamIOnvif *ionvif);
 
-static inline const gchar *ipcam_ionvif_get_string_property(IpcamIOnvif *ionvif, const gchar *key)
-{
-	return (const gchar *)ipcam_ionvif_get_property(ionvif, key);
-}
+uint ipcam_ionvif_get_server_port(IpcamIOnvif *ionvif);
 
-static inline void ipcam_ionvif_set_string_property(IpcamIOnvif *ionvif, const gchar *key, const gchar *value)
-{
-	ipcam_ionvif_set_property(ionvif, g_strdup(key), g_strdup(value));
-}
-
-static inline gint ipcam_ionvif_get_int_property(IpcamIOnvif *ionvif, const gchar *key)
-{
-	gpointer pvalue = ipcam_ionvif_get_property(ionvif, key);
-
-	return pvalue ? *(gint *)pvalue : -1;
-}
-
-static inline void ipcam_ionvif_set_int_property(IpcamIOnvif *ionvif, gchar *key, gint value)
-{
-	gint *pvalue = g_malloc(sizeof(value));
-	*pvalue = value;
-	ipcam_ionvif_set_property(ionvif, g_strdup(key), pvalue);
-}
-
-void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body);
-void ipcam_ionvif_update_datetime_setting(IpcamIOnvif *ionvif, JsonNode *body);
+uint ipcam_ionvif_get_rtsp_port(IpcamIOnvif *ionvif);
 
 G_END_DECLS
 

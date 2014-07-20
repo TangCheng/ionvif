@@ -34,6 +34,8 @@ ionvif_SOURCES = \
 	onvif.h \
 	$(BUILT_SOURCES) \
 	$(GSOAP_DATA_DIR)/custom/duration.c \
+    ipcam-ionvif-event-handler.c \
+    ipcam-ionvif-event-handler.h \
 	onvif-auth.c \
 	onvif-auth.h \
 	soapTester.c \

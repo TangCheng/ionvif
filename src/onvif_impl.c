@@ -31,9 +31,10 @@ gboolean onvif_invocate_action(IpcamIOnvif *ionvif, const char *action,
 	{
 		JsonNode *resp_body;
 
-		g_object_get(G_OBJECT(resp_msg), "body", &resp_body, NULL);
-
-		*response = json_node_copy(resp_body);
+        if (response) {
+            g_object_get(G_OBJECT(resp_msg), "body", &resp_body, NULL);
+            *response = json_node_copy(resp_body);
+        }
 
 		g_object_unref(resp_msg);
 	}

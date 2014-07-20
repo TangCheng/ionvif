@@ -316,8 +316,6 @@ int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAnd
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "timezone");
-	json_builder_add_string_value(builder, "use_ntp");
 	json_builder_add_string_value(builder, "datetime");
 	json_builder_end_array(builder);
 	json_builder_end_object(builder);
@@ -327,18 +325,14 @@ int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAnd
 
 		SOAP_CALLOC_1(soap, Response->SystemDateAndTime);
 
-		if (json_object_has_member(items, "timezone")) {
-			JsonObject *tz_obj = json_object_get_object_member(items, "timezone");
-			const char *tz = json_object_get_string_member(tz_obj, "str_value");
-			SOAP_CALLOC_1(soap, Response->SystemDateAndTime->TimeZone);
-			SOAP_SET_STRING_FIELD(soap, Response->SystemDateAndTime->TimeZone->TZ, tz);
-		}
-		if (json_object_has_member(items, "use_ntp")) {
-			JsonObject *obj = json_object_get_object_member(items, "use_ntp");
-			int use_ntp = json_object_get_int_member(obj, "int_value");
-			SOAP_SET_VALUE_FIELD(soap, Response->SystemDateAndTime->DateTimeType, use_ntp);
-		}
-		if (json_object_has_member(items, "datetime")) {
+        const char *tz = ipcam_ionvif_get_string_property(ionvif, "datetime:timezone");
+        SOAP_CALLOC_1(soap, Response->SystemDateAndTime->TimeZone);
+        SOAP_SET_STRING_FIELD(soap, Response->SystemDateAndTime->TimeZone->TZ, tz);
+
+        int use_ntp = !!ipcam_ionvif_get_int_property(ionvif, "datetime:use_ntp");
+        SOAP_SET_VALUE_FIELD(soap, Response->SystemDateAndTime->DateTimeType, use_ntp);
+
+        if (json_object_has_member(items, "datetime")) {
 			int year, month, day, hour, minute, second;
 			JsonObject *obj = json_object_get_object_member(items, "datetime");
 			const char *datetime = json_object_get_string_member(obj, "str_value");

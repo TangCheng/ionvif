@@ -27,19 +27,36 @@
 #include <net/if.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <json-glib/json-glib.h>
+#include <request_message.h>
 #include "ionvif.h"
 #include "onvif-server.h"
+#include "ipcam-ionvif-event-handler.h"
+
 
 struct _IpcamIOnvifPrivate
 {
 	GThread *service_thread;
 	gboolean terminating;
+
+	GHashTable *cached_property_hash;
+	GMutex mutex;
 };
 
 
 
 
 G_DEFINE_TYPE (IpcamIOnvif, ipcam_ionvif, IPCAM_BASE_APP_TYPE);
+
+static void config_key_destroy_func(gpointer key)
+{
+	g_free(key);
+}
+
+static void config_value_destroy_func(gpointer value)
+{
+	g_free(value);
+}
 
 static void
 ipcam_ionvif_init (IpcamIOnvif *ipcam_ionvif)
@@ -48,6 +65,11 @@ ipcam_ionvif_init (IpcamIOnvif *ipcam_ionvif)
 
 	ipcam_ionvif->priv->service_thread = NULL;
 	ipcam_ionvif->priv->terminating = FALSE;
+
+	ipcam_ionvif->priv->cached_property_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+	                                                                 config_key_destroy_func,
+	                                                                 config_value_destroy_func);
+	g_mutex_init(&ipcam_ionvif->priv->mutex);
 }
 
 static void
@@ -58,6 +80,8 @@ ipcam_ionvif_finalize (GObject *object)
 
 	priv->terminating = TRUE;
 	g_thread_join(priv->service_thread);
+	g_hash_table_destroy(priv->cached_property_hash);
+	g_mutex_clear(&priv->mutex);
 
 	G_OBJECT_CLASS (ipcam_ionvif_parent_class)->finalize (object);
 }
@@ -79,16 +103,162 @@ ipcam_ionvif_class_init (IpcamIOnvifClass *klass)
 	base_service_class->in_loop = ipcam_ionvif_in_loop;
 }
 
-gpointer onvif_discovery_thread_func(gpointer data);
+void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body)
+{
+    JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
+
+    if (json_object_has_member(items_obj, "autoconf"))
+        ipcam_ionvif_set_int_property(ionvif, "network:autoconf",
+                                      json_object_get_int_member(items_obj, "autoconf"));
+    if (json_object_has_member(items_obj, "hostname"))
+        ipcam_ionvif_set_string_property(ionvif, "network:hostname",
+                                         json_object_get_string_member(items_obj, "hostname"));
+    if (json_object_has_member(items_obj, "address")) {
+        JsonObject *addr_obj = json_object_get_object_member(items_obj, "address");
+        if (json_object_has_member(addr_obj, "ipaddr"))
+            ipcam_ionvif_set_string_property(ionvif, "network:address:ipaddr",
+                                             json_object_get_string_member(addr_obj, "ipaddr"));
+        if (json_object_has_member(addr_obj, "netmask"))
+            ipcam_ionvif_set_string_property(ionvif, "network:address:netmask",
+                                             json_object_get_string_member(addr_obj, "netmask"));
+        if (json_object_has_member(addr_obj, "gateway"))
+            ipcam_ionvif_set_string_property(ionvif, "network:address:gateway",
+                                             json_object_get_string_member(addr_obj, "gateway"));
+        if (json_object_has_member(addr_obj, "dns1"))
+            ipcam_ionvif_set_string_property(ionvif, "network:address:dns1",
+                                             json_object_get_string_member(addr_obj, "dns1"));
+        if (json_object_has_member(addr_obj, "dns2"))
+            ipcam_ionvif_set_string_property(ionvif, "network:address:dns2",
+                                             json_object_get_string_member(addr_obj, "dns2"));
+    }
+    if (json_object_has_member(items_obj, "pppoe")) {
+        JsonObject *pppoe_obj = json_object_get_object_member(items_obj, "pppoe");
+
+        if (json_object_has_member(pppoe_obj, "username"))
+            ipcam_ionvif_set_string_property(ionvif, "network:pppoe:username",
+                                             json_object_get_string_member(pppoe_obj, "username"));
+        if (json_object_has_member(pppoe_obj, "password"))
+            ipcam_ionvif_set_string_property(ionvif, "network:pppoe:password",
+                                             json_object_get_string_member(pppoe_obj, "password"));
+    }
+    if (json_object_has_member(items_obj, "server_port")) {
+        JsonObject *port_obj = json_object_get_object_member(items_obj, "server_port");
+
+        if (json_object_has_member(port_obj, "http"))
+            ipcam_ionvif_set_int_property(ionvif, "network:port:http",
+                                          json_object_get_int_member(port_obj, "http"));
+        if (json_object_has_member(port_obj, "rtsp"))
+            ipcam_ionvif_set_int_property(ionvif, "network:port:rtsp",
+                                          json_object_get_int_member(port_obj, "rtsp"));
+    }
+}
+
+static void network_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
+{
+	IpcamIOnvif *ionvif = IPCAM_IONVIF(obj);
+	g_assert(IPCAM_IS_IONVIF(ionvif));
+
+	if (!timeout && msg) {
+		JsonNode *body;
+		g_object_get(msg, "body", &body, NULL);
+		if (body)
+			ipcam_ionvif_update_network_setting(ionvif, body);
+	}
+}
+
+
+void ipcam_ionvif_update_datetime_setting(IpcamIOnvif *ionvif, JsonNode *body)
+{
+    JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
+
+    if (json_object_has_member(items_obj, "timezone")) {
+		JsonObject *obj = json_object_get_object_member(items_obj, "timezone");
+		if (json_object_has_member(obj, "str_value"))
+			ipcam_ionvif_set_string_property(ionvif, "datetime:timezone",
+			                                 json_object_get_string_member(obj, "str_value"));
+	}
+    if (json_object_has_member(items_obj, "use_ntp")) {
+		JsonObject *obj = json_object_get_object_member(items_obj, "use_ntp");
+		if (json_object_has_member(obj, "int_value"))
+			ipcam_ionvif_set_int_property(ionvif, "datetime:use_ntp",
+			                              json_object_get_int_member(obj, "int_value"));
+	}
+    if (json_object_has_member(items_obj, "ntp_server")) {
+		JsonObject *obj = json_object_get_object_member(items_obj, "ntp_server");
+		if (json_object_has_member(obj, "str_value"))
+			ipcam_ionvif_set_string_property(ionvif, "datetime:ntp_server",
+			                                 json_object_get_string_member(obj, "str_value"));
+	}
+}
+
+static void datetime_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
+{
+	IpcamIOnvif *ionvif = IPCAM_IONVIF(obj);
+	g_assert(IPCAM_IS_IONVIF(ionvif));
+
+	if (!timeout && msg) {
+		JsonNode *body;
+		g_object_get(msg, "body", &body, NULL);
+		if (body)
+			ipcam_ionvif_update_datetime_setting(ionvif, body);
+	}
+}
+
 
 static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 {
 	IpcamIOnvif *ionvif = IPCAM_IONVIF(base_service);
 	IpcamIOnvifPrivate *priv = ionvif->priv;
+	JsonBuilder *builder;
+	const gchar *token = ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), "token");
+	IpcamRequestMessage *req_msg;
 
 	priv->service_thread = g_thread_new("onvif-server",
 	                                    onvif_server_thread_func,
 	                                    ionvif);
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_network", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
+
+	/* Request the Network setting */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "autoconf");
+	json_builder_add_string_value(builder, "hostname");
+	json_builder_add_string_value(builder, "address");
+	json_builder_add_string_value(builder, "pppoe");
+	json_builder_add_string_value(builder, "server_port");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", "get_network",
+	                       "body", json_builder_get_root(builder),
+	                       NULL);
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token,
+	                            network_message_handler, 5);
+	g_object_unref(req_msg);
+	g_object_unref(builder);
+
+	/* Request the Datetime setting */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "timezone");
+	json_builder_add_string_value(builder, "use_ntp");
+	json_builder_add_string_value(builder, "ntp_server");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", "get_datetime",
+	                       "body", json_builder_get_root(builder),
+	                       NULL);
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token,
+	                            datetime_message_handler, 5);
+	g_object_unref(req_msg);
+	g_object_unref(builder);
 }
 
 static void ipcam_ionvif_in_loop(IpcamBaseService *base_service)
@@ -100,57 +270,23 @@ gboolean ipcam_ionvif_is_terminating(IpcamIOnvif *ionvif)
 	return ionvif->priv->terminating;
 }
 
-static gchar *get_network_ipaddr(const char *ifname)
+const gpointer ipcam_ionvif_get_property(IpcamIOnvif *ionvif, const gchar *key)
 {
-    struct ifreq ifr;
-    int sockfd;
-	gchar *ipaddr = NULL;
+	IpcamIOnvifPrivate *priv = ionvif->priv;
+	gpointer ret;
 
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd < 0)
-        return NULL;
+	g_mutex_lock(&priv->mutex);
+	ret = g_hash_table_lookup(priv->cached_property_hash, key);
+	g_mutex_unlock(&priv->mutex);
 
-	strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
-	if (ioctl(sockfd, SIOCGIFADDR, &ifr) == 0)
-        ipaddr = strdup(inet_ntoa(((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr));
-
-    close(sockfd);
-
-	return ipaddr;
+	return ret;
 }
 
-gchar *ipcam_ionvif_get_server_addr(IpcamIOnvif *ionvif)
+void ipcam_ionvif_set_property(IpcamIOnvif *ionvif, gchar *key, gpointer value)
 {
-	gchar *ipaddr = NULL;
-	const gchar *onvif_netif = ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), "onvif:netif");
+	IpcamIOnvifPrivate *priv = ionvif->priv;
 
-	if (onvif_netif)
-		ipaddr = get_network_ipaddr(onvif_netif);
-
-	if (ipaddr == NULL)
-		ipaddr = g_strdup("127.0.0.1");
-
-	return ipaddr;
-}
-
-uint ipcam_ionvif_get_server_port(IpcamIOnvif *ionvif)
-{
-	int port = 8080;
-	const gchar *onvif_port = ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), "onvif:server-port");
-
-	if (onvif_port)
-		port = strtoul(onvif_port, NULL, 0);
-
-	return port;
-}
-
-uint ipcam_ionvif_get_rtsp_port(IpcamIOnvif *ionvif)
-{
-	int port = 554;
-	const gchar *onvif_port = ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), "onvif:rtsp-port");
-
-	if (onvif_port)
-		port = strtoul(onvif_port, NULL, 0);
-
-	return port;
+	g_mutex_lock(&priv->mutex);
+	g_hash_table_insert(priv->cached_property_hash, (gpointer)key, value);
+	g_mutex_unlock(&priv->mutex);
 }

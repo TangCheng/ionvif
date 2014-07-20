@@ -33,6 +33,9 @@ discovery_SOURCES =  \
 	$(BUILT_SOURCES) \
 	$(GSOAP_DATA_DIR)/plugin/wsaapi.c \
 	$(GSOAP_DATA_DIR)/plugin/wsddapi.c \
+	ipcam-ionvif-discovery.c \
+	ipcam-ionvif-discovery.h \
+	discovery-server.c \
 	main.c
 
 discovery_CFLAGS = -I$(GSOAP_DATA_DIR) 

@@ -29,41 +29,13 @@ int __tds__GetHostname(struct soap *soap, struct _tds__GetHostname *tds__GetHost
 {
 	struct _tds__GetHostnameResponse *Response = tds__GetHostnameResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
-	int autoconf = 0;
 
-	ACCESS_CONTROL;
+    gint dhcp = ipcam_ionvif_get_int_property(ionvif, "network:autoconf");
+    const gchar *hostname = ipcam_ionvif_get_string_property(ionvif, "network:hostname");
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "autoconf");
-	json_builder_add_string_value(builder, "hostname");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
-
-	if (onvif_invocate_action(ionvif, "get_network", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
-
-		items = json_object_get_object_member(json_node_get_object(response), "items");
-
-		if (json_object_has_member(items, "autoconf")) {
-			autoconf = json_object_get_int_member(items, "autoconf");
-		}
-		if (json_object_has_member(items, "hostname")) {
-			const char *hostname = json_object_get_string_member(items, "hostname");
-
-			SOAP_CALLOC_1(soap, Response->HostnameInformation);
-			Response->HostnameInformation->FromDHCP = autoconf;
-			SOAP_SET_STRING_FIELD(soap, Response->HostnameInformation->Name, hostname);
-		}
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
+    SOAP_CALLOC_1(soap, Response->HostnameInformation);
+    Response->HostnameInformation->FromDHCP = dhcp;
+    SOAP_SET_STRING_FIELD(soap, Response->HostnameInformation->Name, hostname);
 
 	return SOAP_OK;
 }
@@ -110,71 +82,41 @@ int __tds__SetHostnameFromDHCP(struct soap *soap, struct _tds__SetHostnameFromDH
 int __tds__GetDNS(struct soap *soap, struct _tds__GetDNS *tds__GetDNS, struct _tds__GetDNSResponse *tds__GetDNSResponse)
 {
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
 	struct _tds__GetDNSResponse *Response = tds__GetDNSResponse;
 	int dhcp = 0;
 	const char *dns1 = NULL, *dns2 = NULL;
-	int nr_dns = 0;
+    int nr_dns  = 0;
 
 	ACCESS_CONTROL;
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "autoconf");
-	json_builder_add_string_value(builder, "address");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
+    dhcp = ipcam_ionvif_get_int_property(ionvif, "network:autoconf");
+    dns1 = ipcam_ionvif_get_string_property(ionvif, "network:address:dns1");
+    dns2 = ipcam_ionvif_get_string_property(ionvif, "network:address:dns2");
 
-	if (onvif_invocate_action(ionvif, "get_network", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
+    SOAP_CALLOC_1(soap, Response->DNSInformation);
+    Response->DNSInformation->FromDHCP = dhcp;
 
-		items = json_object_get_object_member(json_node_get_object(response), "items");
+    Response->DNSInformation->__sizeSearchDomain = 1;
+    SOAP_CALLOC(soap, Response->DNSInformation->SearchDomain, 1);
+    SOAP_SET_STRING_FIELD(soap, Response->DNSInformation->SearchDomain[0], "ipnc");
 
-		if (json_object_has_member(items, "autoconf")) {
-			dhcp = json_object_get_int_member(items, "autoconf");
-		}
+    nr_dns = (int)!!dns1 + (int)!!dns2;
+    Response->DNSInformation->__sizeDNSManual = nr_dns;
+    SOAP_CALLOC(soap, Response->DNSInformation->DNSManual, nr_dns);
 
-		if (json_object_has_member(items, "address")) {
-			JsonObject *addr_obj = json_object_get_object_member(items, "address");
+    int idx = 0;
+    if (dns1) {
+        Response->DNSInformation->DNSManual[idx].Type = tt__IPType__IPv4;
+        SOAP_SET_STRING_FIELD(soap, Response->DNSInformation->DNSManual[idx].IPv4Address, dns1);
+        idx++;
+    }
+    if (dns2) {
+        Response->DNSInformation->DNSManual[idx].Type = tt__IPType__IPv4;
+        SOAP_SET_STRING_FIELD(soap, Response->DNSInformation->DNSManual[idx].IPv4Address, dns2);
+        idx++;
+    }
 
-			if (json_object_has_member(addr_obj, "dns1"))
-				dns1 = json_object_get_string_member(addr_obj, "dns1");
-			if (json_object_has_member(addr_obj, "dns2"))
-				dns2 = json_object_get_string_member(addr_obj, "dns2");
-		}
-
-		SOAP_CALLOC_1(soap, Response->DNSInformation);
-		Response->DNSInformation->FromDHCP = dhcp;
-
-		Response->DNSInformation->__sizeSearchDomain = 1;
-		SOAP_CALLOC(soap, Response->DNSInformation->SearchDomain, 1);
-		SOAP_SET_STRING_FIELD(soap, Response->DNSInformation->SearchDomain[0], "ipnc");
-
-		nr_dns = (int)!!dns1 + (int)!!dns2;
-		Response->DNSInformation->__sizeDNSManual = nr_dns;
-		SOAP_CALLOC(soap, Response->DNSInformation->DNSManual, nr_dns);
-
-		int idx = 0;
-		if (dns1) {
-			Response->DNSInformation->DNSManual[idx].Type = tt__IPType__IPv4;
-			SOAP_SET_STRING_FIELD(soap, Response->DNSInformation->DNSManual[idx].IPv4Address, dns1);
-			idx++;
-		}
-		if (dns2) {
-			Response->DNSInformation->DNSManual[idx].Type = tt__IPType__IPv4;
-			SOAP_SET_STRING_FIELD(soap, Response->DNSInformation->DNSManual[idx].IPv4Address, dns2);
-			idx++;
-		}
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
-
-	return SOAP_OK;
+    return SOAP_OK;
 }
 
 
@@ -183,7 +125,6 @@ int __tds__SetDNS(struct soap *soap, struct _tds__SetDNS *tds__SetDNS, struct _t
 {	
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 	JsonBuilder *builder;
-	JsonNode *response = NULL;
 
 	ACCESS_CONTROL;
 
@@ -210,9 +151,7 @@ int __tds__SetDNS(struct soap *soap, struct _tds__SetDNS *tds__SetDNS, struct _t
 	json_builder_end_object(builder);
 	json_builder_end_object(builder);
 
-	if (onvif_invocate_action(ionvif, "set_network", json_builder_get_root(builder), &response)) {
-		json_node_free(response);
-	}
+	onvif_invocate_action(ionvif, "set_network", json_builder_get_root(builder), NULL);
 
 	g_object_unref(builder);
 
@@ -223,43 +162,19 @@ int __tds__SetDNS(struct soap *soap, struct _tds__SetDNS *tds__SetDNS, struct _t
 int __tds__GetNTP(struct soap *soap, struct _tds__GetNTP *tds__GetNTP, struct _tds__GetNTPResponse *tds__GetNTPResponse)
 {
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
 	struct _tds__GetNTPResponse *Response = tds__GetNTPResponse;
 	const char *ntp = NULL;
 
 	ACCESS_CONTROL;
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "ntp_server");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
+    ntp = ipcam_ionvif_get_string_property(ionvif, "datetime:ntp_server");
 
-	if (onvif_invocate_action(ionvif, "get_datetime", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
-
-		items = json_object_get_object_member(json_node_get_object(response), "items");
-
-		if (json_object_has_member(items, "ntp_server")) {
-			JsonObject *ntp_obj = json_object_get_object_member(items, "ntp_server");
-
-			ntp = json_object_get_string_member(ntp_obj, "str_value");
-		}
-
-		SOAP_CALLOC_1(soap, Response->NTPInformation);
-		Response->NTPInformation->FromDHCP = xsd__boolean__false_;
-		Response->NTPInformation->__sizeNTPManual = 1;
-		SOAP_CALLOC(soap, Response->NTPInformation->NTPManual, 1);
-		Response->NTPInformation->NTPManual[0].Type = tt__NetworkHostType__IPv4;
-		SOAP_SET_STRING_FIELD(soap, Response->NTPInformation->NTPManual[0].IPv4Address, ntp);
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
+    SOAP_CALLOC_1(soap, Response->NTPInformation);
+    Response->NTPInformation->FromDHCP = xsd__boolean__false_;
+    Response->NTPInformation->__sizeNTPManual = 1;
+    SOAP_CALLOC(soap, Response->NTPInformation->NTPManual, 1);
+    Response->NTPInformation->NTPManual[0].Type = tt__NetworkHostType__IPv4;
+    SOAP_SET_STRING_FIELD(soap, Response->NTPInformation->NTPManual[0].IPv4Address, ntp);
 
 	return SOAP_OK;
 }
@@ -269,7 +184,6 @@ int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _t
 {	
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 	JsonBuilder *builder;
-	JsonNode *response = NULL;
 
 	ACCESS_CONTROL;
 
@@ -289,9 +203,7 @@ int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _t
 	json_builder_end_object(builder);
 	json_builder_end_object(builder);
 
-	if (onvif_invocate_action(ionvif, "set_datetime", json_builder_get_root(builder), &response)) {
-		json_node_free(response);
-	}
+	onvif_invocate_action(ionvif, "set_datetime", json_builder_get_root(builder), NULL);
 
 	g_object_unref(builder);
 
@@ -339,71 +251,41 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 {
 	struct _tds__GetNetworkInterfacesResponse *Response = tds__GetNetworkInterfacesResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
 	int dhcp = 0;
 	const char *ipaddr = NULL;
 	const char *netmask = NULL;
 
 	ACCESS_CONTROL;
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "autoconf");
-	json_builder_add_string_value(builder, "address");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
+    dhcp = ipcam_ionvif_get_int_property(ionvif, "network:autoconf");
+    ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
+    netmask = ipcam_ionvif_get_string_property(ionvif, "network:address:netmask");
 
-	if (onvif_invocate_action(ionvif, "get_network", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
+    Response->__sizeNetworkInterfaces = 1;
+    SOAP_CALLOC(soap, Response->NetworkInterfaces, 1);
 
-		items = json_object_get_object_member(json_node_get_object(response), "items");
+    struct tt__NetworkInterface *netif = &Response->NetworkInterfaces[0];
 
-		if (json_object_has_member(items, "autoconf")) {
-			dhcp = json_object_get_int_member(items, "autoconf");
-		}
+    SOAP_SET_STRING_FIELD(soap, netif->token, "eth0");
+    netif->Enabled = xsd__boolean__true_;
+    SOAP_CALLOC_1(soap, netif->IPv4);
+    netif->IPv4->Enabled = xsd__boolean__true_;
+    SOAP_CALLOC_1(soap, netif->IPv4->Config);
 
-		if (json_object_has_member(items, "address")) {
-			JsonObject *addr_obj = json_object_get_object_member(items, "address");
-
-			if (json_object_has_member(addr_obj, "ipaddr"))
-				ipaddr = json_object_get_string_member(addr_obj, "ipaddr");
-			if (json_object_has_member(addr_obj, "netmask"))
-				netmask = json_object_get_string_member(addr_obj, "netmask");
-		}
-
-		Response->__sizeNetworkInterfaces = 1;
-		SOAP_CALLOC(soap, Response->NetworkInterfaces, 1);
-
-		struct tt__NetworkInterface *netif = &Response->NetworkInterfaces[0];
-
-		SOAP_SET_STRING_FIELD(soap, netif->token, "eth0");
-		netif->Enabled = xsd__boolean__true_;
-		SOAP_CALLOC_1(soap, netif->IPv4);
-		netif->IPv4->Enabled = xsd__boolean__true_;
-		SOAP_CALLOC_1(soap, netif->IPv4->Config);
-
-		if (dhcp) {
-			netif->IPv4->Config->DHCP = xsd__boolean__true_;
-			SOAP_CALLOC_1(soap, netif->IPv4->Config->FromDHCP);
-			SOAP_SET_STRING_FIELD(soap, netif->IPv4->Config->FromDHCP->Address, ipaddr);
-			netif->IPv4->Config->FromDHCP->PrefixLength = Netmask2PrefixLength(netmask);
-		}
-		else {
-			netif->IPv4->Config->DHCP = xsd__boolean__false_;
-			netif->IPv4->Config->__sizeManual = 1;
-			SOAP_CALLOC_1(soap, netif->IPv4->Config->Manual);
-			SOAP_SET_STRING_FIELD(soap, netif->IPv4->Config->Manual->Address,
-			                      ipaddr);
-			netif->IPv4->Config->Manual->PrefixLength = Netmask2PrefixLength(netmask);
-		}
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
+    if (dhcp) {
+        netif->IPv4->Config->DHCP = xsd__boolean__true_;
+        SOAP_CALLOC_1(soap, netif->IPv4->Config->FromDHCP);
+        SOAP_SET_STRING_FIELD(soap, netif->IPv4->Config->FromDHCP->Address, ipaddr);
+        netif->IPv4->Config->FromDHCP->PrefixLength = Netmask2PrefixLength(netmask);
+    }
+    else {
+        netif->IPv4->Config->DHCP = xsd__boolean__false_;
+        netif->IPv4->Config->__sizeManual = 1;
+        SOAP_CALLOC_1(soap, netif->IPv4->Config->Manual);
+        SOAP_SET_STRING_FIELD(soap, netif->IPv4->Config->Manual->Address,
+                              ipaddr);
+        netif->IPv4->Config->Manual->PrefixLength = Netmask2PrefixLength(netmask);
+    }
 
 	return SOAP_OK;
 }
@@ -467,52 +349,26 @@ int __tds__GetNetworkProtocols(struct soap *soap, struct _tds__GetNetworkProtoco
 {
 	struct _tds__GetNetworkProtocolsResponse *Response = tds__GetNetworkProtocolsResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
+    guint http, rtsp;
 
 	ACCESS_CONTROL;
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "server_port");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
+    http = ipcam_ionvif_get_int_property(ionvif, "network:port:http");
+    rtsp = ipcam_ionvif_get_int_property(ionvif, "network:port:rtsp");
 
-	if (onvif_invocate_action(ionvif, "get_network", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
+    Response->__sizeNetworkProtocols = 2;
+    SOAP_CALLOC(soap, Response->NetworkProtocols, 2);
+    Response->NetworkProtocols[0].Name = tt__NetworkProtocolType__HTTP;
+    Response->NetworkProtocols[0].Enabled = xsd__boolean__true_;
+    Response->NetworkProtocols[0].__sizePort = 1;
+    SOAP_CALLOC(soap, Response->NetworkProtocols[0].Port, 1);
+    Response->NetworkProtocols[0].Port[0] = http;
 
-		items = json_object_get_object_member(json_node_get_object(response), "items");
-
-		if (json_object_has_member(items, "server_port")) {
-			JsonObject *port_obj = json_object_get_object_member(items, "server_port");
-			guint http = 80, rtsp = 554;
-
-			if (json_object_has_member(port_obj, "http"))
-				http = json_object_get_int_member(port_obj, "http");
-			if (json_object_has_member(port_obj, "rtsp"))
-				rtsp = json_object_get_int_member(port_obj, "rtsp");
-
-			Response->__sizeNetworkProtocols = 2;
-			SOAP_CALLOC(soap, Response->NetworkProtocols, 2);
-			Response->NetworkProtocols[0].Name = tt__NetworkProtocolType__HTTP;
-			Response->NetworkProtocols[0].Enabled = xsd__boolean__true_;
-			Response->NetworkProtocols[0].__sizePort = 1;
-			SOAP_CALLOC(soap, Response->NetworkProtocols[0].Port, 1);
-			Response->NetworkProtocols[0].Port[0] = http;
-
-			Response->NetworkProtocols[1].Name = tt__NetworkProtocolType__RTSP;
-			Response->NetworkProtocols[1].Enabled = xsd__boolean__true_;
-			Response->NetworkProtocols[1].__sizePort = 1;
-			SOAP_CALLOC(soap, Response->NetworkProtocols[1].Port, 1);
-			Response->NetworkProtocols[1].Port[0] = rtsp;
-		}
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
+    Response->NetworkProtocols[1].Name = tt__NetworkProtocolType__RTSP;
+    Response->NetworkProtocols[1].Enabled = xsd__boolean__true_;
+    Response->NetworkProtocols[1].__sizePort = 1;
+    SOAP_CALLOC(soap, Response->NetworkProtocols[1].Port, 1);
+    Response->NetworkProtocols[1].Port[0] = rtsp;
 
 	return SOAP_OK;
 }
@@ -564,44 +420,18 @@ int __tds__GetNetworkDefaultGateway(struct soap *soap, struct _tds__GetNetworkDe
 {
 	struct _tds__GetNetworkDefaultGatewayResponse *Response = tds__GetNetworkDefaultGatewayResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
 
 	ACCESS_CONTROL;
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "autoconf");
-	json_builder_add_string_value(builder, "address");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
 
-	if (onvif_invocate_action(ionvif, "get_network", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
-		const char *gwaddr = NULL;
+    const gchar *gwaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:gateway");
 
-		items = json_object_get_object_member(json_node_get_object(response), "items");
-
-		if (json_object_has_member(items, "address")) {
-			JsonObject *addr_obj = json_object_get_object_member(items, "address");
-
-			if (json_object_has_member(addr_obj, "gateway"))
-				gwaddr = json_object_get_string_member(addr_obj, "gateway");
-		}
-
-		if (gwaddr) {
-			SOAP_CALLOC_1(soap, Response->NetworkGateway);
-			Response->NetworkGateway->__sizeIPv4Address = 1;
-			SOAP_CALLOC(soap, Response->NetworkGateway->IPv4Address, 1);
-			SOAP_SET_STRING_FIELD(soap, Response->NetworkGateway->IPv4Address[0], gwaddr);
-		}
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
+    if (gwaddr) {
+        SOAP_CALLOC_1(soap, Response->NetworkGateway);
+        Response->NetworkGateway->__sizeIPv4Address = 1;
+        SOAP_CALLOC(soap, Response->NetworkGateway->IPv4Address, 1);
+        SOAP_SET_STRING_FIELD(soap, Response->NetworkGateway->IPv4Address[0], gwaddr);
+    }
 
 	return SOAP_OK;
 }

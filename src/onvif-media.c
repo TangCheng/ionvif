@@ -175,7 +175,7 @@ int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetSt
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 	char *uri;
 	char *key;
-	char *ipaddr;
+	const char *ipaddr;
 	char *path = NULL;
 
 	ACCESS_CONTROL;
@@ -184,12 +184,11 @@ int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetSt
 		path = (char *)ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), key);
 		free(key);
 	}
-	ipaddr = ipcam_ionvif_get_server_addr(ionvif);
+	ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
 	asprintf(&uri, "rtsp://%s:%d/%s",
 	         ipaddr,
-	         ipcam_ionvif_get_rtsp_port (ionvif), 
+	         ipcam_ionvif_get_int_property(ionvif, "network:port:rtsp"), 
 	         path);
-	free(ipaddr);
 
 	SOAP_CALLOC(soap, trt__GetStreamUriResponse->MediaUri, 1);
 	SOAP_SET_STRING_FIELD(soap, trt__GetStreamUriResponse->MediaUri->Uri, uri);
