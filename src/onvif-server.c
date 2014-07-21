@@ -98,11 +98,14 @@ gpointer onvif_server_thread_func(gpointer data)
 
 	soap.user = ionvif;
 
-	while (!ipcam_ionvif_is_terminating(ionvif)) {
-		m = soap_bind(&soap, NULL, port, 100);
-		if (soap_valid_socket(m))
-			break;
-		usleep(1000000);
+	/* reuse address */
+ 	soap.bind_flags = SO_REUSEADDR;
+
+
+	m = soap_bind(&soap, NULL, port, 100);
+	if (!soap_valid_socket(m)) {
+		g_warn_if_reached();
+		return NULL;
 	}
 
 	printf("socket bind success %d\n", m);

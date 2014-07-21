@@ -34,20 +34,6 @@ do { \
 	val = var; \
 } while(0)
 
-
-const char * onvif_dm_get_ipv4_address(struct soap* soap);
-const char * onvif_dm_get_wsdl_url(struct soap* soap);
-const char * onvif_dm_get_service_url(struct soap* soap);
-const char * onvif_dm_get_service_namespace(struct soap* soap);
-void onvif_dm_get_service_version(struct soap* soap, int* major, int * minor);
-
-const char* onvif_dm_get_manufacturer(struct soap* soap);
-const char* onvif_dm_get_model(struct soap* soap);
-const char* onvif_dm_get_firmware_version(struct soap* soap);
-const char* onvif_dm_get_serial_number(struct soap* soap);
-const char* onvif_dm_get_hardware_id(struct soap* soap);
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct ONVIF_VIDEO_CONFIG

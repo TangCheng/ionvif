@@ -72,5 +72,6 @@ Makefile
 src/Makefile
 src/discovery/Makefile
 src/config/Makefile
+src/discovery/config/Makefile
 
 ])

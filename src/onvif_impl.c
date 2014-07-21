@@ -46,55 +46,6 @@ gboolean onvif_invocate_action(IpcamIOnvif *ionvif, const char *action,
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//an device implement can overwrite these functions.
-//device management functions
-
-#define IPV4_ADDRESS "192.168.1.4"
-#define WSDL_URL "http://192.168.1.4/onvif/ver10/device/wsdl/devicemgmt.wsdl"
-#define SERVICE_URL "http://192.168.1.4/onvif/services"
-#define SERVICE_NAMESPACE "http://www.onvif.org/ver10/events/wsdl"
-
-
-const char * onvif_dm_get_ipv4_address(struct soap* soap)
-{
-	return IPV4_ADDRESS;
-}
-
-const char * onvif_dm_get_wsdl_url(struct soap* soap) {
-	return WSDL_URL;
-}
-
-const char * onvif_dm_get_service_url(struct soap* soap) {
-	return SERVICE_URL;
-}
-
-const char * onvif_dm_get_service_namespace(struct soap* soap) {
-	return SERVICE_NAMESPACE;
-}
-
-void onvif_dm_get_service_version(struct soap* soap, int* major, int * minor) {
-	*major = 1;
-	*minor = 3;
-}
-
-const char* onvif_dm_get_manufacturer(struct soap* soap) {
-	return "IPCAM";
-}
-const char* onvif_dm_get_model(struct soap* soap) {
-	return "102";
-}
-const char* onvif_dm_get_firmware_version(struct soap* soap) {
-	return "V1.0.0";
-}
-const char* onvif_dm_get_serial_number(struct soap* soap) {
-	return "333-133-333";
-}
-const char* onvif_dm_get_hardware_id(struct soap* soap) {
-	return "Hi3518";
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //media
 
 static ONVIF_VIDEO_SOURCE __onvif_video_source[] = {

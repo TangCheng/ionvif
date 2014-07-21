@@ -248,6 +248,8 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	priv->service_thread = g_thread_new("onvif-server",
 	                                    onvif_server_thread_func,
 	                                    ionvif);
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_base_info", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_datetime", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_network", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 
 
@@ -259,6 +261,11 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	json_builder_add_string_value(builder, "device_name");
 	json_builder_add_string_value(builder, "comment");
 	json_builder_add_string_value(builder, "location");
+	json_builder_add_string_value(builder, "hardware");
+	json_builder_add_string_value(builder, "firmware");
+	json_builder_add_string_value(builder, "manufacturer");
+	json_builder_add_string_value(builder, "model");
+	json_builder_add_string_value(builder, "serial");
 	json_builder_end_array(builder);
 	json_builder_end_object(builder);
 	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,

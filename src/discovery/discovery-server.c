@@ -24,6 +24,8 @@
 #include "RemoteDiscoveryBinding.nsmap"
 #include <plugin/wsddapi.h>
 
+#include "ipcam-ionvif-discovery.h"
+
 
 /*WS-Discovery specialization address and port of UDP*/
 #define ONVIF_MULTICAST_GROUP ("239.255.255.250")  
@@ -40,19 +42,23 @@ char  g_scopes[] = "onvif://www.onvif.org/name/IPCAM";
 
 gpointer onvif_discovery_server_thread_func(gpointer data)
 {
+    IpcamIOnvifDiscovery *ionvif_discovery = IPCAM_IONVIF_DISCOVERY(data);
 	SOAP_SOCKET m, s;
 	struct soap soap;
 
 	soap_init1(&soap, SOAP_IO_UDP);
 
-	m = soap_bind(&soap, NULL,  ONVIF_DISCOVERY_PORT, 100);
- 	/* reuse address */
+    soap.user = ionvif_discovery;
+    /* reuse address */
  	soap.bind_flags = SO_REUSEADDR;
-	if (!soap_valid_socket(m)) {
+
+	m = soap_bind(&soap, NULL,  ONVIF_DISCOVERY_PORT, 100);
+    if (!soap_valid_socket(m)) {
 		soap_print_fault(&soap, stderr);
 		exit(-1);
 	}
-	/* optionally join a multicast group */
+
+    /* optionally join a multicast group */
 	if (ONVIF_MULTICAST_GROUP) { 
 		struct ip_mreq mreq;
 		mreq.imr_multiaddr.s_addr = inet_addr(ONVIF_MULTICAST_GROUP);
@@ -118,8 +124,12 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 		const char *ReplyTo, const char *Types, const char *Scopes,
 		const char *MatchBy, struct wsdd__ProbeMatchesType *matches)
 {
+    IpcamIOnvifDiscovery *ionvif_discovery = IPCAM_IONVIF_DISCOVERY(soap->user);
+    struct in_addr ipaddr;
 	char *xaddrs = NULL;
 	char *ep_ref = NULL;
+
+    g_assert(IPCAM_IS_IONVIF_DISCOVERY(ionvif_discovery));
 
 	printf("%s,%d\n", __FUNCTION__, __LINE__);
 	printf("MessageID:%s\n", MessageID);
@@ -141,8 +151,9 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 
 	soap_wsdd_init_ProbeMatches(soap, matches);
 
+    ipaddr = ipcam_ionvif_discovery_get_server_addr(ionvif_discovery);
 	asprintf(&xaddrs, "http://%s:%d/onvif/device_service", 
-	         "192.168.1.5",
+	         inet_ntoa(ipaddr),
 	         ONVIF_SERVICE_PORT);
 	ep_ref = "urn:uuid:464A4854-4656-5242-4530-313035394100";
 	soap_wsdd_add_ProbeMatch(soap, matches,

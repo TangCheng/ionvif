@@ -105,22 +105,24 @@ int __tds__GetServices(struct soap* soap,
 		struct _tds__GetServices *tds__GetServices,
 		struct _tds__GetServicesResponse *tds__GetServicesResponse)
 {
-	int major, minor;
-
+	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
+    gchar *service_url = NULL;
 
 	ACCESS_CONTROL;
-
-	onvif_dm_get_service_version(soap, &major, &minor);
 
 	tds__GetServicesResponse->__sizeService = 1;
 
 	SOAP_CALLOC_1(soap, tds__GetServicesResponse->Service);
 	SOAP_CALLOC_1(soap, tds__GetServicesResponse->Service[0].Version);
 
-	SOAP_SET_STRING_FIELD(soap, tds__GetServicesResponse->Service[0].XAddr, onvif_dm_get_service_url(soap));
-	SOAP_SET_STRING_FIELD(soap, tds__GetServicesResponse->Service[0].Namespace, onvif_dm_get_service_namespace(soap));
-	tds__GetServicesResponse->Service[0].Version->Major = major;
-	tds__GetServicesResponse->Service[0].Version->Minor = minor;
+    asprintf(&service_url, "http://%s/onvif/ver10/device/wsdl/devicemgmt.wsdl",
+             ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr"));
+	SOAP_SET_STRING_FIELD(soap, tds__GetServicesResponse->Service[0].XAddr, service_url);
+    free(service_url);
+#define SERVICE_NAMESPACE "http://www.onvif.org/ver10/events/wsdl"
+	SOAP_SET_STRING_FIELD(soap, tds__GetServicesResponse->Service[0].Namespace, SERVICE_NAMESPACE);
+	tds__GetServicesResponse->Service[0].Version->Major = 1;
+	tds__GetServicesResponse->Service[0].Version->Minor = 0;
 
 	return SOAP_OK;
 }
@@ -130,14 +132,20 @@ int __tds__GetDeviceInformation(struct soap* soap,
 		struct _tds__GetDeviceInformationResponse *tds__GetDeviceInformationResponse)
 {
 	struct _tds__GetDeviceInformationResponse *Response = tds__GetDeviceInformationResponse;
+	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
+    const gchar *hardware_id = ipcam_ionvif_get_string_property(ionvif, "base_info:hardware");
+    const gchar *firmware_ver = ipcam_ionvif_get_string_property(ionvif, "base_info:firmware");
+    const gchar *manufacturer = ipcam_ionvif_get_string_property(ionvif, "base_info:manufacturer");
+    const gchar *model = ipcam_ionvif_get_string_property(ionvif, "base_info:model");
+    const gchar *serial = ipcam_ionvif_get_string_property(ionvif, "base_info:serial");
 
 	ACCESS_CONTROL;
 
-	SOAP_SET_STRING_FIELD(soap, Response->FirmwareVersion, onvif_dm_get_firmware_version(soap));
-	SOAP_SET_STRING_FIELD(soap, Response->HardwareId, onvif_dm_get_hardware_id(soap));
-	SOAP_SET_STRING_FIELD(soap, Response->Manufacturer, onvif_dm_get_manufacturer(soap));
-	SOAP_SET_STRING_FIELD(soap, Response->Model, onvif_dm_get_model(soap));
-	SOAP_SET_STRING_FIELD(soap, Response->SerialNumber, onvif_dm_get_serial_number(soap));
+	SOAP_SET_STRING_FIELD(soap, Response->FirmwareVersion, firmware_ver);
+	SOAP_SET_STRING_FIELD(soap, Response->HardwareId, hardware_id);
+	SOAP_SET_STRING_FIELD(soap, Response->Manufacturer, manufacturer);
+	SOAP_SET_STRING_FIELD(soap, Response->Model, model);
+	SOAP_SET_STRING_FIELD(soap, Response->SerialNumber, serial);
 
 	return SOAP_OK;
 }
@@ -189,9 +197,15 @@ int __tds__GetWsdlUrl(struct soap* soap,
 		struct _tds__GetWsdlUrl *tds__GetWsdlUrl,
 		struct _tds__GetWsdlUrlResponse *tds__GetWsdlUrlResponse)
 {
-	ACCESS_CONTROL;
+	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
+    char *wsdl_url = NULL;
 
-	SOAP_SET_STRING_FIELD(soap,  tds__GetWsdlUrlResponse->WsdlUrl, onvif_dm_get_wsdl_url(soap));
+    ACCESS_CONTROL;
+
+    asprintf(&wsdl_url, "http://%s/onvif/ver10/device/wsdl/devicemgmt.wsdl",
+             ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr"));
+	SOAP_SET_STRING_FIELD(soap,  tds__GetWsdlUrlResponse->WsdlUrl, wsdl_url);
+    free(wsdl_url);
 
 	return SOAP_OK;
 }
@@ -202,6 +216,7 @@ int __tds__GetCapabilities(struct soap* soap,
 		struct _tds__GetCapabilitiesResponse *tds__GetCapabilitiesResponse)
 {
 	struct _tds__GetCapabilitiesResponse *Response = tds__GetCapabilitiesResponse;
+	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 
 	DBG_LINE;
 
@@ -219,8 +234,8 @@ int __tds__GetCapabilities(struct soap* soap,
 	SOAP_CALLOC_1(soap, Response->Capabilities->Device->System->SupportedVersions);
 
 
-	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Imaging->XAddr, onvif_dm_get_ipv4_address(soap));
-	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Media->XAddr, onvif_dm_get_ipv4_address(soap));
+	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Imaging->XAddr, ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr"));
+	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Media->XAddr, ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr"));
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTPMulticast[0], xsd__boolean__false_);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP[0], xsd__boolean__true_);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP[0], xsd__boolean__true_);

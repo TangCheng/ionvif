@@ -14,9 +14,9 @@ AM_CFLAGS = \
 
 GSOAP_DATA_DIR = $(GSOAP_PREFIX)/share/gsoap
 
-bindir = $(prefix)/ionvif
+bindir = $(prefix)/ionvif-discovery
 bin_PROGRAMS =  \
-	discovery
+	ionvif-discovery
 
 BUILT_SOURCES = \
 	soapC.c \
@@ -29,22 +29,24 @@ NSMAP_FILES = \
 	RemoteDiscoveryBinding.nsmap \
 	wsdd.nsmap
 
-discovery_SOURCES =  \
+ionvif_discovery_SOURCES =  \
 	$(BUILT_SOURCES) \
 	$(GSOAP_DATA_DIR)/plugin/wsaapi.c \
 	$(GSOAP_DATA_DIR)/plugin/wsddapi.c \
 	ipcam-ionvif-discovery.c \
 	ipcam-ionvif-discovery.h \
+    ipcam-ionvif-discovery-event-handler.c \
+    ipcam-ionvif-discovery-event-handler.h \
 	discovery-server.c \
 	main.c
 
-discovery_CFLAGS = -I$(GSOAP_DATA_DIR) 
+ionvif_discovery_CFLAGS = -I$(GSOAP_DATA_DIR) 
 
-discovery_LDFLAGS = 
+ionvif_discovery_LDFLAGS = 
 
-discovery_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS) $(GSOAP_LIBS)
+ionvif_discovery_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS) $(GSOAP_LIBS)
 
-discovery_DEPENDENCIES = \
+ionvif_discovery_DEPENDENCIES = \
 	onvif-generated.h
 
 ONVIF_WSDL = \
@@ -60,3 +62,6 @@ $(BUILT_SOURCES): onvif-generated.h
 	$(SOAPCPP2) -c -2 -L -x -w -a $(top_srcdir)/src/onvif.h $(GSOAP_IMPORT)
 
 CLEANFILES = onvif-generated.h $(BUILT_SOURCES) $(NSMAP_FILES)
+
+SUBDIRS = \
+	config

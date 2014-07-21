@@ -17,13 +17,19 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <arpa/inet.h>
+#include <json-glib/json-glib.h>
+#include <request_message.h>
 #include "discovery-server.h"
 #include "ipcam-ionvif-discovery.h"
+#include "ipcam-ionvif-discovery-event-handler.h"
 
 struct _IpcamIOnvifDiscoveryPrivate
 {
 	GThread *discovery_thread;
 	gboolean terminating;
+
+	struct in_addr server_addr;
 };
 
 
@@ -38,6 +44,7 @@ ipcam_ionvif_discovery_init (IpcamIOnvifDiscovery *ipcam_ionvif_discovery)
 
 	ipcam_ionvif_discovery->priv->discovery_thread = NULL;
 	ipcam_ionvif_discovery->priv->terminating = FALSE;
+	inet_aton("127.0.0.1", &ipcam_ionvif_discovery->priv->server_addr);
 }
 
 static void
@@ -69,14 +76,67 @@ ipcam_ionvif_discovery_class_init (IpcamIOnvifDiscoveryClass *klass)
 	base_service_class->in_loop = ipcam_ionvif_discovery_in_loop;
 }
 
+
+void ipcam_ionvif_discovery_update_network_setting(IpcamIOnvifDiscovery *ionvif_discovery, JsonNode *body)
+{
+    JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
+	IpcamIOnvifDiscoveryPrivate *priv = ionvif_discovery->priv;
+
+    if (json_object_has_member(items_obj, "address")) {
+        JsonObject *addr_obj = json_object_get_object_member(items_obj, "address");
+        if (json_object_has_member(addr_obj, "ipaddr"))
+            inet_aton(json_object_get_string_member(addr_obj, "ipaddr"), &priv->server_addr);
+    }
+}
+
+static void network_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
+{
+	IpcamIOnvifDiscovery *ionvif_discovery = IPCAM_IONVIF_DISCOVERY(obj);
+	g_assert(IPCAM_IS_IONVIF_DISCOVERY(ionvif_discovery));
+
+	if (!timeout && msg) {
+		JsonNode *body;
+		g_object_get(msg, "body", &body, NULL);
+		if (body)
+			ipcam_ionvif_discovery_update_network_setting(ionvif_discovery, body);
+	}
+}
+
 static void ipcam_ionvif_discovery_before_start(IpcamBaseService *base_service)
 {
 	IpcamIOnvifDiscovery *ionvif_discovery = IPCAM_IONVIF_DISCOVERY(base_service);
 	IpcamIOnvifDiscoveryPrivate *priv = ionvif_discovery->priv;
+	JsonBuilder *builder;
+	const gchar *token = "discovery_token";
+	IpcamRequestMessage *req_msg;
 
 	priv->discovery_thread = g_thread_new("onvif-discovery-server",
 	                                      onvif_discovery_server_thread_func,
 	                                      ionvif_discovery);
+
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif_discovery), "set_network",
+	                                       IPCAM_TYPE_IONVIF_DISCOVERY_EVENT_HANDLER);
+
+	/* Request the Network setting */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "address");
+	json_builder_add_string_value(builder, "server_port");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", "get_network",
+	                       "body", json_builder_get_root(builder),
+	                       NULL);
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif_discovery), IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token,
+	                            network_message_handler, 5);
+
+	g_object_unref(req_msg);
+	g_object_unref(builder);
+
 }
 
 static void ipcam_ionvif_discovery_in_loop(IpcamBaseService *base_service)
@@ -86,4 +146,9 @@ static void ipcam_ionvif_discovery_in_loop(IpcamBaseService *base_service)
 gboolean ipcam_ionvif_discovery_is_terminating(IpcamIOnvifDiscovery *ionvif_discovery)
 {
 	return ionvif_discovery->priv->terminating;
+}
+
+struct in_addr ipcam_ionvif_discovery_get_server_addr(IpcamIOnvifDiscovery *ionvif_discovery)
+{
+	return ionvif_discovery->priv->server_addr;
 }
