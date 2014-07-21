@@ -60,6 +60,8 @@ ionvif_SOURCES += \
 	$(GSOAP_DATA_DIR)/plugin/wsaapi.c
 endif
 
+ionvif_CFLAGS = -I$(GSOAP_DATA_DIR)
+
 ionvif_LDFLAGS =
 
 ionvif_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS) $(GSOAP_LIBS)
