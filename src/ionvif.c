@@ -147,7 +147,11 @@ void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body)
                                          json_object_get_string_member(items_obj, "hostname"));
     if (json_object_has_member(items_obj, "address")) {
         JsonObject *addr_obj = json_object_get_object_member(items_obj, "address");
-        if (json_object_has_member(addr_obj, "ipaddr"))
+
+		if (json_object_has_member(addr_obj, "hwaddr"))
+            ipcam_ionvif_set_string_property(ionvif, "network:address:hwaddr",
+                                             json_object_get_string_member(addr_obj, "hwaddr"));
+		if (json_object_has_member(addr_obj, "ipaddr"))
             ipcam_ionvif_set_string_property(ionvif, "network:address:ipaddr",
                                              json_object_get_string_member(addr_obj, "ipaddr"));
         if (json_object_has_member(addr_obj, "netmask"))

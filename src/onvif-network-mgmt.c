@@ -252,11 +252,13 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 	struct _tds__GetNetworkInterfacesResponse *Response = tds__GetNetworkInterfacesResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 	int dhcp = 0;
+    const char *hwaddr = NULL;
 	const char *ipaddr = NULL;
 	const char *netmask = NULL;
 
 	ACCESS_CONTROL;
 
+    hwaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:hwaddr");
     dhcp = ipcam_ionvif_get_int_property(ionvif, "network:autoconf");
     ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
     netmask = ipcam_ionvif_get_string_property(ionvif, "network:address:netmask");
@@ -268,10 +270,16 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 
     SOAP_SET_STRING_FIELD(soap, netif->token, "eth0");
     netif->Enabled = xsd__boolean__true_;
+
+    if (hwaddr) {
+        SOAP_CALLOC_1(soap, netif->Info);
+        SOAP_SET_STRING_FIELD(soap, netif->Info->Name, "eth0");
+        SOAP_SET_STRING_FIELD(soap, netif->Info->HwAddress, hwaddr);
+    }
+
     SOAP_CALLOC_1(soap, netif->IPv4);
     netif->IPv4->Enabled = xsd__boolean__true_;
     SOAP_CALLOC_1(soap, netif->IPv4->Config);
-
     if (dhcp) {
         netif->IPv4->Config->DHCP = xsd__boolean__true_;
         SOAP_CALLOC_1(soap, netif->IPv4->Config->FromDHCP);

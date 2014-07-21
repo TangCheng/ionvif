@@ -122,8 +122,7 @@ static void ipcam_ionvif_discovery_before_start(IpcamBaseService *base_service)
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "address");
-	json_builder_add_string_value(builder, "server_port");
+	json_builder_add_string_value(builder, "dyn-address");
 	json_builder_end_array(builder);
 	json_builder_end_object(builder);
 	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
