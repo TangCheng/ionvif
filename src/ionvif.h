@@ -80,6 +80,7 @@ static inline void ipcam_ionvif_set_int_property(IpcamIOnvif *ionvif, gchar *key
 	ipcam_ionvif_set_property(ionvif, g_strdup(key), pvalue);
 }
 
+void ipcam_ionvif_update_base_info_setting(IpcamIOnvif *ionvif, JsonNode *body);
 void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body);
 void ipcam_ionvif_update_datetime_setting(IpcamIOnvif *ionvif, JsonNode *body);
 

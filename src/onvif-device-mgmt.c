@@ -16,43 +16,25 @@ const static char *__fixed_onvif_scopes[] = {
 int __tds__GetScopes(struct soap *soap, struct _tds__GetScopes *tds__GetScopes, struct _tds__GetScopesResponse *tds__GetScopesResponse)
 {
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	JsonBuilder *builder;
-	JsonNode *response = NULL;
 	int nr_var_scopes = 0;
 	char *var_scopes[2] = { NULL, NULL };
 	int i;
 
 	ACCESS_CONTROL;
 
-	builder = json_builder_new();
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "items");
-	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "device_name");
-	json_builder_add_string_value(builder, "location");
-	json_builder_end_array(builder);
-	json_builder_end_object(builder);
+	const gchar *device_name = ipcam_ionvif_get_string_property(ionvif, "base_info:device_name");
+	const gchar *location = ipcam_ionvif_get_string_property(ionvif, "base_info:location");
 
-	if (onvif_invocate_action(ionvif, "get_base_info", json_builder_get_root(builder), &response)) {
-		JsonObject *items;
-
-		items = json_object_get_object_member(json_node_get_object(response), "items");
-
-		if (json_object_has_member(items, "device_name")) {
-			char *str = NULL;
-			if (asprintf(&str, "odm:name:%s", json_object_get_string_member(items, "device_name")) > 0)
-				var_scopes[nr_var_scopes++] = str;
-		}
-		if (json_object_has_member(items, "location")) {
-			char *str = NULL;
-			if (asprintf(&str, "odm:location:%s", json_object_get_string_member(items, "location")) > 0)
-				var_scopes[nr_var_scopes++] = str;
-		}
-
-		json_node_free(response);
-	}
-
-	g_object_unref(builder);
+    if (device_name) {
+        gchar *str;
+        if (asprintf(&str, "odm:name:%s", device_name) > 0)
+            var_scopes[nr_var_scopes++] = str;
+    }
+    if (location) {
+        gchar *str;
+        if (asprintf(&str, "odm:location:%s", location) > 0)
+            var_scopes[nr_var_scopes++] = str;
+    }
 
 	tds__GetScopesResponse->__sizeScopes = ARRAY_SIZE(__fixed_onvif_scopes) + nr_var_scopes;
 
@@ -252,12 +234,11 @@ int __tds__GetCapabilities(struct soap* soap,
 
 
 
-/** Auto-test server operation __tds__SetSystemDateAndTime */
 int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAndTime *tds__SetSystemDateAndTime, struct _tds__SetSystemDateAndTimeResponse *tds__SetSystemDateAndTimeResponse)
 {
+    struct _tds__SetSystemDateAndTime *Request = tds__SetSystemDateAndTime;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 	JsonBuilder *builder;
-	JsonNode *response = NULL;
 	char *str_datetime = NULL;
 
 	builder = json_builder_new();
@@ -265,36 +246,39 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_object(builder);
 	// TimeZone
-	json_builder_set_member_name(builder, "timezone");
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "str_value");
-	json_builder_add_string_value(builder, tds__SetSystemDateAndTime->TimeZone->TZ);
-	json_builder_end_object(builder);
+    if (Request->TimeZone && Request->TimeZone->TZ) {
+        json_builder_set_member_name(builder, "timezone");
+        json_builder_begin_object(builder);
+        json_builder_set_member_name(builder, "str_value");
+        json_builder_add_string_value(builder, Request->TimeZone->TZ);
+        json_builder_end_object(builder);
+    }
 	//User NTP
 	json_builder_set_member_name(builder, "use_ntp");
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "int_value");
-	json_builder_add_int_value(builder, tds__SetSystemDateAndTime->DateTimeType);
+	json_builder_add_int_value(builder, Request->DateTimeType);
 	json_builder_end_object(builder);
 	// DateTime
-	json_builder_set_member_name(builder, "datetime");
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "str_value");
-	asprintf(&str_datetime, "%04d-%02d-%02d %02d:%02d:%02d",
-	         tds__SetSystemDateAndTime->UTCDateTime->Date->Year,
-	         tds__SetSystemDateAndTime->UTCDateTime->Date->Month,
-	         tds__SetSystemDateAndTime->UTCDateTime->Date->Day,
-	         tds__SetSystemDateAndTime->UTCDateTime->Time->Hour,
-	         tds__SetSystemDateAndTime->UTCDateTime->Time->Minute,
-	         tds__SetSystemDateAndTime->UTCDateTime->Time->Second);
-	json_builder_add_string_value(builder, str_datetime);
-	free(str_datetime);
-	json_builder_end_object(builder);
+    if (Request->UTCDateTime) {
+        json_builder_set_member_name(builder, "datetime");
+        json_builder_begin_object(builder);
+        json_builder_set_member_name(builder, "str_value");
+        asprintf(&str_datetime, "%04d-%02d-%02d %02d:%02d:%02d",
+                 Request->UTCDateTime->Date->Year,
+                 Request->UTCDateTime->Date->Month,
+                 Request->UTCDateTime->Date->Day,
+                 Request->UTCDateTime->Time->Hour,
+                 Request->UTCDateTime->Time->Minute,
+                 Request->UTCDateTime->Time->Second);
+        json_builder_add_string_value(builder, str_datetime);
+        free(str_datetime);
+        json_builder_end_object(builder);
+    }
 
 	json_builder_end_object(builder);
 
-	if (onvif_invocate_action(ionvif, "set_datetime", json_builder_get_root(builder), &response))
-		json_node_free(response);
+	onvif_invocate_action(ionvif, "set_datetime", json_builder_get_root(builder), NULL);
 
 	g_object_unref(builder);
 
@@ -302,7 +286,6 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
 }
 
 
-/** Auto-test server operation __tds__GetSystemDateAndTime */
 int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAndTime *tds__GetSystemDateAndTime, struct _tds__GetSystemDateAndTimeResponse *tds__GetSystemDateAndTimeResponse)
 {
 	struct _tds__GetSystemDateAndTimeResponse *Response = tds__GetSystemDateAndTimeResponse;

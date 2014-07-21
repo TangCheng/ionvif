@@ -103,6 +103,38 @@ ipcam_ionvif_class_init (IpcamIOnvifClass *klass)
 	base_service_class->in_loop = ipcam_ionvif_in_loop;
 }
 
+
+void ipcam_ionvif_update_base_info_setting(IpcamIOnvif *ionvif, JsonNode *body)
+{
+    JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
+	GList *members, *item;
+
+	members = json_object_get_members(items_obj);
+	for (item = g_list_first(members); item; item = g_list_next(item)) {
+		const gchar *name = (const gchar *)item->data;
+		gchar *key;
+		if (asprintf(&key, "base_info:%s", (const gchar *)item->data) > 0) {
+			const gchar *value = json_object_get_string_member(items_obj, name);
+			ipcam_ionvif_set_string_property(ionvif, key, value);
+			g_free(key);
+		}
+	}
+}
+
+static void base_info_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
+{
+	IpcamIOnvif *ionvif = IPCAM_IONVIF(obj);
+	g_assert(IPCAM_IS_IONVIF(ionvif));
+
+	if (!timeout && msg) {
+		JsonNode *body;
+		g_object_get(msg, "body", &body, NULL);
+		if (body)
+			ipcam_ionvif_update_base_info_setting(ionvif, body);
+	}
+}
+
+
 void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body)
 {
     JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
@@ -217,6 +249,27 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                                    onvif_server_thread_func,
 	                                    ionvif);
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_network", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
+
+
+	/* Request the Base Information */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "device_name");
+	json_builder_add_string_value(builder, "comment");
+	json_builder_add_string_value(builder, "location");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", "get_base_info",
+	                       "body", json_builder_get_root(builder),
+	                       NULL);
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token,
+	                            base_info_message_handler, 5);
+	g_object_unref(req_msg);
+	g_object_unref(builder);
 
 	/* Request the Network setting */
 	builder = json_builder_new();
