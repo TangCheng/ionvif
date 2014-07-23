@@ -73,10 +73,10 @@ WSDL2H = $(GSOAP_DIR)/bin/wsdl2h
 SOAPCPP2 = $(GSOAP_DIR)/bin/soapcpp2
 
 $(WSDL2H): $(SOAPCPP2)
-	$(MAKE) -C $(GSOAP_DIR)/wsdl -f $(GSOAP_DIR)/wsdl/MakefileManual
+	$(MAKE) -C $(GSOAP_DIR)/wsdl -f MakefileManual
 
 $(SOAPCPP2):
-	$(MAKE) -C $(GSOAP_DIR)/src -f $(GSOAP_DIR)/src/MakefileManual
+	$(MAKE) -C $(GSOAP_DIR)/src -f MakefileManual
 
 ONVIF_WSDL = \
 	$(srcdir)/wsdl/ver10/device/wsdl/devicemgmt.wsdl \
