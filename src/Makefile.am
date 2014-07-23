@@ -2,6 +2,9 @@
 
 ## Created by Anjuta
 
+GSOAP_CFLAGS=$(shell PKG_CONFIG_PATH=$(top_builddir)/gsoap-2.8 pkg-config --cflags gsoap)
+GSOAP_LDFLAGS=$(shell PKG_CONFIG_PATH=$(top_builddir)/gsoap-2.8 pkg-config --libs gsoap)
+
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -25,7 +28,7 @@ NSMAP_FILES = \
 	MediaBinding.nsmap \
 	ImagingBinding.nsmap
 
-GSOAP_DATA_DIR = $(GSOAP_PREFIX)/share/gsoap
+GSOAP_DIR = $(top_srcdir)/gsoap-2.8/gsoap
 
 bindir = $(prefix)/ionvif
 bin_PROGRAMS = ionvif
@@ -33,7 +36,7 @@ bin_PROGRAMS = ionvif
 ionvif_SOURCES = \
 	onvif.h \
 	$(BUILT_SOURCES) \
-	$(GSOAP_DATA_DIR)/custom/duration.c \
+	$(GSOAP_DIR)/custom/duration.c \
     ipcam-ionvif-event-handler.c \
     ipcam-ionvif-event-handler.h \
 	onvif-auth.c \
@@ -54,31 +57,40 @@ ionvif_DEPENDENCIES = \
 
 if ENABLE_OPENSSL
 ionvif_SOURCES += \
-	$(GSOAP_DATA_DIR)/plugin/mecevp.c \
-	$(GSOAP_DATA_DIR)/plugin/smdevp.c \
-	$(GSOAP_DATA_DIR)/plugin/wsseapi.c \
-	$(GSOAP_DATA_DIR)/plugin/wsaapi.c
+	$(GSOAP_DIR)/plugin/mecevp.c \
+	$(GSOAP_DIR)/plugin/smdevp.c \
+	$(GSOAP_DIR)/plugin/wsseapi.c \
+	$(GSOAP_DIR)/plugin/wsaapi.c
 endif
 
-ionvif_CFLAGS = -I$(GSOAP_DATA_DIR)
+ionvif_CFLAGS = -I$(GSOAP_DIR)
 
-ionvif_LDFLAGS =
+ionvif_LDFLAGS = -L$(top_builddir)/gsoap-2.8/gsoap -lgsoap
 
-ionvif_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS) $(GSOAP_LIBS)
+ionvif_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS)
+
+WSDL2H = $(GSOAP_DIR)/bin/wsdl2h
+SOAPCPP2 = $(GSOAP_DIR)/bin/soapcpp2
+
+$(WSDL2H): $(SOAPCPP2)
+	$(MAKE) -C $(GSOAP_DIR)/wsdl -f $(GSOAP_DIR)/wsdl/MakefileManual
+
+$(SOAPCPP2):
+	$(MAKE) -C $(GSOAP_DIR)/src -f $(GSOAP_DIR)/src/MakefileManual
 
 ONVIF_WSDL = \
-	wsdl/ver10/device/wsdl/devicemgmt.wsdl \
-	wsdl/ver10/media/wsdl/media.wsdl \
-	wsdl/ver20/imaging/wsdl/imaging.wsdl
+	$(srcdir)/wsdl/ver10/device/wsdl/devicemgmt.wsdl \
+	$(srcdir)/wsdl/ver10/media/wsdl/media.wsdl \
+	$(srcdir)/wsdl/ver20/imaging/wsdl/imaging.wsdl
 
-onvif-generated.h: $(ONVIF_WSDL)
-	$(WSDL2H) -o $@ -c -s -x -y -P -p -t $(top_srcdir)/src/typemap.dat $^
+onvif-generated.h: $(ONVIF_WSDL) $(WSDL2H)
+	$(WSDL2H) -o $@ -c -s -x -y -P -p -t $(top_srcdir)/src/typemap.dat $(ONVIF_WSDL)
 
 GSOAP_IMPORT = \
-	-I$(GSOAP_DATA_DIR) \
-	-I$(GSOAP_DATA_DIR)/import
+	-I$(GSOAP_DIR) \
+	-I$(GSOAP_DIR)/import
 
-$(BUILT_SOURCES): onvif-generated.h
+$(BUILT_SOURCES): onvif-generated.h $(SOAPCPP2)
 	$(SOAPCPP2) -c -L -x -w -a -S $(top_srcdir)/src/onvif.h -I. $(GSOAP_IMPORT)
 
 CLEANFILES = onvif-generated.h $(BUILT_SOURCES) $(NSMAP_FILES)

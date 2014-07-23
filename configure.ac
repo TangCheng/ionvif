@@ -36,36 +36,9 @@ if test "x$enable_openssl" != "xno"; then
 	fi
 fi
 
-if test "x$enable_openssl" = "xyes"; then
-	PKG_CHECK_MODULES(GSOAP, [gsoapssl])
-else
-	PKG_CHECK_MODULES(GSOAP, [gsoap])
-fi
-
 AM_CONDITIONAL(ENABLE_OPENSSL, test x"$enable_openssl" = "xyes")
 
-GSOAP_PREFIX="$(pkg-config --variable=prefix gsoap)"
-AC_SUBST(GSOAP_PREFIX)
-
-AC_PATH_PROG([WSDL2H], [wsdl2h], [wsdl2h], [${GSOAP_PREFIX}/bin:${PATH}])
-test -z "${WSDL2H}" && AC_MSG_ERROR([
-*** You need the wsdl2h tool which is installed
-*** from gSoap.
-***
-*** Either the location where you installed your gSoap is
-*** not in your PATH or something is screwed up with your
-*** gSoap installation
-])
-
-AC_PATH_PROG([SOAPCPP2], [soapcpp2], [soapcpp2], [${GSOAP_PREFIX}/bin:${PATH}])
-test -z "${SOAPCPP2}" && AC_MSG_ERROR([
-*** You need the soapcpp2 tool which is installed
-*** from gSoap.
-***
-*** Either the location where you installed your gSoap is
-*** not in your PATH or something is screwed up with your
-*** gSoap installation
-])
+AC_CONFIG_SUBDIRS([gsoap-2.8])
 
 AC_OUTPUT([
 Makefile
@@ -73,5 +46,4 @@ src/Makefile
 src/discovery/Makefile
 src/config/Makefile
 src/discovery/config/Makefile
-
 ])
