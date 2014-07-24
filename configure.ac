@@ -19,8 +19,8 @@ LT_INIT
 
 PKG_CHECK_MODULES(IONVIF, [json-glib-1.0 glib-2.0 gobject-2.0 libipcam_base-0.1.0])
 
-AC_ARG_ENABLE([openssl],
-	AS_HELP_STRING([--enable-openssl],[Build with OpenSSL support (default: enabled)]),
+AC_ARG_ENABLE([ssl],
+	AS_HELP_STRING([--disable-ssl],[Build with OpenSSL support (default: enabled)]),
 	[enable_openssl=$enableval],
 	[enable_openssl=yes])
 
