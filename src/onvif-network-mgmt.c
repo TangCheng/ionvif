@@ -306,7 +306,7 @@ static char *PrefixLength2Netmask(unsigned int prefix_len)
 
     prefix_len = prefix_len > 32 ? 32 : prefix_len;
 
-	for (i = 31; i >= 32 - prefix_len; i--)
+	for (i = 31; i >= (32 - (int)prefix_len); i--)
 		addr.s_addr |= (1 << i);
 
 	return inet_ntoa(addr);

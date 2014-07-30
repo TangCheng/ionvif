@@ -64,7 +64,7 @@ gpointer onvif_discovery_server_thread_func(gpointer data)
 		mreq.imr_multiaddr.s_addr = inet_addr(ONVIF_MULTICAST_GROUP);
 		mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 		if (setsockopt(soap.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
-			printf("setsockopt failed\n");
+			perror("setsockopt failed:");
 	      	exit(-1);
 		}
 	}
