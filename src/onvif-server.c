@@ -26,7 +26,6 @@
 #include "onvif_impl.h"
 #include "ionvif.h"
 
-const char *TMPDIR = ".";
 
 struct mime_server_handle
 {
@@ -47,7 +46,7 @@ static void *mime_server_write_open(struct soap *soap, void *unused_handle,
 		return NULL;
 	}
 	/* Create a new file */
-	file = tempnam(TMPDIR, "data");
+	file = tempnam(LOCAL_STATE_DIR, "data");
 	/* The file name is also the key */
 	handle->key = soap_strdup(soap, file);
 	handle->fd = fopen(file, "wb");

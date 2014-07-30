@@ -9,6 +9,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
+	-DLOCAL_STATE_DIR=\""$(localstatedir)"\" \
 	$(IONVIF_CFLAGS) \
 	$(OPENSSL_CFLAGS) \
 	$(GSOAP_CFLAGS)
