@@ -38,8 +38,8 @@ ionvif_discovery_SOURCES =  \
 	$(GSOAP_DIR)/plugin/wsddapi.c \
 	ipcam-ionvif-discovery.c \
 	ipcam-ionvif-discovery.h \
-    ipcam-ionvif-discovery-event-handler.c \
-    ipcam-ionvif-discovery-event-handler.h \
+	ipcam-ionvif-discovery-event-handler.c \
+	ipcam-ionvif-discovery-event-handler.h \
 	discovery-server.c \
 	main.c
 

@@ -55,6 +55,8 @@ GType ipcam_ionvif_discovery_get_type (void) G_GNUC_CONST;
 gboolean ipcam_ionvif_discovery_is_terminating(IpcamIOnvifDiscovery *ionvif_discovery);
 
 struct in_addr ipcam_ionvif_discovery_get_server_addr(IpcamIOnvifDiscovery *ionvif_discovery);
+guint ipcam_ionvif_discovery_get_server_port(IpcamIOnvifDiscovery *ionvif_discovery);
+const gchar *ipcam_ionvif_discovery_get_mac_addr(IpcamIOnvifDiscovery *ionvif_discovery);
 
 void ipcam_ionvif_discovery_update_network_setting(IpcamIOnvifDiscovery *ionvif_discovery, JsonNode *body);
 

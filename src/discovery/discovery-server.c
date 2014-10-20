@@ -126,6 +126,7 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 {
     IpcamIOnvifDiscovery *ionvif_discovery = IPCAM_IONVIF_DISCOVERY(soap->user);
     struct in_addr ipaddr;
+    guint http_port;
 	char *xaddrs = NULL;
 	char *ep_ref = NULL;
 
@@ -152,10 +153,21 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 	soap_wsdd_init_ProbeMatches(soap, matches);
 
     ipaddr = ipcam_ionvif_discovery_get_server_addr(ionvif_discovery);
-	asprintf(&xaddrs, "http://%s:%d/onvif/device_service", 
-	         inet_ntoa(ipaddr),
-	         ONVIF_SERVICE_PORT);
-	ep_ref = "urn:uuid:464A4854-4656-5242-4530-313035394100";
+    http_port = ipcam_ionvif_discovery_get_server_port(ionvif_discovery);
+    if (http_port == 80)
+    {
+        asprintf(&xaddrs, "http://%s/onvif/device_service", 
+                 inet_ntoa(ipaddr));
+    }
+    else
+    {
+        asprintf(&xaddrs, "http://%s:%d/onvif/device_service", 
+                 inet_ntoa(ipaddr),
+                 http_port);
+    }
+    ep_ref = g_malloc0(64);
+	g_snprintf(ep_ref, 64, "urn:uuid:464A4854-4656-5242-4530-%s",
+               ipcam_ionvif_discovery_get_mac_addr(ionvif_discovery));
 	soap_wsdd_add_ProbeMatch(soap, matches,
 				soap_strdup(soap, ep_ref),
 				"tdn:NetworkVideoTransmitter",
@@ -164,6 +176,7 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
 				soap_strdup(soap, xaddrs),
 				10);
 	free(xaddrs);
+    g_free(ep_ref);
 
 	return SOAP_WSDD_MANAGED;
 }
