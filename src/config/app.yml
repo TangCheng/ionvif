@@ -1,9 +1,7 @@
 token: ionvif_token
-onvif:
-  profile:
-    MainProfileToken: MainVideo.mkv
-    SubProfileToken: SubVideo.mkv
-subscribe:
-  iconfig_pub: tcp://127.0.0.1:3010
 connect:
-  iconfig: tcp://127.0.0.1:3000
+  iconfig: tcp://127.0.0.1:65400
+subscribe:
+  iconfig_pub: tcp://127.0.0.1:65401
+onvif:
+  port: 65410

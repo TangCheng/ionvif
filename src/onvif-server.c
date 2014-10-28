@@ -87,11 +87,13 @@ gpointer onvif_server_thread_func(gpointer data)
 {
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)data;
 	SOAP_SOCKET m, s;
-	int port = 8080;
+	int port = 65410;
 	struct soap soap;
 
 	soap_init1(&soap, SOAP_ENC_MTOM);
 
+	const gchar *sport = ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), "onvif:port");
+	port = g_ascii_strtoull(sport, NULL, 10);
 #include "DeviceBinding.nsmap"
 	soap_set_namespaces(&soap, namespaces);
 
