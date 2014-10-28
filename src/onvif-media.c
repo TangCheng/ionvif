@@ -176,18 +176,20 @@ int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetSt
 	char *uri;
 	char *key;
 	const char *ipaddr;
+    guint port;
 	char *path = NULL;
 
 	ACCESS_CONTROL;
 
-	if (asprintf(&key, "onvif:profile:%s", trt__GetStreamUri->ProfileToken) > 0) {
-		path = (char *)ipcam_base_app_get_config(IPCAM_BASE_APP(ionvif), key);
+	if (asprintf(&key, "video:%s:stream_path", trt__GetStreamUri->ProfileToken) > 0) {
+		path = (char *)ipcam_ionvif_get_string_property(ionvif, key);
 		free(key);
 	}
 	ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
+    port = ipcam_ionvif_get_int_property(ionvif, "network:port:rtsp");
 	asprintf(&uri, "rtsp://%s:%d/%s",
 	         ipaddr,
-	         ipcam_ionvif_get_int_property(ionvif, "network:port:rtsp"), 
+	         port, 
 	         path);
 
 	SOAP_CALLOC(soap, trt__GetStreamUriResponse->MediaUri, 1);

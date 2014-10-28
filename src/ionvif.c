@@ -139,18 +139,12 @@ void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body)
 {
     JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
 
-    if (json_object_has_member(items_obj, "autoconf"))
-        ipcam_ionvif_set_int_property(ionvif, "network:autoconf",
-                                      json_object_get_int_member(items_obj, "autoconf"));
-    if (json_object_has_member(items_obj, "hostname"))
-        ipcam_ionvif_set_string_property(ionvif, "network:hostname",
-                                         json_object_get_string_member(items_obj, "hostname"));
+    if (json_object_has_member(items_obj, "method"))
+        ipcam_ionvif_set_string_property(ionvif, "network:method",
+										 json_object_get_string_member(items_obj, "method"));
     if (json_object_has_member(items_obj, "address")) {
         JsonObject *addr_obj = json_object_get_object_member(items_obj, "address");
 
-		if (json_object_has_member(addr_obj, "hwaddr"))
-            ipcam_ionvif_set_string_property(ionvif, "network:address:hwaddr",
-                                             json_object_get_string_member(addr_obj, "hwaddr"));
 		if (json_object_has_member(addr_obj, "ipaddr"))
             ipcam_ionvif_set_string_property(ionvif, "network:address:ipaddr",
                                              json_object_get_string_member(addr_obj, "ipaddr"));
@@ -177,12 +171,15 @@ void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body)
             ipcam_ionvif_set_string_property(ionvif, "network:pppoe:password",
                                              json_object_get_string_member(pppoe_obj, "password"));
     }
-    if (json_object_has_member(items_obj, "server_port")) {
-        JsonObject *port_obj = json_object_get_object_member(items_obj, "server_port");
+    if (json_object_has_member(items_obj, "port")) {
+        JsonObject *port_obj = json_object_get_object_member(items_obj, "port");
 
         if (json_object_has_member(port_obj, "http"))
             ipcam_ionvif_set_int_property(ionvif, "network:port:http",
                                           json_object_get_int_member(port_obj, "http"));
+		if (json_object_has_member(port_obj, "ftp"))
+            ipcam_ionvif_set_int_property(ionvif, "network:port:ftp",
+                                          json_object_get_int_member(port_obj, "ftp"));
         if (json_object_has_member(port_obj, "rtsp"))
             ipcam_ionvif_set_int_property(ionvif, "network:port:rtsp",
                                           json_object_get_int_member(port_obj, "rtsp"));
@@ -208,22 +205,16 @@ void ipcam_ionvif_update_datetime_setting(IpcamIOnvif *ionvif, JsonNode *body)
     JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
 
     if (json_object_has_member(items_obj, "timezone")) {
-		JsonObject *obj = json_object_get_object_member(items_obj, "timezone");
-		if (json_object_has_member(obj, "str_value"))
-			ipcam_ionvif_set_string_property(ionvif, "datetime:timezone",
-			                                 json_object_get_string_member(obj, "str_value"));
+		ipcam_ionvif_set_string_property(ionvif, "datetime:timezone",
+										 json_object_get_string_member(items_obj, "timezone"));
 	}
     if (json_object_has_member(items_obj, "use_ntp")) {
-		JsonObject *obj = json_object_get_object_member(items_obj, "use_ntp");
-		if (json_object_has_member(obj, "int_value"))
-			ipcam_ionvif_set_int_property(ionvif, "datetime:use_ntp",
-			                              json_object_get_int_member(obj, "int_value"));
+		ipcam_ionvif_set_int_property(ionvif, "datetime:use_ntp",
+									  json_object_get_boolean_member(items_obj, "use_ntp"));
 	}
     if (json_object_has_member(items_obj, "ntp_server")) {
-		JsonObject *obj = json_object_get_object_member(items_obj, "ntp_server");
-		if (json_object_has_member(obj, "str_value"))
-			ipcam_ionvif_set_string_property(ionvif, "datetime:ntp_server",
-			                                 json_object_get_string_member(obj, "str_value"));
+		ipcam_ionvif_set_string_property(ionvif, "datetime:ntp_server",
+										 json_object_get_string_member(items_obj, "ntp_server"));
 	}
 }
 
@@ -287,11 +278,10 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_array(builder);
-	json_builder_add_string_value(builder, "autoconf");
-	json_builder_add_string_value(builder, "hostname");
+	json_builder_add_string_value(builder, "method");
 	json_builder_add_string_value(builder, "address");
 	json_builder_add_string_value(builder, "pppoe");
-	json_builder_add_string_value(builder, "server_port");
+	json_builder_add_string_value(builder, "port");
 	json_builder_end_array(builder);
 	json_builder_end_object(builder);
 	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
