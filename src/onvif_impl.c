@@ -113,7 +113,7 @@ static ONVIF_VIDEO_ENCODER_CONFIG __onvif_video_encoder_config[] = {
 static ONVIF_PROFILE __onvif_profile[] = {
 	[0] = {
 		.Name = "MainProfile",
-		.token = "MainProfileToken",
+		.token = "main_profile",
 		.VideoSourceConfig = &__onvif_video_config[0],
 		.AudioSourceConfig = NULL,
 		.VideoEncoderConfig = &__onvif_video_encoder_config[0],
@@ -121,7 +121,7 @@ static ONVIF_PROFILE __onvif_profile[] = {
 	},
 	[1] = {
 		.Name = "SubProfile",
-		.token = "SubProfileToken",
+		.token = "sub_profile",
 		.VideoSourceConfig = &__onvif_video_config[0],
 		.AudioSourceConfig = NULL,
 		.VideoEncoderConfig = &__onvif_video_encoder_config[1],

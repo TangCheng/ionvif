@@ -263,22 +263,14 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
 	// TimeZone
     if (Request->TimeZone && Request->TimeZone->TZ) {
         json_builder_set_member_name(builder, "timezone");
-        json_builder_begin_object(builder);
-        json_builder_set_member_name(builder, "str_value");
         json_builder_add_string_value(builder, Request->TimeZone->TZ);
-        json_builder_end_object(builder);
     }
 	//User NTP
 	json_builder_set_member_name(builder, "use_ntp");
-	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "int_value");
 	json_builder_add_int_value(builder, Request->DateTimeType);
-	json_builder_end_object(builder);
 	// DateTime
     if (Request->UTCDateTime) {
         json_builder_set_member_name(builder, "datetime");
-        json_builder_begin_object(builder);
-        json_builder_set_member_name(builder, "str_value");
         asprintf(&str_datetime, "%04d-%02d-%02d %02d:%02d:%02d",
                  Request->UTCDateTime->Date->Year,
                  Request->UTCDateTime->Date->Month,
@@ -288,7 +280,6 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
                  Request->UTCDateTime->Time->Second);
         json_builder_add_string_value(builder, str_datetime);
         free(str_datetime);
-        json_builder_end_object(builder);
     }
 
 	json_builder_end_object(builder);
@@ -332,8 +323,7 @@ int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAnd
 
         if (json_object_has_member(items, "datetime")) {
 			int year, month, day, hour, minute, second;
-			JsonObject *obj = json_object_get_object_member(items, "datetime");
-			const char *datetime = json_object_get_string_member(obj, "str_value");
+			const char *datetime = json_object_get_string_member(items, "datetime");
 
 			if (sscanf(datetime, "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &minute, &second) == 6) {
 				SOAP_CALLOC_1(soap, Response->SystemDateAndTime->UTCDateTime);

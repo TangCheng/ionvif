@@ -218,6 +218,70 @@ void ipcam_ionvif_update_datetime_setting(IpcamIOnvif *ionvif, JsonNode *body)
 	}
 }
 
+void ipcam_ionvif_update_video_setting(IpcamIOnvif *ionvif, JsonNode *body)
+{
+    JsonObject *items_obj = json_object_get_object_member(json_node_get_object(body), "items");
+
+    if (json_object_has_member(items_obj, "profile")) {
+		ipcam_ionvif_set_string_property(ionvif, "video:profile",
+										 json_object_get_string_member(items_obj, "profile"));
+	}
+    if (json_object_has_member(items_obj, "flip")) {
+		ipcam_ionvif_set_int_property(ionvif, "video:flip",
+									  json_object_get_boolean_member(items_obj, "flip"));
+	}
+    if (json_object_has_member(items_obj, "mirror")) {
+		ipcam_ionvif_set_int_property(ionvif, "video:mirror",
+		                              json_object_get_boolean_member(items_obj, "mirror"));
+	}
+	if (json_object_has_member(items_obj, "main_profile")) {
+		JsonObject *p_obj = json_object_get_object_member(items_obj, "main_profile");
+		if (json_object_has_member(p_obj, "frame_rate")) {
+			ipcam_ionvif_set_int_property(ionvif, "video:main_profile:frame_rate",
+			                              json_object_get_int_member(p_obj, "frame_rate"));
+		}
+		if (json_object_has_member(p_obj, "bit_rate")) {
+			ipcam_ionvif_set_string_property(ionvif, "video:main_profile:bit_rate",
+			                              json_object_get_string_member(p_obj, "bit_rate"));
+		}
+		if (json_object_has_member(p_obj, "bit_rate_value")) {
+			ipcam_ionvif_set_int_property(ionvif, "video:main_profile:bit_rate_value",
+			                              json_object_get_int_member(p_obj, "bit_rate_value"));
+		}
+		if (json_object_has_member(p_obj, "resolution")) {
+			ipcam_ionvif_set_string_property(ionvif, "video:main_profile:resolution",
+			                              json_object_get_string_member(p_obj, "resolution"));
+		}
+		if (json_object_has_member(p_obj, "stream_path")) {
+			ipcam_ionvif_set_string_property(ionvif, "video:main_profile:stream_path",
+			                              json_object_get_string_member(p_obj, "stream_path"));
+		}
+	}
+	if (json_object_has_member(items_obj, "sub_profile")) {
+		JsonObject *p_obj = json_object_get_object_member(items_obj, "sub_profile");
+		if (json_object_has_member(p_obj, "frame_rate")) {
+			ipcam_ionvif_set_int_property(ionvif, "video:sub_profile:frame_rate",
+			                              json_object_get_int_member(p_obj, "frame_rate"));
+		}
+		if (json_object_has_member(p_obj, "bit_rate")) {
+			ipcam_ionvif_set_string_property(ionvif, "video:sub_profile:bit_rate",
+			                              json_object_get_string_member(p_obj, "bit_rate"));
+		}
+		if (json_object_has_member(p_obj, "bit_rate_value")) {
+			ipcam_ionvif_set_int_property(ionvif, "video:sub_profile:bit_rate_value",
+			                              json_object_get_int_member(p_obj, "bit_rate_value"));
+		}
+		if (json_object_has_member(p_obj, "resolution")) {
+			ipcam_ionvif_set_string_property(ionvif, "video:sub_profile:resolution",
+			                              json_object_get_string_member(p_obj, "resolution"));
+		}
+		if (json_object_has_member(p_obj, "stream_path")) {
+			ipcam_ionvif_set_string_property(ionvif, "video:sub_profile:stream_path",
+			                              json_object_get_string_member(p_obj, "stream_path"));
+		}
+	}
+}
+
 static void datetime_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
 {
 	IpcamIOnvif *ionvif = IPCAM_IONVIF(obj);
@@ -228,6 +292,19 @@ static void datetime_message_handler(GObject *obj, IpcamMessage *msg, gboolean t
 		g_object_get(msg, "body", &body, NULL);
 		if (body)
 			ipcam_ionvif_update_datetime_setting(ionvif, body);
+	}
+}
+
+static void video_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
+{
+	IpcamIOnvif *ionvif = IPCAM_IONVIF(obj);
+	g_assert(IPCAM_IS_IONVIF(ionvif));
+
+	if (!timeout && msg) {
+		JsonNode *body;
+		g_object_get(msg, "body", &body, NULL);
+		if (body)
+			ipcam_ionvif_update_video_setting(ionvif, body);
 	}
 }
 
@@ -246,7 +323,7 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_base_info", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_datetime", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_network", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
-
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_video", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 
 	/* Request the Base Information */
 	builder = json_builder_new();
@@ -311,6 +388,28 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
 	                            "iconfig", token,
 	                            datetime_message_handler, 5);
+	g_object_unref(req_msg);
+	g_object_unref(builder);
+
+	/* Request the Video setting */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "profile");
+	json_builder_add_string_value(builder, "flip");
+	json_builder_add_string_value(builder, "mirror");
+	json_builder_add_string_value(builder, "main_profile");
+	json_builder_add_string_value(builder, "sub_profile");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", "get_video",
+	                       "body", json_builder_get_root(builder),
+	                       NULL);
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token,
+	                            video_message_handler, 5);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
 }

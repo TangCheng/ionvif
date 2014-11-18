@@ -6,6 +6,38 @@
 #include "request_message.h"
 #include "ionvif.h"
 
+static const char *UserLevelToRole(enum tt__UserLevel user_level)
+{
+	switch (user_level) {
+		case tt__UserLevel__Administrator:
+			return "administrator";
+		case tt__UserLevel__Operator:
+			return "operator";
+		case tt__UserLevel__User:
+			return "user";
+		case tt__UserLevel__Anonymous:
+			return "anonymous";
+		case tt__UserLevel__Extended:
+		default:
+			return "extended";
+	}
+	return "anonymous";
+}
+
+static enum tt__UserLevel RoleToUserLevel(const char *role)
+{
+	if (g_strcmp0(role, "administrator") == 0)
+		return tt__UserLevel__Administrator;
+	if (g_strcmp0(role, "operator") == 0)
+		return tt__UserLevel__Operator;
+	if (g_strcmp0(role, "user") == 0)
+		return tt__UserLevel__User;
+	if (g_strcmp0(role, "anonymous") == 0)
+		return tt__UserLevel__Anonymous;
+
+	return tt__UserLevel__Extended;
+}
+
 int __tds__GetUsers(struct soap *soap, struct _tds__GetUsers *tds__GetUsers, struct _tds__GetUsersResponse *tds__GetUsersResponse)
 {
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
@@ -19,7 +51,7 @@ int __tds__GetUsers(struct soap *soap, struct _tds__GetUsers *tds__GetUsers, str
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_array(builder);
 	json_builder_add_string_value(builder, "password");
-	json_builder_add_string_value(builder, "privilege");
+	json_builder_add_string_value(builder, "role");
 	json_builder_end_array(builder);
 	json_builder_end_object(builder);
 
@@ -37,10 +69,11 @@ int __tds__GetUsers(struct soap *soap, struct _tds__GetUsers *tds__GetUsers, str
 			JsonObject *obj = json_array_get_object_element(items, i);
 			const gchar *username = json_object_get_string_member(obj, "username");
 			const gchar *password = json_object_get_string_member(obj, "password");
-			gint privilege = json_object_get_int_member(obj, "privilege");
+			const gchar *role = json_object_get_string_member(obj, "role");
 			SOAP_SET_STRING_FIELD(soap, tds__GetUsersResponse->User[i].Username, username);
 			SOAP_SET_STRING_FIELD(soap, tds__GetUsersResponse->User[i].Password, password);
-			SOAP_SET_VALUE_FIELD(soap, tds__GetUsersResponse->User[i].UserLevel, privilege);
+			SOAP_SET_VALUE_FIELD(soap, tds__GetUsersResponse->User[i].UserLevel, 
+			                     RoleToUserLevel(role));
 		}
 
 		json_node_free(response);
@@ -70,8 +103,9 @@ int __tds__CreateUsers(struct soap *soap, struct _tds__CreateUsers *tds__CreateU
 		json_builder_add_string_value(builder, tds__CreateUsers->User[i].Username);
 		json_builder_set_member_name(builder, "password");
 		json_builder_add_string_value(builder, tds__CreateUsers->User[i].Password);
-		json_builder_set_member_name(builder, "privilege");
-		json_builder_add_int_value(builder, tds__CreateUsers->User[i].UserLevel);
+		json_builder_set_member_name(builder, "role");
+		json_builder_add_string_value(builder, 
+		                              UserLevelToRole(tds__CreateUsers->User[i].UserLevel));
 		json_builder_end_object(builder);
 	}
 	json_builder_end_array(builder);
@@ -136,8 +170,8 @@ int __tds__SetUser(struct soap *soap, struct _tds__SetUser *tds__SetUser, struct
 		json_builder_add_string_value(builder, tds__SetUser->User[i].Username);
 		json_builder_set_member_name(builder, "password");
 		json_builder_add_string_value(builder, tds__SetUser->User[i].Password);
-		json_builder_set_member_name(builder, "privilege");
-		json_builder_add_int_value(builder, tds__SetUser->User[i].UserLevel);
+		json_builder_set_member_name(builder, "role");
+		json_builder_add_string_value(builder, UserLevelToRole(tds__SetUser->User[i].UserLevel));
 		json_builder_end_object(builder);
 	}
 	json_builder_end_array(builder);

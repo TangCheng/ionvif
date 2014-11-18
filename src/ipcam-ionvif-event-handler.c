@@ -60,4 +60,6 @@ ipcam_ionvif_event_handler_run_impl(IpcamEventHandler *event_handler, IpcamMessa
         ipcam_ionvif_update_datetime_setting(ionvif, body);
     else if(g_strcmp0(event, "set_base_info") == 0)
         ipcam_ionvif_update_base_info_setting(ionvif, body);
+    else if(g_strcmp0(event, "set_video") == 0)
+        ipcam_ionvif_update_video_setting(ionvif, body);
 }
