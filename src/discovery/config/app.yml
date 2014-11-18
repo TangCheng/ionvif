@@ -1,5 +1,5 @@
 token: ionvif_discovery_token
 subscribe:
-  iconfig_pub: tcp://127.0.0.1:3010
+  iconfig_pub: tcp://127.0.0.1:65401
 connect:
-  iconfig: tcp://127.0.0.1:3000
+  iconfig: tcp://127.0.0.1:65400
