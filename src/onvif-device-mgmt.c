@@ -256,6 +256,8 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
 	JsonBuilder *builder;
 	char *str_datetime = NULL;
 
+	ACCESS_CONTROL;
+
 	builder = json_builder_new();
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
@@ -267,7 +269,8 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
     }
 	//User NTP
 	json_builder_set_member_name(builder, "use_ntp");
-	json_builder_add_int_value(builder, Request->DateTimeType);
+	json_builder_add_boolean_value(builder,
+	                               Request->DateTimeType == tt__SetDateTimeType__NTP);
 	// DateTime
     if (Request->UTCDateTime) {
         json_builder_set_member_name(builder, "datetime");
@@ -282,6 +285,7 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
         free(str_datetime);
     }
 
+	json_builder_end_object(builder);
 	json_builder_end_object(builder);
 
 	onvif_invocate_action(ionvif, "set_datetime", json_builder_get_root(builder), NULL);
@@ -351,6 +355,8 @@ int __tds__SetSystemFactoryDefault(struct soap *soap,
 		struct _tds__SetSystemFactoryDefault *tds__SetSystemFactoryDefault,
 		struct _tds__SetSystemFactoryDefaultResponse *tds__SetSystemFactoryDefaultResponse)
 {
+	ACCESS_CONTROL;
+
 	return SOAP_OK;
 }
 
@@ -359,6 +365,8 @@ int __tds__SystemReboot(struct soap *soap,
 		struct _tds__SystemReboot *tds__SystemReboot,
 		struct _tds__SystemRebootResponse *tds__SystemRebootResponse)
 {
+	ACCESS_CONTROL;
+
 	return SOAP_OK;
 }
 
