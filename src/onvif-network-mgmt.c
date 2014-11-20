@@ -191,15 +191,10 @@ int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _t
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "ntp_server");
-	json_builder_begin_object(builder);
 	if (tds__SetNTP->__sizeNTPManual > 0) {
-		json_builder_set_member_name(builder, "int_value");
-		json_builder_add_int_value(builder, 0);
-		json_builder_set_member_name(builder, "str_value");
+		json_builder_set_member_name(builder, "ntp_server");
 		json_builder_add_string_value(builder, tds__SetNTP->NTPManual[0].IPv4Address);
 	}
-	json_builder_end_object(builder);
 	json_builder_end_object(builder);
 	json_builder_end_object(builder);
 
@@ -231,19 +226,25 @@ int __tds__SetDynamicDNS(struct soap *soap, struct _tds__SetDynamicDNS *tds__Set
 static unsigned int Netmask2PrefixLength(const char *netmask)
 {
 	struct in_addr addr;
-	int i = 0;
+	unsigned int bits_of_one = 0;
 
 	if (netmask == NULL)
 		return 0;
 
 	if (inet_aton(netmask, &addr)) {
-		for (i = 0; i < 32; i++) {
-			if (addr.s_addr & (1 << i))
+		uint32_t mask = (1 << 31);
+		uint32_t s_addr = ntohl(addr.s_addr);
+		do {
+			if (s_addr & mask)
+				bits_of_one++;
+			else
 				break;
-		}
+
+			mask >>= 1;
+		} while(mask);
 	}
 
-	return 32 - i;
+	return bits_of_one;
 }
 
 
@@ -251,6 +252,7 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 {
 	struct _tds__GetNetworkInterfacesResponse *Response = tds__GetNetworkInterfacesResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
+	const gchar *network_method;
 	int dhcp = 0;
     const char *hwaddr = NULL;
 	const char *ipaddr = NULL;
@@ -259,7 +261,8 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 	ACCESS_CONTROL;
 
     hwaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:hwaddr");
-    dhcp = ipcam_ionvif_get_int_property(ionvif, "network:autoconf");
+    network_method = ipcam_ionvif_get_string_property(ionvif, "network:method");
+	dhcp = (g_strcmp0(network_method, "static") != 0);
     ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
     netmask = ipcam_ionvif_get_string_property(ionvif, "network:address:netmask");
 
@@ -327,8 +330,8 @@ int __tds__SetNetworkInterfaces(struct soap *soap, struct _tds__SetNetworkInterf
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "autoconf");
-	json_builder_add_int_value(builder, dhcp);
+	json_builder_set_member_name(builder, "method");
+	json_builder_add_string_value(builder, dhcp ? "dhcp" : "static");
 	if (!dhcp) {
 		char *ipaddr;
 		char *netmask;
