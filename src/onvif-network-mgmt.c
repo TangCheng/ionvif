@@ -353,13 +353,16 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 
 static char *PrefixLength2Netmask(unsigned int prefix_len)
 {
-	struct in_addr addr = { 0 };
+	uint32_t mask = 0;
+	struct in_addr addr;
 	int i;
 
-    prefix_len = prefix_len > 32 ? 32 : prefix_len;
+	prefix_len = prefix_len > 32 ? 32 : prefix_len;
 
 	for (i = 31; i >= (32 - (int)prefix_len); i--)
-		addr.s_addr |= (1 << i);
+		mask |= (1 << i);
+
+	addr.s_addr = htonl(mask);
 
 	return inet_ntoa(addr);
 }
