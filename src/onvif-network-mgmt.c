@@ -218,8 +218,20 @@ int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _t
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_object(builder);
 	if (tds__SetNTP->__sizeNTPManual > 0) {
+		char *ntp_server = NULL;
 		json_builder_set_member_name(builder, "ntp_server");
-		json_builder_add_string_value(builder, tds__SetNTP->NTPManual[0].IPv4Address);
+		switch (tds__SetNTP->NTPManual[0].Type) {
+		case tt__NetworkHostType__IPv4:
+			ntp_server = tds__SetNTP->NTPManual[0].IPv4Address;
+			break;
+		case tt__NetworkHostType__IPv6:
+			ntp_server = tds__SetNTP->NTPManual[0].IPv6Address;
+			break;
+		case tt__NetworkHostType__DNS:
+			ntp_server = tds__SetNTP->NTPManual[0].DNSname;
+			break;
+		}
+		json_builder_add_string_value(builder, ntp_server);
 	}
 	json_builder_end_object(builder);
 	json_builder_end_object(builder);
@@ -454,7 +466,7 @@ int __tds__SetNetworkProtocols(struct soap *soap, struct _tds__SetNetworkProtoco
 	json_builder_begin_object(builder);
 	json_builder_set_member_name(builder, "items");
 	json_builder_begin_object(builder);
-	json_builder_set_member_name(builder, "server_port");
+	json_builder_set_member_name(builder, "port");
 	json_builder_begin_object(builder);
 	for (i = 0; i < Request->__sizeNetworkProtocols; i++)
 	{
