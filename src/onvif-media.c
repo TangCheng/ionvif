@@ -172,6 +172,8 @@ int __trt__GetProfiles(struct soap* soap,
 /** Auto-test server operation __trt__GetStreamUri */
 int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetStreamUri, struct _trt__GetStreamUriResponse *trt__GetStreamUriResponse)
 {
+	JsonBuilder *builder;
+	JsonNode *response;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 	char *uri;
 	char *key;
@@ -181,12 +183,33 @@ int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetSt
 
 	ACCESS_CONTROL;
 
+	/* Request the Network setting */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "address");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	if (onvif_invocate_action(ionvif, "get_network", json_builder_get_root(builder), &response)) {
+		JsonObject *items_obj;
+		JsonObject *addr_obj;
+
+		items_obj = json_object_get_object_member(json_node_get_object(response), "items");
+		addr_obj = json_object_get_object_member(items_obj, "address");
+		if (addr_obj) {
+			ipaddr = json_object_get_string_member(addr_obj, "ipaddr");
+		}
+		json_node_free(response);
+	}
+	g_object_unref(builder);
+
 	if (asprintf(&key, "video:%s:stream_path", trt__GetStreamUri->ProfileToken) > 0) {
 		path = (char *)ipcam_ionvif_get_string_property(ionvif, key);
 		free(key);
 	}
-	ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
-    port = ipcam_ionvif_get_int_property(ionvif, "network:port:rtsp");
+
+	port = ipcam_ionvif_get_int_property(ionvif, "network:port:rtsp");
 	asprintf(&uri, "rtsp://%s:%d/%s",
 	         ipaddr,
 	         port, 
