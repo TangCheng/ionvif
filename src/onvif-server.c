@@ -46,11 +46,10 @@ static void *mime_server_write_open(struct soap *soap, void *unused_handle,
 		return NULL;
 	}
 	/* Create a new file */
-	file = tempnam(LOCAL_STATE_DIR, "data");
+	file = LOCAL_STATE_DIR "/firmware/firmware.bin";
 	/* The file name is also the key */
 	handle->key = soap_strdup(soap, file);
 	handle->fd = fopen(file, "wb");
-	free((void*) file);
 	if (!handle->fd) {
 		soap->error = soap_sender_fault(soap,
 				"Cannot save data to file", handle->key);
