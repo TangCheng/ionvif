@@ -76,9 +76,8 @@ gpointer onvif_discovery_server_thread_func(gpointer data)
 			exit(-1);
 		}
 	}
-	printf("socket bind success %d\n", m);
-	for (;;) {
-		printf("socket connect %d\n", s);
+
+    for (;;) {
 		s = soap_accept(&soap);
 		if (!soap_valid_socket(s)) {
 			soap_print_fault(&soap, stderr);

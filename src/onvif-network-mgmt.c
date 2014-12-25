@@ -10,8 +10,7 @@
 
 /** Auto-test server operation __tds__GetDPAddresses */
 int __tds__GetDPAddresses(struct soap *soap, struct _tds__GetDPAddresses *tds__GetDPAddresses, struct _tds__GetDPAddressesResponse *tds__GetDPAddressesResponse)
-{	
-	DBG_LINE;
+{
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
@@ -20,7 +19,6 @@ int __tds__GetDPAddresses(struct soap *soap, struct _tds__GetDPAddresses *tds__G
 /** Auto-test server operation __tds__SetDPAddresses */
 int __tds__SetDPAddresses(struct soap *soap, struct _tds__SetDPAddresses *tds__SetDPAddresses, struct _tds__SetDPAddressesResponse *tds__SetDPAddressesResponse)
 {	
-	DBG_LINE;
 	return SOAP_OK;
 }
 
@@ -98,7 +96,6 @@ int __tds__SetHostname(struct soap *soap, struct _tds__SetHostname *tds__SetHost
 /** Auto-test server operation __tds__SetHostnameFromDHCP */
 int __tds__SetHostnameFromDHCP(struct soap *soap, struct _tds__SetHostnameFromDHCP *tds__SetHostnameFromDHCP, struct _tds__SetHostnameFromDHCPResponse *tds__SetHostnameFromDHCPResponse)
 {	
-	DBG_LINE;
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
@@ -247,7 +244,6 @@ int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _t
 /** Auto-test server operation __tds__GetDynamicDNS */
 int __tds__GetDynamicDNS(struct soap *soap, struct _tds__GetDynamicDNS *tds__GetDynamicDNS, struct _tds__GetDynamicDNSResponse *tds__GetDynamicDNSResponse)
 {	
-	DBG_LINE;
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
@@ -256,7 +252,6 @@ int __tds__GetDynamicDNS(struct soap *soap, struct _tds__GetDynamicDNS *tds__Get
 /** Auto-test server operation __tds__SetDynamicDNS */
 int __tds__SetDynamicDNS(struct soap *soap, struct _tds__SetDynamicDNS *tds__SetDynamicDNS, struct _tds__SetDynamicDNSResponse *tds__SetDynamicDNSResponse)
 {	
-	DBG_LINE;
 	return SOAP_OK;
 }
 
@@ -561,7 +556,6 @@ int __tds__SetNetworkDefaultGateway(struct soap *soap, struct _tds__SetNetworkDe
 
 	g_object_unref(builder);
 
-	DBG_LINE;
 	return SOAP_OK;
 }
 
@@ -569,7 +563,6 @@ int __tds__SetNetworkDefaultGateway(struct soap *soap, struct _tds__SetNetworkDe
 /** Auto-test server operation __tds__GetZeroConfiguration */
 int __tds__GetZeroConfiguration(struct soap *soap, struct _tds__GetZeroConfiguration *tds__GetZeroConfiguration, struct _tds__GetZeroConfigurationResponse *tds__GetZeroConfigurationResponse)
 {	
-	DBG_LINE;
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
@@ -578,7 +571,6 @@ int __tds__GetZeroConfiguration(struct soap *soap, struct _tds__GetZeroConfigura
 /** Auto-test server operation __tds__SetZeroConfiguration */
 int __tds__SetZeroConfiguration(struct soap *soap, struct _tds__SetZeroConfiguration *tds__SetZeroConfiguration, struct _tds__SetZeroConfigurationResponse *tds__SetZeroConfigurationResponse)
 {	
-	DBG_LINE;
 	return SOAP_OK;
 }
 
@@ -586,7 +578,6 @@ int __tds__SetZeroConfiguration(struct soap *soap, struct _tds__SetZeroConfigura
 /** Auto-test server operation __tds__GetIPAddressFilter */
 int __tds__GetIPAddressFilter(struct soap *soap, struct _tds__GetIPAddressFilter *tds__GetIPAddressFilter, struct _tds__GetIPAddressFilterResponse *tds__GetIPAddressFilterResponse)
 {	
-	DBG_LINE;
 	/* Return incomplete response with default data values */
 	return SOAP_OK;
 }
@@ -595,7 +586,6 @@ int __tds__GetIPAddressFilter(struct soap *soap, struct _tds__GetIPAddressFilter
 /** Auto-test server operation __tds__SetIPAddressFilter */
 int __tds__SetIPAddressFilter(struct soap *soap, struct _tds__SetIPAddressFilter *tds__SetIPAddressFilter, struct _tds__SetIPAddressFilterResponse *tds__SetIPAddressFilterResponse)
 {	
-	DBG_LINE;
 	return SOAP_OK;
 }
 
@@ -603,7 +593,6 @@ int __tds__SetIPAddressFilter(struct soap *soap, struct _tds__SetIPAddressFilter
 /** Auto-test server operation __tds__AddIPAddressFilter */
 int __tds__AddIPAddressFilter(struct soap *soap, struct _tds__AddIPAddressFilter *tds__AddIPAddressFilter, struct _tds__AddIPAddressFilterResponse *tds__AddIPAddressFilterResponse)
 {	
-	DBG_LINE;
 	return SOAP_OK;
 }
 
@@ -611,6 +600,5 @@ int __tds__AddIPAddressFilter(struct soap *soap, struct _tds__AddIPAddressFilter
 /** Auto-test server operation __tds__RemoveIPAddressFilter */
 int __tds__RemoveIPAddressFilter(struct soap *soap, struct _tds__RemoveIPAddressFilter *tds__RemoveIPAddressFilter, struct _tds__RemoveIPAddressFilterResponse *tds__RemoveIPAddressFilterResponse)
 {	
-	DBG_LINE;
 	return SOAP_OK;
 }

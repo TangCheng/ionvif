@@ -108,15 +108,12 @@ gpointer onvif_server_thread_func(gpointer data)
 		return NULL;
 	}
 
-	printf("socket bind success %d\n", m);
-
 	soap.fmimewriteopen = mime_server_write_open;
 	soap.fmimewriteclose = mime_server_write_close;
 	soap.fmimewrite = mime_server_write;
 
 	for (;!ipcam_ionvif_is_terminating(ionvif);) {
 		s = soap_accept(&soap);
-		printf("socket connect %d\n", s);
 		if (!soap_valid_socket(s)) {
 			soap_print_fault(&soap, stderr);
 

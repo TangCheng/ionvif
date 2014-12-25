@@ -50,8 +50,8 @@ int SOAP_DEFMAIN(int argc, char **argv)
 
 /** Auto-test server operation SOAP_ENV__Fault */
 int SOAP_ENV__Fault(struct soap *soap, char *faultcode, char *faultstring, char *faultactor, struct SOAP_ENV__Detail *detail, struct SOAP_ENV__Code *SOAP_ENV__Code, struct SOAP_ENV__Reason *SOAP_ENV__Reason, char *SOAP_ENV__Node, char *SOAP_ENV__Role, struct SOAP_ENV__Detail *SOAP_ENV__Detail)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -59,9 +59,9 @@ int SOAP_ENV__Fault(struct soap *soap, char *faultcode, char *faultstring, char 
 #if 0
 /** Auto-test server operation __tds__GetServices */
 int __tds__GetServices(struct soap *soap, struct _tds__GetServices *tds__GetServices, struct _tds__GetServicesResponse *tds__GetServicesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -69,9 +69,9 @@ int __tds__GetServices(struct soap *soap, struct _tds__GetServices *tds__GetServ
 
 /** Auto-test server operation __tds__GetServiceCapabilities */
 int __tds__GetServiceCapabilities(struct soap *soap, struct _tds__GetServiceCapabilities *tds__GetServiceCapabilities, struct _tds__GetServiceCapabilitiesResponse *tds__GetServiceCapabilitiesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -79,9 +79,9 @@ int __tds__GetServiceCapabilities(struct soap *soap, struct _tds__GetServiceCapa
 #if 0
 /** Auto-test server operation __tds__GetDeviceInformation */
 int __tds__GetDeviceInformation(struct soap *soap, struct _tds__GetDeviceInformation *tds__GetDeviceInformation, struct _tds__GetDeviceInformationResponse *tds__GetDeviceInformationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -90,8 +90,8 @@ int __tds__GetDeviceInformation(struct soap *soap, struct _tds__GetDeviceInforma
 #if 0
 /** Auto-test server operation __tds__SetSystemDateAndTime */
 int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAndTime *tds__SetSystemDateAndTime, struct _tds__SetSystemDateAndTimeResponse *tds__SetSystemDateAndTimeResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -100,9 +100,9 @@ int __tds__SetSystemDateAndTime(struct soap *soap, struct _tds__SetSystemDateAnd
 #if 0
 /** Auto-test server operation __tds__GetSystemDateAndTime */
 int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAndTime *tds__GetSystemDateAndTime, struct _tds__GetSystemDateAndTimeResponse *tds__GetSystemDateAndTimeResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -111,8 +111,8 @@ int __tds__GetSystemDateAndTime(struct soap *soap, struct _tds__GetSystemDateAnd
 #if 0
 /** Auto-test server operation __tds__SetSystemFactoryDefault */
 int __tds__SetSystemFactoryDefault(struct soap *soap, struct _tds__SetSystemFactoryDefault *tds__SetSystemFactoryDefault, struct _tds__SetSystemFactoryDefaultResponse *tds__SetSystemFactoryDefaultResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -121,9 +121,9 @@ int __tds__SetSystemFactoryDefault(struct soap *soap, struct _tds__SetSystemFact
 #if 0
 /** Auto-test server operation __tds__UpgradeSystemFirmware */
 int __tds__UpgradeSystemFirmware(struct soap *soap, struct _tds__UpgradeSystemFirmware *tds__UpgradeSystemFirmware, struct _tds__UpgradeSystemFirmwareResponse *tds__UpgradeSystemFirmwareResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -132,9 +132,9 @@ int __tds__UpgradeSystemFirmware(struct soap *soap, struct _tds__UpgradeSystemFi
 #if 0
 /** Auto-test server operation __tds__SystemReboot */
 int __tds__SystemReboot(struct soap *soap, struct _tds__SystemReboot *tds__SystemReboot, struct _tds__SystemRebootResponse *tds__SystemRebootResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -142,35 +142,35 @@ int __tds__SystemReboot(struct soap *soap, struct _tds__SystemReboot *tds__Syste
 
 /** Auto-test server operation __tds__RestoreSystem */
 int __tds__RestoreSystem(struct soap *soap, struct _tds__RestoreSystem *tds__RestoreSystem, struct _tds__RestoreSystemResponse *tds__RestoreSystemResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetSystemBackup */
 int __tds__GetSystemBackup(struct soap *soap, struct _tds__GetSystemBackup *tds__GetSystemBackup, struct _tds__GetSystemBackupResponse *tds__GetSystemBackupResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetSystemLog */
 int __tds__GetSystemLog(struct soap *soap, struct _tds__GetSystemLog *tds__GetSystemLog, struct _tds__GetSystemLogResponse *tds__GetSystemLogResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetSystemSupportInformation */
 int __tds__GetSystemSupportInformation(struct soap *soap, struct _tds__GetSystemSupportInformation *tds__GetSystemSupportInformation, struct _tds__GetSystemSupportInformationResponse *tds__GetSystemSupportInformationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -178,9 +178,9 @@ int __tds__GetSystemSupportInformation(struct soap *soap, struct _tds__GetSystem
 #if 0
 /** Auto-test server operation __tds__GetScopes */
 int __tds__GetScopes(struct soap *soap, struct _tds__GetScopes *tds__GetScopes, struct _tds__GetScopesResponse *tds__GetScopesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -189,8 +189,8 @@ int __tds__GetScopes(struct soap *soap, struct _tds__GetScopes *tds__GetScopes, 
 #if 0
 /** Auto-test server operation __tds__SetScopes */
 int __tds__SetScopes(struct soap *soap, struct _tds__SetScopes *tds__SetScopes, struct _tds__SetScopesResponse *tds__SetScopesResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -198,51 +198,51 @@ int __tds__SetScopes(struct soap *soap, struct _tds__SetScopes *tds__SetScopes, 
 
 /** Auto-test server operation __tds__AddScopes */
 int __tds__AddScopes(struct soap *soap, struct _tds__AddScopes *tds__AddScopes, struct _tds__AddScopesResponse *tds__AddScopesResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__RemoveScopes */
 int __tds__RemoveScopes(struct soap *soap, struct _tds__RemoveScopes *tds__RemoveScopes, struct _tds__RemoveScopesResponse *tds__RemoveScopesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetDiscoveryMode */
 int __tds__GetDiscoveryMode(struct soap *soap, struct _tds__GetDiscoveryMode *tds__GetDiscoveryMode, struct _tds__GetDiscoveryModeResponse *tds__GetDiscoveryModeResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetDiscoveryMode */
 int __tds__SetDiscoveryMode(struct soap *soap, struct _tds__SetDiscoveryMode *tds__SetDiscoveryMode, struct _tds__SetDiscoveryModeResponse *tds__SetDiscoveryModeResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetRemoteDiscoveryMode */
 int __tds__GetRemoteDiscoveryMode(struct soap *soap, struct _tds__GetRemoteDiscoveryMode *tds__GetRemoteDiscoveryMode, struct _tds__GetRemoteDiscoveryModeResponse *tds__GetRemoteDiscoveryModeResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetRemoteDiscoveryMode */
 int __tds__SetRemoteDiscoveryMode(struct soap *soap, struct _tds__SetRemoteDiscoveryMode *tds__SetRemoteDiscoveryMode, struct _tds__SetRemoteDiscoveryModeResponse *tds__SetRemoteDiscoveryModeResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -250,9 +250,9 @@ int __tds__SetRemoteDiscoveryMode(struct soap *soap, struct _tds__SetRemoteDisco
 #if 0
 /** Auto-test server operation __tds__GetDPAddresses */
 int __tds__GetDPAddresses(struct soap *soap, struct _tds__GetDPAddresses *tds__GetDPAddresses, struct _tds__GetDPAddressesResponse *tds__GetDPAddressesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -260,26 +260,26 @@ int __tds__GetDPAddresses(struct soap *soap, struct _tds__GetDPAddresses *tds__G
 
 /** Auto-test server operation __tds__GetEndpointReference */
 int __tds__GetEndpointReference(struct soap *soap, struct _tds__GetEndpointReference *tds__GetEndpointReference, struct _tds__GetEndpointReferenceResponse *tds__GetEndpointReferenceResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetRemoteUser */
 int __tds__GetRemoteUser(struct soap *soap, struct _tds__GetRemoteUser *tds__GetRemoteUser, struct _tds__GetRemoteUserResponse *tds__GetRemoteUserResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetRemoteUser */
 int __tds__SetRemoteUser(struct soap *soap, struct _tds__SetRemoteUser *tds__SetRemoteUser, struct _tds__SetRemoteUserResponse *tds__SetRemoteUserResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -287,9 +287,9 @@ int __tds__SetRemoteUser(struct soap *soap, struct _tds__SetRemoteUser *tds__Set
 #if 0
 /** Auto-test server operation __tds__GetUsers */
 int __tds__GetUsers(struct soap *soap, struct _tds__GetUsers *tds__GetUsers, struct _tds__GetUsersResponse *tds__GetUsersResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -298,8 +298,8 @@ int __tds__GetUsers(struct soap *soap, struct _tds__GetUsers *tds__GetUsers, str
 #if 0
 /** Auto-test server operation __tds__CreateUsers */
 int __tds__CreateUsers(struct soap *soap, struct _tds__CreateUsers *tds__CreateUsers, struct _tds__CreateUsersResponse *tds__CreateUsersResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -308,8 +308,8 @@ int __tds__CreateUsers(struct soap *soap, struct _tds__CreateUsers *tds__CreateU
 #if 0
 /** Auto-test server operation __tds__DeleteUsers */
 int __tds__DeleteUsers(struct soap *soap, struct _tds__DeleteUsers *tds__DeleteUsers, struct _tds__DeleteUsersResponse *tds__DeleteUsersResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -318,8 +318,8 @@ int __tds__DeleteUsers(struct soap *soap, struct _tds__DeleteUsers *tds__DeleteU
 #if 0
 /** Auto-test server operation __tds__SetUser */
 int __tds__SetUser(struct soap *soap, struct _tds__SetUser *tds__SetUser, struct _tds__SetUserResponse *tds__SetUserResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -328,9 +328,9 @@ int __tds__SetUser(struct soap *soap, struct _tds__SetUser *tds__SetUser, struct
 #if 0
 /** Auto-test server operation __tds__GetWsdlUrl */
 int __tds__GetWsdlUrl(struct soap *soap, struct _tds__GetWsdlUrl *tds__GetWsdlUrl, struct _tds__GetWsdlUrlResponse *tds__GetWsdlUrlResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -339,9 +339,9 @@ int __tds__GetWsdlUrl(struct soap *soap, struct _tds__GetWsdlUrl *tds__GetWsdlUr
 #if 0
 /** Auto-test server operation __tds__GetCapabilities */
 int __tds__GetCapabilities(struct soap *soap, struct _tds__GetCapabilities *tds__GetCapabilities, struct _tds__GetCapabilitiesResponse *tds__GetCapabilitiesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -350,8 +350,8 @@ int __tds__GetCapabilities(struct soap *soap, struct _tds__GetCapabilities *tds_
 #if 0
 /** Auto-test server operation __tds__SetDPAddresses */
 int __tds__SetDPAddresses(struct soap *soap, struct _tds__SetDPAddresses *tds__SetDPAddresses, struct _tds__SetDPAddressesResponse *tds__SetDPAddressesResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -360,9 +360,9 @@ int __tds__SetDPAddresses(struct soap *soap, struct _tds__SetDPAddresses *tds__S
 #if 0
 /** Auto-test server operation __tds__GetHostname */
 int __tds__GetHostname(struct soap *soap, struct _tds__GetHostname *tds__GetHostname, struct _tds__GetHostnameResponse *tds__GetHostnameResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -371,8 +371,8 @@ int __tds__GetHostname(struct soap *soap, struct _tds__GetHostname *tds__GetHost
 #if 0
 /** Auto-test server operation __tds__SetHostname */
 int __tds__SetHostname(struct soap *soap, struct _tds__SetHostname *tds__SetHostname, struct _tds__SetHostnameResponse *tds__SetHostnameResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -381,9 +381,9 @@ int __tds__SetHostname(struct soap *soap, struct _tds__SetHostname *tds__SetHost
 #if 0
 /** Auto-test server operation __tds__SetHostnameFromDHCP */
 int __tds__SetHostnameFromDHCP(struct soap *soap, struct _tds__SetHostnameFromDHCP *tds__SetHostnameFromDHCP, struct _tds__SetHostnameFromDHCPResponse *tds__SetHostnameFromDHCPResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -392,9 +392,9 @@ int __tds__SetHostnameFromDHCP(struct soap *soap, struct _tds__SetHostnameFromDH
 #if 0
 /** Auto-test server operation __tds__GetDNS */
 int __tds__GetDNS(struct soap *soap, struct _tds__GetDNS *tds__GetDNS, struct _tds__GetDNSResponse *tds__GetDNSResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -403,8 +403,8 @@ int __tds__GetDNS(struct soap *soap, struct _tds__GetDNS *tds__GetDNS, struct _t
 #if 0
 /** Auto-test server operation __tds__SetDNS */
 int __tds__SetDNS(struct soap *soap, struct _tds__SetDNS *tds__SetDNS, struct _tds__SetDNSResponse *tds__SetDNSResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -413,9 +413,9 @@ int __tds__SetDNS(struct soap *soap, struct _tds__SetDNS *tds__SetDNS, struct _t
 #if 0
 /** Auto-test server operation __tds__GetNTP */
 int __tds__GetNTP(struct soap *soap, struct _tds__GetNTP *tds__GetNTP, struct _tds__GetNTPResponse *tds__GetNTPResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -424,8 +424,8 @@ int __tds__GetNTP(struct soap *soap, struct _tds__GetNTP *tds__GetNTP, struct _t
 #if 0
 /** Auto-test server operation __tds__SetNTP */
 int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _tds__SetNTPResponse *tds__SetNTPResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -434,9 +434,9 @@ int __tds__SetNTP(struct soap *soap, struct _tds__SetNTP *tds__SetNTP, struct _t
 #if 0
 /** Auto-test server operation __tds__GetDynamicDNS */
 int __tds__GetDynamicDNS(struct soap *soap, struct _tds__GetDynamicDNS *tds__GetDynamicDNS, struct _tds__GetDynamicDNSResponse *tds__GetDynamicDNSResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -445,8 +445,8 @@ int __tds__GetDynamicDNS(struct soap *soap, struct _tds__GetDynamicDNS *tds__Get
 #if 0
 /** Auto-test server operation __tds__SetDynamicDNS */
 int __tds__SetDynamicDNS(struct soap *soap, struct _tds__SetDynamicDNS *tds__SetDynamicDNS, struct _tds__SetDynamicDNSResponse *tds__SetDynamicDNSResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -455,9 +455,9 @@ int __tds__SetDynamicDNS(struct soap *soap, struct _tds__SetDynamicDNS *tds__Set
 #if 0
 /** Auto-test server operation __tds__GetNetworkInterfaces */
 int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterfaces *tds__GetNetworkInterfaces, struct _tds__GetNetworkInterfacesResponse *tds__GetNetworkInterfacesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -466,9 +466,9 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 #if 0
 /** Auto-test server operation __tds__SetNetworkInterfaces */
 int __tds__SetNetworkInterfaces(struct soap *soap, struct _tds__SetNetworkInterfaces *tds__SetNetworkInterfaces, struct _tds__SetNetworkInterfacesResponse *tds__SetNetworkInterfacesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -477,9 +477,9 @@ int __tds__SetNetworkInterfaces(struct soap *soap, struct _tds__SetNetworkInterf
 #if 0
 /** Auto-test server operation __tds__GetNetworkProtocols */
 int __tds__GetNetworkProtocols(struct soap *soap, struct _tds__GetNetworkProtocols *tds__GetNetworkProtocols, struct _tds__GetNetworkProtocolsResponse *tds__GetNetworkProtocolsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -488,8 +488,8 @@ int __tds__GetNetworkProtocols(struct soap *soap, struct _tds__GetNetworkProtoco
 #if 0
 /** Auto-test server operation __tds__SetNetworkProtocols */
 int __tds__SetNetworkProtocols(struct soap *soap, struct _tds__SetNetworkProtocols *tds__SetNetworkProtocols, struct _tds__SetNetworkProtocolsResponse *tds__SetNetworkProtocolsResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -498,9 +498,9 @@ int __tds__SetNetworkProtocols(struct soap *soap, struct _tds__SetNetworkProtoco
 #if 0
 /** Auto-test server operation __tds__GetNetworkDefaultGateway */
 int __tds__GetNetworkDefaultGateway(struct soap *soap, struct _tds__GetNetworkDefaultGateway *tds__GetNetworkDefaultGateway, struct _tds__GetNetworkDefaultGatewayResponse *tds__GetNetworkDefaultGatewayResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -509,8 +509,8 @@ int __tds__GetNetworkDefaultGateway(struct soap *soap, struct _tds__GetNetworkDe
 #if 0
 /** Auto-test server operation __tds__SetNetworkDefaultGateway */
 int __tds__SetNetworkDefaultGateway(struct soap *soap, struct _tds__SetNetworkDefaultGateway *tds__SetNetworkDefaultGateway, struct _tds__SetNetworkDefaultGatewayResponse *tds__SetNetworkDefaultGatewayResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -519,9 +519,9 @@ int __tds__SetNetworkDefaultGateway(struct soap *soap, struct _tds__SetNetworkDe
 #if 0
 /** Auto-test server operation __tds__GetZeroConfiguration */
 int __tds__GetZeroConfiguration(struct soap *soap, struct _tds__GetZeroConfiguration *tds__GetZeroConfiguration, struct _tds__GetZeroConfigurationResponse *tds__GetZeroConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -530,8 +530,8 @@ int __tds__GetZeroConfiguration(struct soap *soap, struct _tds__GetZeroConfigura
 #if 0
 /** Auto-test server operation __tds__SetZeroConfiguration */
 int __tds__SetZeroConfiguration(struct soap *soap, struct _tds__SetZeroConfiguration *tds__SetZeroConfiguration, struct _tds__SetZeroConfigurationResponse *tds__SetZeroConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -540,9 +540,9 @@ int __tds__SetZeroConfiguration(struct soap *soap, struct _tds__SetZeroConfigura
 #if 0
 /** Auto-test server operation __tds__GetIPAddressFilter */
 int __tds__GetIPAddressFilter(struct soap *soap, struct _tds__GetIPAddressFilter *tds__GetIPAddressFilter, struct _tds__GetIPAddressFilterResponse *tds__GetIPAddressFilterResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -551,8 +551,8 @@ int __tds__GetIPAddressFilter(struct soap *soap, struct _tds__GetIPAddressFilter
 #if 0
 /** Auto-test server operation __tds__SetIPAddressFilter */
 int __tds__SetIPAddressFilter(struct soap *soap, struct _tds__SetIPAddressFilter *tds__SetIPAddressFilter, struct _tds__SetIPAddressFilterResponse *tds__SetIPAddressFilterResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -561,8 +561,8 @@ int __tds__SetIPAddressFilter(struct soap *soap, struct _tds__SetIPAddressFilter
 #if 0
 /** Auto-test server operation __tds__AddIPAddressFilter */
 int __tds__AddIPAddressFilter(struct soap *soap, struct _tds__AddIPAddressFilter *tds__AddIPAddressFilter, struct _tds__AddIPAddressFilterResponse *tds__AddIPAddressFilterResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -571,8 +571,8 @@ int __tds__AddIPAddressFilter(struct soap *soap, struct _tds__AddIPAddressFilter
 #if 0
 /** Auto-test server operation __tds__RemoveIPAddressFilter */
 int __tds__RemoveIPAddressFilter(struct soap *soap, struct _tds__RemoveIPAddressFilter *tds__RemoveIPAddressFilter, struct _tds__RemoveIPAddressFilterResponse *tds__RemoveIPAddressFilterResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -581,9 +581,9 @@ int __tds__RemoveIPAddressFilter(struct soap *soap, struct _tds__RemoveIPAddress
 #if 0
 /** Auto-test server operation __tds__GetAccessPolicy */
 int __tds__GetAccessPolicy(struct soap *soap, struct _tds__GetAccessPolicy *tds__GetAccessPolicy, struct _tds__GetAccessPolicyResponse *tds__GetAccessPolicyResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -592,8 +592,8 @@ int __tds__GetAccessPolicy(struct soap *soap, struct _tds__GetAccessPolicy *tds_
 #if 0
 /** Auto-test server operation __tds__SetAccessPolicy */
 int __tds__SetAccessPolicy(struct soap *soap, struct _tds__SetAccessPolicy *tds__SetAccessPolicy, struct _tds__SetAccessPolicyResponse *tds__SetAccessPolicyResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -601,250 +601,250 @@ int __tds__SetAccessPolicy(struct soap *soap, struct _tds__SetAccessPolicy *tds_
 
 /** Auto-test server operation __tds__CreateCertificate */
 int __tds__CreateCertificate(struct soap *soap, struct _tds__CreateCertificate *tds__CreateCertificate, struct _tds__CreateCertificateResponse *tds__CreateCertificateResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetCertificates */
 int __tds__GetCertificates(struct soap *soap, struct _tds__GetCertificates *tds__GetCertificates, struct _tds__GetCertificatesResponse *tds__GetCertificatesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetCertificatesStatus */
 int __tds__GetCertificatesStatus(struct soap *soap, struct _tds__GetCertificatesStatus *tds__GetCertificatesStatus, struct _tds__GetCertificatesStatusResponse *tds__GetCertificatesStatusResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetCertificatesStatus */
 int __tds__SetCertificatesStatus(struct soap *soap, struct _tds__SetCertificatesStatus *tds__SetCertificatesStatus, struct _tds__SetCertificatesStatusResponse *tds__SetCertificatesStatusResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__DeleteCertificates */
 int __tds__DeleteCertificates(struct soap *soap, struct _tds__DeleteCertificates *tds__DeleteCertificates, struct _tds__DeleteCertificatesResponse *tds__DeleteCertificatesResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetPkcs10Request */
 int __tds__GetPkcs10Request(struct soap *soap, struct _tds__GetPkcs10Request *tds__GetPkcs10Request, struct _tds__GetPkcs10RequestResponse *tds__GetPkcs10RequestResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__LoadCertificates */
 int __tds__LoadCertificates(struct soap *soap, struct _tds__LoadCertificates *tds__LoadCertificates, struct _tds__LoadCertificatesResponse *tds__LoadCertificatesResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetClientCertificateMode */
 int __tds__GetClientCertificateMode(struct soap *soap, struct _tds__GetClientCertificateMode *tds__GetClientCertificateMode, struct _tds__GetClientCertificateModeResponse *tds__GetClientCertificateModeResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetClientCertificateMode */
 int __tds__SetClientCertificateMode(struct soap *soap, struct _tds__SetClientCertificateMode *tds__SetClientCertificateMode, struct _tds__SetClientCertificateModeResponse *tds__SetClientCertificateModeResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetRelayOutputs */
 int __tds__GetRelayOutputs(struct soap *soap, struct _tds__GetRelayOutputs *tds__GetRelayOutputs, struct _tds__GetRelayOutputsResponse *tds__GetRelayOutputsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetRelayOutputSettings */
 int __tds__SetRelayOutputSettings(struct soap *soap, struct _tds__SetRelayOutputSettings *tds__SetRelayOutputSettings, struct _tds__SetRelayOutputSettingsResponse *tds__SetRelayOutputSettingsResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetRelayOutputState */
 int __tds__SetRelayOutputState(struct soap *soap, struct _tds__SetRelayOutputState *tds__SetRelayOutputState, struct _tds__SetRelayOutputStateResponse *tds__SetRelayOutputStateResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SendAuxiliaryCommand */
 int __tds__SendAuxiliaryCommand(struct soap *soap, struct _tds__SendAuxiliaryCommand *tds__SendAuxiliaryCommand, struct _tds__SendAuxiliaryCommandResponse *tds__SendAuxiliaryCommandResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetCACertificates */
 int __tds__GetCACertificates(struct soap *soap, struct _tds__GetCACertificates *tds__GetCACertificates, struct _tds__GetCACertificatesResponse *tds__GetCACertificatesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__LoadCertificateWithPrivateKey */
 int __tds__LoadCertificateWithPrivateKey(struct soap *soap, struct _tds__LoadCertificateWithPrivateKey *tds__LoadCertificateWithPrivateKey, struct _tds__LoadCertificateWithPrivateKeyResponse *tds__LoadCertificateWithPrivateKeyResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetCertificateInformation */
 int __tds__GetCertificateInformation(struct soap *soap, struct _tds__GetCertificateInformation *tds__GetCertificateInformation, struct _tds__GetCertificateInformationResponse *tds__GetCertificateInformationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__LoadCACertificates */
 int __tds__LoadCACertificates(struct soap *soap, struct _tds__LoadCACertificates *tds__LoadCACertificates, struct _tds__LoadCACertificatesResponse *tds__LoadCACertificatesResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__CreateDot1XConfiguration */
 int __tds__CreateDot1XConfiguration(struct soap *soap, struct _tds__CreateDot1XConfiguration *tds__CreateDot1XConfiguration, struct _tds__CreateDot1XConfigurationResponse *tds__CreateDot1XConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__SetDot1XConfiguration */
 int __tds__SetDot1XConfiguration(struct soap *soap, struct _tds__SetDot1XConfiguration *tds__SetDot1XConfiguration, struct _tds__SetDot1XConfigurationResponse *tds__SetDot1XConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetDot1XConfiguration */
 int __tds__GetDot1XConfiguration(struct soap *soap, struct _tds__GetDot1XConfiguration *tds__GetDot1XConfiguration, struct _tds__GetDot1XConfigurationResponse *tds__GetDot1XConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetDot1XConfigurations */
 int __tds__GetDot1XConfigurations(struct soap *soap, struct _tds__GetDot1XConfigurations *tds__GetDot1XConfigurations, struct _tds__GetDot1XConfigurationsResponse *tds__GetDot1XConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__DeleteDot1XConfiguration */
 int __tds__DeleteDot1XConfiguration(struct soap *soap, struct _tds__DeleteDot1XConfiguration *tds__DeleteDot1XConfiguration, struct _tds__DeleteDot1XConfigurationResponse *tds__DeleteDot1XConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetDot11Capabilities */
 int __tds__GetDot11Capabilities(struct soap *soap, struct _tds__GetDot11Capabilities *tds__GetDot11Capabilities, struct _tds__GetDot11CapabilitiesResponse *tds__GetDot11CapabilitiesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetDot11Status */
 int __tds__GetDot11Status(struct soap *soap, struct _tds__GetDot11Status *tds__GetDot11Status, struct _tds__GetDot11StatusResponse *tds__GetDot11StatusResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__ScanAvailableDot11Networks */
 int __tds__ScanAvailableDot11Networks(struct soap *soap, struct _tds__ScanAvailableDot11Networks *tds__ScanAvailableDot11Networks, struct _tds__ScanAvailableDot11NetworksResponse *tds__ScanAvailableDot11NetworksResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__GetSystemUris */
 int __tds__GetSystemUris(struct soap *soap, struct _tds__GetSystemUris *tds__GetSystemUris, struct _tds__GetSystemUrisResponse *tds__GetSystemUrisResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__StartFirmwareUpgrade */
 int __tds__StartFirmwareUpgrade(struct soap *soap, struct _tds__StartFirmwareUpgrade *tds__StartFirmwareUpgrade, struct _tds__StartFirmwareUpgradeResponse *tds__StartFirmwareUpgradeResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __tds__StartSystemRestore */
 int __tds__StartSystemRestore(struct soap *soap, struct _tds__StartSystemRestore *tds__StartSystemRestore, struct _tds__StartSystemRestoreResponse *tds__StartSystemRestoreResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __timg__GetServiceCapabilities */
 int __timg__GetServiceCapabilities(struct soap *soap, struct _timg__GetServiceCapabilities *timg__GetServiceCapabilities, struct _timg__GetServiceCapabilitiesResponse *timg__GetServiceCapabilitiesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -852,9 +852,9 @@ int __timg__GetServiceCapabilities(struct soap *soap, struct _timg__GetServiceCa
 #if 0
 /** Auto-test server operation __timg__GetImagingSettings */
 int __timg__GetImagingSettings(struct soap *soap, struct _timg__GetImagingSettings *timg__GetImagingSettings, struct _timg__GetImagingSettingsResponse *timg__GetImagingSettingsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -863,8 +863,8 @@ int __timg__GetImagingSettings(struct soap *soap, struct _timg__GetImagingSettin
 #if 0
 /** Auto-test server operation __timg__SetImagingSettings */
 int __timg__SetImagingSettings(struct soap *soap, struct _timg__SetImagingSettings *timg__SetImagingSettings, struct _timg__SetImagingSettingsResponse *timg__SetImagingSettingsResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -873,9 +873,9 @@ int __timg__SetImagingSettings(struct soap *soap, struct _timg__SetImagingSettin
 #if 0
 /** Auto-test server operation __timg__GetOptions */
 int __timg__GetOptions(struct soap *soap, struct _timg__GetOptions *timg__GetOptions, struct _timg__GetOptionsResponse *timg__GetOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -884,8 +884,8 @@ int __timg__GetOptions(struct soap *soap, struct _timg__GetOptions *timg__GetOpt
 #if 0
 /** Auto-test server operation __timg__Move */
 int __timg__Move(struct soap *soap, struct _timg__Move *timg__Move, struct _timg__MoveResponse *timg__MoveResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -894,8 +894,8 @@ int __timg__Move(struct soap *soap, struct _timg__Move *timg__Move, struct _timg
 #if 0
 /** Auto-test server operation __timg__Stop */
 int __timg__Stop(struct soap *soap, struct _timg__Stop *timg__Stop, struct _timg__StopResponse *timg__StopResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -904,9 +904,9 @@ int __timg__Stop(struct soap *soap, struct _timg__Stop *timg__Stop, struct _timg
 #if 0
 /** Auto-test server operation __timg__GetStatus */
 int __timg__GetStatus(struct soap *soap, struct _timg__GetStatus *timg__GetStatus, struct _timg__GetStatusResponse *timg__GetStatusResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -915,29 +915,31 @@ int __timg__GetStatus(struct soap *soap, struct _timg__GetStatus *timg__GetStatu
 #if 0
 /** Auto-test server operation __timg__GetMoveOptions */
 int __timg__GetMoveOptions(struct soap *soap, struct _timg__GetMoveOptions *timg__GetMoveOptions, struct _timg__GetMoveOptionsResponse *timg__GetMoveOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
 
 
+#if 0
 /** Auto-test server operation __trt__GetServiceCapabilities */
 int __trt__GetServiceCapabilities(struct soap *soap, struct _trt__GetServiceCapabilities *trt__GetServiceCapabilities, struct _trt__GetServiceCapabilitiesResponse *trt__GetServiceCapabilitiesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 #if 0
 /** Auto-test server operation __trt__GetVideoSources */
 int __trt__GetVideoSources(struct soap *soap, struct _trt__GetVideoSources *trt__GetVideoSources, struct _trt__GetVideoSourcesResponse *trt__GetVideoSourcesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -945,27 +947,27 @@ int __trt__GetVideoSources(struct soap *soap, struct _trt__GetVideoSources *trt_
 
 /** Auto-test server operation __trt__GetAudioSources */
 int __trt__GetAudioSources(struct soap *soap, struct _trt__GetAudioSources *trt__GetAudioSources, struct _trt__GetAudioSourcesResponse *trt__GetAudioSourcesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioOutputs */
 int __trt__GetAudioOutputs(struct soap *soap, struct _trt__GetAudioOutputs *trt__GetAudioOutputs, struct _trt__GetAudioOutputsResponse *trt__GetAudioOutputsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__CreateProfile */
 int __trt__CreateProfile(struct soap *soap, struct _trt__CreateProfile *trt__CreateProfile, struct _trt__CreateProfileResponse *trt__CreateProfileResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -973,9 +975,9 @@ int __trt__CreateProfile(struct soap *soap, struct _trt__CreateProfile *trt__Cre
 #if 0
 /** Auto-test server operation __trt__GetProfile */
 int __trt__GetProfile(struct soap *soap, struct _trt__GetProfile *trt__GetProfile, struct _trt__GetProfileResponse *trt__GetProfileResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -984,514 +986,530 @@ int __trt__GetProfile(struct soap *soap, struct _trt__GetProfile *trt__GetProfil
 #if 0
 /** Auto-test server operation __trt__GetProfiles */
 int __trt__GetProfiles(struct soap *soap, struct _trt__GetProfiles *trt__GetProfiles, struct _trt__GetProfilesResponse *trt__GetProfilesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
 
 
+#if 0
 /** Auto-test server operation __trt__AddVideoEncoderConfiguration */
 int __trt__AddVideoEncoderConfiguration(struct soap *soap, struct _trt__AddVideoEncoderConfiguration *trt__AddVideoEncoderConfiguration, struct _trt__AddVideoEncoderConfigurationResponse *trt__AddVideoEncoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__AddVideoSourceConfiguration */
 int __trt__AddVideoSourceConfiguration(struct soap *soap, struct _trt__AddVideoSourceConfiguration *trt__AddVideoSourceConfiguration, struct _trt__AddVideoSourceConfigurationResponse *trt__AddVideoSourceConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddAudioEncoderConfiguration */
 int __trt__AddAudioEncoderConfiguration(struct soap *soap, struct _trt__AddAudioEncoderConfiguration *trt__AddAudioEncoderConfiguration, struct _trt__AddAudioEncoderConfigurationResponse *trt__AddAudioEncoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddAudioSourceConfiguration */
 int __trt__AddAudioSourceConfiguration(struct soap *soap, struct _trt__AddAudioSourceConfiguration *trt__AddAudioSourceConfiguration, struct _trt__AddAudioSourceConfigurationResponse *trt__AddAudioSourceConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddPTZConfiguration */
 int __trt__AddPTZConfiguration(struct soap *soap, struct _trt__AddPTZConfiguration *trt__AddPTZConfiguration, struct _trt__AddPTZConfigurationResponse *trt__AddPTZConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddVideoAnalyticsConfiguration */
 int __trt__AddVideoAnalyticsConfiguration(struct soap *soap, struct _trt__AddVideoAnalyticsConfiguration *trt__AddVideoAnalyticsConfiguration, struct _trt__AddVideoAnalyticsConfigurationResponse *trt__AddVideoAnalyticsConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddMetadataConfiguration */
 int __trt__AddMetadataConfiguration(struct soap *soap, struct _trt__AddMetadataConfiguration *trt__AddMetadataConfiguration, struct _trt__AddMetadataConfigurationResponse *trt__AddMetadataConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddAudioOutputConfiguration */
 int __trt__AddAudioOutputConfiguration(struct soap *soap, struct _trt__AddAudioOutputConfiguration *trt__AddAudioOutputConfiguration, struct _trt__AddAudioOutputConfigurationResponse *trt__AddAudioOutputConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__AddAudioDecoderConfiguration */
 int __trt__AddAudioDecoderConfiguration(struct soap *soap, struct _trt__AddAudioDecoderConfiguration *trt__AddAudioDecoderConfiguration, struct _trt__AddAudioDecoderConfigurationResponse *trt__AddAudioDecoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
+#if 0
 /** Auto-test server operation __trt__RemoveVideoEncoderConfiguration */
 int __trt__RemoveVideoEncoderConfiguration(struct soap *soap, struct _trt__RemoveVideoEncoderConfiguration *trt__RemoveVideoEncoderConfiguration, struct _trt__RemoveVideoEncoderConfigurationResponse *trt__RemoveVideoEncoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__RemoveVideoSourceConfiguration */
 int __trt__RemoveVideoSourceConfiguration(struct soap *soap, struct _trt__RemoveVideoSourceConfiguration *trt__RemoveVideoSourceConfiguration, struct _trt__RemoveVideoSourceConfigurationResponse *trt__RemoveVideoSourceConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemoveAudioEncoderConfiguration */
 int __trt__RemoveAudioEncoderConfiguration(struct soap *soap, struct _trt__RemoveAudioEncoderConfiguration *trt__RemoveAudioEncoderConfiguration, struct _trt__RemoveAudioEncoderConfigurationResponse *trt__RemoveAudioEncoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemoveAudioSourceConfiguration */
 int __trt__RemoveAudioSourceConfiguration(struct soap *soap, struct _trt__RemoveAudioSourceConfiguration *trt__RemoveAudioSourceConfiguration, struct _trt__RemoveAudioSourceConfigurationResponse *trt__RemoveAudioSourceConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemovePTZConfiguration */
 int __trt__RemovePTZConfiguration(struct soap *soap, struct _trt__RemovePTZConfiguration *trt__RemovePTZConfiguration, struct _trt__RemovePTZConfigurationResponse *trt__RemovePTZConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemoveVideoAnalyticsConfiguration */
 int __trt__RemoveVideoAnalyticsConfiguration(struct soap *soap, struct _trt__RemoveVideoAnalyticsConfiguration *trt__RemoveVideoAnalyticsConfiguration, struct _trt__RemoveVideoAnalyticsConfigurationResponse *trt__RemoveVideoAnalyticsConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemoveMetadataConfiguration */
 int __trt__RemoveMetadataConfiguration(struct soap *soap, struct _trt__RemoveMetadataConfiguration *trt__RemoveMetadataConfiguration, struct _trt__RemoveMetadataConfigurationResponse *trt__RemoveMetadataConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemoveAudioOutputConfiguration */
 int __trt__RemoveAudioOutputConfiguration(struct soap *soap, struct _trt__RemoveAudioOutputConfiguration *trt__RemoveAudioOutputConfiguration, struct _trt__RemoveAudioOutputConfigurationResponse *trt__RemoveAudioOutputConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__RemoveAudioDecoderConfiguration */
 int __trt__RemoveAudioDecoderConfiguration(struct soap *soap, struct _trt__RemoveAudioDecoderConfiguration *trt__RemoveAudioDecoderConfiguration, struct _trt__RemoveAudioDecoderConfigurationResponse *trt__RemoveAudioDecoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__DeleteProfile */
 int __trt__DeleteProfile(struct soap *soap, struct _trt__DeleteProfile *trt__DeleteProfile, struct _trt__DeleteProfileResponse *trt__DeleteProfileResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
+#if 0
 /** Auto-test server operation __trt__GetVideoSourceConfigurations */
 int __trt__GetVideoSourceConfigurations(struct soap *soap, struct _trt__GetVideoSourceConfigurations *trt__GetVideoSourceConfigurations, struct _trt__GetVideoSourceConfigurationsResponse *trt__GetVideoSourceConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
+#if 0
 /** Auto-test server operation __trt__GetVideoEncoderConfigurations */
 int __trt__GetVideoEncoderConfigurations(struct soap *soap, struct _trt__GetVideoEncoderConfigurations *trt__GetVideoEncoderConfigurations, struct _trt__GetVideoEncoderConfigurationsResponse *trt__GetVideoEncoderConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__GetAudioSourceConfigurations */
 int __trt__GetAudioSourceConfigurations(struct soap *soap, struct _trt__GetAudioSourceConfigurations *trt__GetAudioSourceConfigurations, struct _trt__GetAudioSourceConfigurationsResponse *trt__GetAudioSourceConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioEncoderConfigurations */
 int __trt__GetAudioEncoderConfigurations(struct soap *soap, struct _trt__GetAudioEncoderConfigurations *trt__GetAudioEncoderConfigurations, struct _trt__GetAudioEncoderConfigurationsResponse *trt__GetAudioEncoderConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetVideoAnalyticsConfigurations */
 int __trt__GetVideoAnalyticsConfigurations(struct soap *soap, struct _trt__GetVideoAnalyticsConfigurations *trt__GetVideoAnalyticsConfigurations, struct _trt__GetVideoAnalyticsConfigurationsResponse *trt__GetVideoAnalyticsConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetMetadataConfigurations */
 int __trt__GetMetadataConfigurations(struct soap *soap, struct _trt__GetMetadataConfigurations *trt__GetMetadataConfigurations, struct _trt__GetMetadataConfigurationsResponse *trt__GetMetadataConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioOutputConfigurations */
 int __trt__GetAudioOutputConfigurations(struct soap *soap, struct _trt__GetAudioOutputConfigurations *trt__GetAudioOutputConfigurations, struct _trt__GetAudioOutputConfigurationsResponse *trt__GetAudioOutputConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioDecoderConfigurations */
 int __trt__GetAudioDecoderConfigurations(struct soap *soap, struct _trt__GetAudioDecoderConfigurations *trt__GetAudioDecoderConfigurations, struct _trt__GetAudioDecoderConfigurationsResponse *trt__GetAudioDecoderConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetVideoSourceConfiguration */
 int __trt__GetVideoSourceConfiguration(struct soap *soap, struct _trt__GetVideoSourceConfiguration *trt__GetVideoSourceConfiguration, struct _trt__GetVideoSourceConfigurationResponse *trt__GetVideoSourceConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
+#if 0
 /** Auto-test server operation __trt__GetVideoEncoderConfiguration */
 int __trt__GetVideoEncoderConfiguration(struct soap *soap, struct _trt__GetVideoEncoderConfiguration *trt__GetVideoEncoderConfiguration, struct _trt__GetVideoEncoderConfigurationResponse *trt__GetVideoEncoderConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__GetAudioSourceConfiguration */
 int __trt__GetAudioSourceConfiguration(struct soap *soap, struct _trt__GetAudioSourceConfiguration *trt__GetAudioSourceConfiguration, struct _trt__GetAudioSourceConfigurationResponse *trt__GetAudioSourceConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioEncoderConfiguration */
 int __trt__GetAudioEncoderConfiguration(struct soap *soap, struct _trt__GetAudioEncoderConfiguration *trt__GetAudioEncoderConfiguration, struct _trt__GetAudioEncoderConfigurationResponse *trt__GetAudioEncoderConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetVideoAnalyticsConfiguration */
 int __trt__GetVideoAnalyticsConfiguration(struct soap *soap, struct _trt__GetVideoAnalyticsConfiguration *trt__GetVideoAnalyticsConfiguration, struct _trt__GetVideoAnalyticsConfigurationResponse *trt__GetVideoAnalyticsConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetMetadataConfiguration */
 int __trt__GetMetadataConfiguration(struct soap *soap, struct _trt__GetMetadataConfiguration *trt__GetMetadataConfiguration, struct _trt__GetMetadataConfigurationResponse *trt__GetMetadataConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioOutputConfiguration */
 int __trt__GetAudioOutputConfiguration(struct soap *soap, struct _trt__GetAudioOutputConfiguration *trt__GetAudioOutputConfiguration, struct _trt__GetAudioOutputConfigurationResponse *trt__GetAudioOutputConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioDecoderConfiguration */
 int __trt__GetAudioDecoderConfiguration(struct soap *soap, struct _trt__GetAudioDecoderConfiguration *trt__GetAudioDecoderConfiguration, struct _trt__GetAudioDecoderConfigurationResponse *trt__GetAudioDecoderConfigurationResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
+#if 0
 /** Auto-test server operation __trt__GetCompatibleVideoEncoderConfigurations */
 int __trt__GetCompatibleVideoEncoderConfigurations(struct soap *soap, struct _trt__GetCompatibleVideoEncoderConfigurations *trt__GetCompatibleVideoEncoderConfigurations, struct _trt__GetCompatibleVideoEncoderConfigurationsResponse *trt__GetCompatibleVideoEncoderConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__GetCompatibleVideoSourceConfigurations */
 int __trt__GetCompatibleVideoSourceConfigurations(struct soap *soap, struct _trt__GetCompatibleVideoSourceConfigurations *trt__GetCompatibleVideoSourceConfigurations, struct _trt__GetCompatibleVideoSourceConfigurationsResponse *trt__GetCompatibleVideoSourceConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetCompatibleAudioEncoderConfigurations */
 int __trt__GetCompatibleAudioEncoderConfigurations(struct soap *soap, struct _trt__GetCompatibleAudioEncoderConfigurations *trt__GetCompatibleAudioEncoderConfigurations, struct _trt__GetCompatibleAudioEncoderConfigurationsResponse *trt__GetCompatibleAudioEncoderConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetCompatibleAudioSourceConfigurations */
 int __trt__GetCompatibleAudioSourceConfigurations(struct soap *soap, struct _trt__GetCompatibleAudioSourceConfigurations *trt__GetCompatibleAudioSourceConfigurations, struct _trt__GetCompatibleAudioSourceConfigurationsResponse *trt__GetCompatibleAudioSourceConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetCompatibleVideoAnalyticsConfigurations */
 int __trt__GetCompatibleVideoAnalyticsConfigurations(struct soap *soap, struct _trt__GetCompatibleVideoAnalyticsConfigurations *trt__GetCompatibleVideoAnalyticsConfigurations, struct _trt__GetCompatibleVideoAnalyticsConfigurationsResponse *trt__GetCompatibleVideoAnalyticsConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetCompatibleMetadataConfigurations */
 int __trt__GetCompatibleMetadataConfigurations(struct soap *soap, struct _trt__GetCompatibleMetadataConfigurations *trt__GetCompatibleMetadataConfigurations, struct _trt__GetCompatibleMetadataConfigurationsResponse *trt__GetCompatibleMetadataConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetCompatibleAudioOutputConfigurations */
 int __trt__GetCompatibleAudioOutputConfigurations(struct soap *soap, struct _trt__GetCompatibleAudioOutputConfigurations *trt__GetCompatibleAudioOutputConfigurations, struct _trt__GetCompatibleAudioOutputConfigurationsResponse *trt__GetCompatibleAudioOutputConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetCompatibleAudioDecoderConfigurations */
 int __trt__GetCompatibleAudioDecoderConfigurations(struct soap *soap, struct _trt__GetCompatibleAudioDecoderConfigurations *trt__GetCompatibleAudioDecoderConfigurations, struct _trt__GetCompatibleAudioDecoderConfigurationsResponse *trt__GetCompatibleAudioDecoderConfigurationsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetVideoSourceConfiguration */
 int __trt__SetVideoSourceConfiguration(struct soap *soap, struct _trt__SetVideoSourceConfiguration *trt__SetVideoSourceConfiguration, struct _trt__SetVideoSourceConfigurationResponse *trt__SetVideoSourceConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
+#if 0
 /** Auto-test server operation __trt__SetVideoEncoderConfiguration */
 int __trt__SetVideoEncoderConfiguration(struct soap *soap, struct _trt__SetVideoEncoderConfiguration *trt__SetVideoEncoderConfiguration, struct _trt__SetVideoEncoderConfigurationResponse *trt__SetVideoEncoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__SetAudioSourceConfiguration */
 int __trt__SetAudioSourceConfiguration(struct soap *soap, struct _trt__SetAudioSourceConfiguration *trt__SetAudioSourceConfiguration, struct _trt__SetAudioSourceConfigurationResponse *trt__SetAudioSourceConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetAudioEncoderConfiguration */
 int __trt__SetAudioEncoderConfiguration(struct soap *soap, struct _trt__SetAudioEncoderConfiguration *trt__SetAudioEncoderConfiguration, struct _trt__SetAudioEncoderConfigurationResponse *trt__SetAudioEncoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetVideoAnalyticsConfiguration */
 int __trt__SetVideoAnalyticsConfiguration(struct soap *soap, struct _trt__SetVideoAnalyticsConfiguration *trt__SetVideoAnalyticsConfiguration, struct _trt__SetVideoAnalyticsConfigurationResponse *trt__SetVideoAnalyticsConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetMetadataConfiguration */
 int __trt__SetMetadataConfiguration(struct soap *soap, struct _trt__SetMetadataConfiguration *trt__SetMetadataConfiguration, struct _trt__SetMetadataConfigurationResponse *trt__SetMetadataConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetAudioOutputConfiguration */
 int __trt__SetAudioOutputConfiguration(struct soap *soap, struct _trt__SetAudioOutputConfiguration *trt__SetAudioOutputConfiguration, struct _trt__SetAudioOutputConfigurationResponse *trt__SetAudioOutputConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetAudioDecoderConfiguration */
 int __trt__SetAudioDecoderConfiguration(struct soap *soap, struct _trt__SetAudioDecoderConfiguration *trt__SetAudioDecoderConfiguration, struct _trt__SetAudioDecoderConfigurationResponse *trt__SetAudioDecoderConfigurationResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetVideoSourceConfigurationOptions */
 int __trt__GetVideoSourceConfigurationOptions(struct soap *soap, struct _trt__GetVideoSourceConfigurationOptions *trt__GetVideoSourceConfigurationOptions, struct _trt__GetVideoSourceConfigurationOptionsResponse *trt__GetVideoSourceConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
+#if 0
 /** Auto-test server operation __trt__GetVideoEncoderConfigurationOptions */
 int __trt__GetVideoEncoderConfigurationOptions(struct soap *soap, struct _trt__GetVideoEncoderConfigurationOptions *trt__GetVideoEncoderConfigurationOptions, struct _trt__GetVideoEncoderConfigurationOptionsResponse *trt__GetVideoEncoderConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
+#endif
 
 
 /** Auto-test server operation __trt__GetAudioSourceConfigurationOptions */
 int __trt__GetAudioSourceConfigurationOptions(struct soap *soap, struct _trt__GetAudioSourceConfigurationOptions *trt__GetAudioSourceConfigurationOptions, struct _trt__GetAudioSourceConfigurationOptionsResponse *trt__GetAudioSourceConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioEncoderConfigurationOptions */
 int __trt__GetAudioEncoderConfigurationOptions(struct soap *soap, struct _trt__GetAudioEncoderConfigurationOptions *trt__GetAudioEncoderConfigurationOptions, struct _trt__GetAudioEncoderConfigurationOptionsResponse *trt__GetAudioEncoderConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetMetadataConfigurationOptions */
 int __trt__GetMetadataConfigurationOptions(struct soap *soap, struct _trt__GetMetadataConfigurationOptions *trt__GetMetadataConfigurationOptions, struct _trt__GetMetadataConfigurationOptionsResponse *trt__GetMetadataConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioOutputConfigurationOptions */
 int __trt__GetAudioOutputConfigurationOptions(struct soap *soap, struct _trt__GetAudioOutputConfigurationOptions *trt__GetAudioOutputConfigurationOptions, struct _trt__GetAudioOutputConfigurationOptionsResponse *trt__GetAudioOutputConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetAudioDecoderConfigurationOptions */
 int __trt__GetAudioDecoderConfigurationOptions(struct soap *soap, struct _trt__GetAudioDecoderConfigurationOptions *trt__GetAudioDecoderConfigurationOptions, struct _trt__GetAudioDecoderConfigurationOptionsResponse *trt__GetAudioDecoderConfigurationOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetGuaranteedNumberOfVideoEncoderInstances */
 int __trt__GetGuaranteedNumberOfVideoEncoderInstances(struct soap *soap, struct _trt__GetGuaranteedNumberOfVideoEncoderInstances *trt__GetGuaranteedNumberOfVideoEncoderInstances, struct _trt__GetGuaranteedNumberOfVideoEncoderInstancesResponse *trt__GetGuaranteedNumberOfVideoEncoderInstancesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
@@ -1499,9 +1517,9 @@ int __trt__GetGuaranteedNumberOfVideoEncoderInstances(struct soap *soap, struct 
 #if 0
 /** Auto-test server operation __trt__GetStreamUri */
 int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetStreamUri, struct _trt__GetStreamUriResponse *trt__GetStreamUriResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 #endif
@@ -1509,104 +1527,104 @@ int __trt__GetStreamUri(struct soap *soap, struct _trt__GetStreamUri *trt__GetSt
 
 /** Auto-test server operation __trt__StartMulticastStreaming */
 int __trt__StartMulticastStreaming(struct soap *soap, struct _trt__StartMulticastStreaming *trt__StartMulticastStreaming, struct _trt__StartMulticastStreamingResponse *trt__StartMulticastStreamingResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__StopMulticastStreaming */
 int __trt__StopMulticastStreaming(struct soap *soap, struct _trt__StopMulticastStreaming *trt__StopMulticastStreaming, struct _trt__StopMulticastStreamingResponse *trt__StopMulticastStreamingResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetSynchronizationPoint */
 int __trt__SetSynchronizationPoint(struct soap *soap, struct _trt__SetSynchronizationPoint *trt__SetSynchronizationPoint, struct _trt__SetSynchronizationPointResponse *trt__SetSynchronizationPointResponse)
-{	
-	DBG_LINE;
+{
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetSnapshotUri */
 int __trt__GetSnapshotUri(struct soap *soap, struct _trt__GetSnapshotUri *trt__GetSnapshotUri, struct _trt__GetSnapshotUriResponse *trt__GetSnapshotUriResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetVideoSourceModes */
 int __trt__GetVideoSourceModes(struct soap *soap, struct _trt__GetVideoSourceModes *trt__GetVideoSourceModes, struct _trt__GetVideoSourceModesResponse *trt__GetVideoSourceModesResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetVideoSourceMode */
 int __trt__SetVideoSourceMode(struct soap *soap, struct _trt__SetVideoSourceMode *trt__SetVideoSourceMode, struct _trt__SetVideoSourceModeResponse *trt__SetVideoSourceModeResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetOSDs */
 int __trt__GetOSDs(struct soap *soap, struct _trt__GetOSDs *trt__GetOSDs, struct _trt__GetOSDsResponse *trt__GetOSDsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetOSD */
 int __trt__GetOSD(struct soap *soap, struct _trt__GetOSD *trt__GetOSD, struct _trt__GetOSDResponse *trt__GetOSDResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__GetOSDOptions */
 int __trt__GetOSDOptions(struct soap *soap, struct _trt__GetOSDOptions *trt__GetOSDOptions, struct _trt__GetOSDOptionsResponse *trt__GetOSDOptionsResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__SetOSD */
 int __trt__SetOSD(struct soap *soap, struct _trt__SetOSD *trt__SetOSD, struct _trt__SetOSDResponse *trt__SetOSDResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__CreateOSD */
 int __trt__CreateOSD(struct soap *soap, struct _trt__CreateOSD *trt__CreateOSD, struct _trt__CreateOSDResponse *trt__CreateOSDResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }
 
 
 /** Auto-test server operation __trt__DeleteOSD */
 int __trt__DeleteOSD(struct soap *soap, struct _trt__DeleteOSD *trt__DeleteOSD, struct _trt__DeleteOSDResponse *trt__DeleteOSDResponse)
-{	
+{
 	/* Return incomplete response with default data values */
-	DBG_LINE;
+	ONVIF_DBG("\n");
 	return SOAP_OK;
 }

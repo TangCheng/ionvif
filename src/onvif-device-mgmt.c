@@ -218,8 +218,6 @@ int __tds__GetCapabilities(struct soap* soap,
 	struct _tds__GetCapabilitiesResponse *Response = tds__GetCapabilitiesResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
 
-	DBG_LINE;
-
 	SOAP_CALLOC_1(soap, Response->Capabilities);
 	SOAP_CALLOC_1(soap, Response->Capabilities->Imaging);
 	SOAP_CALLOC_1(soap, Response->Capabilities->Media);
@@ -355,7 +353,16 @@ int __tds__SetSystemFactoryDefault(struct soap *soap,
 		struct _tds__SetSystemFactoryDefault *tds__SetSystemFactoryDefault,
 		struct _tds__SetSystemFactoryDefaultResponse *tds__SetSystemFactoryDefaultResponse)
 {
-	ACCESS_CONTROL;
+    struct _tds__SetSystemFactoryDefault *Request = tds__SetSystemFactoryDefault;
+
+    ACCESS_CONTROL;
+
+    if (Request->FactoryDefault == tt__FactoryDefaultType__Hard) {
+        system("/apps/iconfig/hard-reset.sh");
+    }
+    else {
+        system("/apps/iconfig/soft-reset.sh");
+    }
 
 	return SOAP_OK;
 }
@@ -367,6 +374,8 @@ int __tds__SystemReboot(struct soap *soap,
 {
 	ACCESS_CONTROL;
 
+    system("reboot");
+
 	return SOAP_OK;
 }
 
@@ -374,14 +383,12 @@ int __tds__SystemReboot(struct soap *soap,
 int __tds__GetAccessPolicy(struct soap *soap, struct _tds__GetAccessPolicy *tds__GetAccessPolicy, struct _tds__GetAccessPolicyResponse *tds__GetAccessPolicyResponse)
 {
 	/* Return incomplete response with default data values */
-	DBG_LINE
 	return SOAP_OK;
 }
 
 
 int __tds__SetAccessPolicy(struct soap *soap, struct _tds__SetAccessPolicy *tds__SetAccessPolicy, struct _tds__SetAccessPolicyResponse *tds__SetAccessPolicyResponse)
 {
-	DBG_LINE
 	return SOAP_OK;
 }
 
