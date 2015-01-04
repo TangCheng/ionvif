@@ -242,7 +242,10 @@ int __trt__GetStreamUri(struct soap *soap,
 		}
 		json_node_free(response);
 	}
-	g_object_unref(builder);
+    else {
+        ipaddr = ipcam_ionvif_get_int_property(ionvif, "network:address:ipaddr");
+    }
+    g_object_unref(builder);
 
 	if (asprintf(&key, "video:%s:stream_path", trt__GetStreamUri->ProfileToken) > 0) {
 		path = (char *)ipcam_ionvif_get_string_property(ionvif, key);

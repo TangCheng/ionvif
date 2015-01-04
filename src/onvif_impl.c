@@ -26,7 +26,7 @@ gboolean onvif_invocate_action(IpcamIOnvif *ionvif, const char *action,
 
 	ret = ipcam_base_app_wait_response(IPCAM_BASE_APP(ionvif),
 	                                   ipcam_request_message_get_id(req_msg),
-	                                   5000, &resp_msg);
+	                                   10000, &resp_msg);
 	if (ret)
 	{
 		JsonNode *resp_body;
