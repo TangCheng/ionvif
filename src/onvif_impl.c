@@ -84,8 +84,9 @@ static ONVIF_VIDEO_SOURCE_CONFIG __onvif_video_source_config[] = {
 static ONVIF_VIDEO_RESOLUTION __main_stream_resolutions_avail[] = {
     [0] = { .Width = 1600, .Height = 1200 },
     [1] = { .Width = 1920, .Height = 1080 },
-    [2] = { .Width = 1280, .Height = 720  },
-    [3] = { .Width = 704,  .Height = 576  }
+    [2] = { .Width = 1280, .Height = 960  },
+    [3] = { .Width = 1280, .Height = 720  },
+    [4] = { .Width = 704,  .Height = 576  }
 };
 
 static ONVIF_VIDEO_RESOLUTION __sub_stream_resolutions_avail[] = {
