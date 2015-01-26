@@ -119,6 +119,7 @@ void ipcam_ionvif_update_base_info_setting(IpcamIOnvif *ionvif, JsonNode *body)
 			g_free(key);
 		}
 	}
+	g_list_free(members);
 }
 
 static void base_info_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
