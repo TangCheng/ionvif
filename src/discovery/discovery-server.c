@@ -27,6 +27,7 @@
 
 #include "ipcam-ionvif-discovery.h"
 
+#define DBG_PRINT(x...)
 
 /*WS-Discovery specialization address and port of UDP*/
 #define ONVIF_MULTICAST_GROUP ("239.255.255.250")  
@@ -97,34 +98,34 @@ gpointer onvif_discovery_server_thread_func(gpointer data)
 
 
 SOAP_FMAC5 int SOAP_FMAC6 SOAP_ENV__Fault(struct soap* soap, char *faultcode, char *faultstring, char *faultactor, struct SOAP_ENV__Detail *detail, struct SOAP_ENV__Code *SOAP_ENV__Code, struct SOAP_ENV__Reason *SOAP_ENV__Reason, char *SOAP_ENV__Node, char *SOAP_ENV__Role, struct SOAP_ENV__Detail *SOAP_ENV__Detail) {
-	printf("%s,%d\n",__FUNCTION__, __LINE__);
+	DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 	return 0;
 }
 
 
 SOAP_FMAC5 int SOAP_FMAC6 __tdn__Hello(struct soap* soap, struct wsdd__HelloType tdn__Hello, struct wsdd__ResolveType *tdn__HelloResponse) {
-	printf("%s,%d\n",__FUNCTION__, __LINE__);
+	DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 	return 0;
 }
 
 SOAP_FMAC5 int SOAP_FMAC6 __tdn__Bye(struct soap* soap, struct wsdd__ByeType tdn__Bye, struct wsdd__ResolveType *tdn__ByeResponse) {
-	printf("%s,%d\n",__FUNCTION__, __LINE__);
+	DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 	return 0;
 }
 
 SOAP_FMAC5 int SOAP_FMAC6 __tdn__Probe(struct soap* soap, struct wsdd__ProbeType tdn__Probe, struct wsdd__ProbeMatchesType *tdn__ProbeResponse) {
-	printf("%s,%d\n",__FUNCTION__, __LINE__);
+	DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 	return 0;
 }
 
 void wsdd_event_Hello(struct soap *soap, unsigned int InstanceId, const char *SequenceId, unsigned int MessageNumber, const char *MessageID, const char *RelatesTo, const char *EndpointReference, const char *Types, const char *Scopes, const char *MatchBy, const char *XAddrs, unsigned int MetadataVersion)
 {
-    printf("%s,%d\n",__FUNCTION__, __LINE__);
+    DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 }
  
 void wsdd_event_Bye(struct soap *soap, unsigned int InstanceId, const char *SequenceId, unsigned int MessageNumber, const char *MessageID, const char *RelatesTo, const char *EndpointReference, const char *Types, const char *Scopes, const char *MatchBy, const char *XAddrs, unsigned int *MetadataVersion)
 {
-    printf("%s,%d\n",__FUNCTION__, __LINE__);
+    DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 }
 
 static gboolean
@@ -245,13 +246,13 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
     g_assert(IPCAM_IS_IONVIF_DISCOVERY(ionvif_discovery));
 
 #if 0
-	printf("%s,%d\n", __FUNCTION__, __LINE__);
-	printf("MessageID:%s\n", MessageID);
-	printf("ReplyTo:%s\n", ReplyTo);
-	printf("Types:%s\n", Types);
-	printf("Scopes:%s\n", Scopes);
-	printf("MatchBy:%s\n", MatchBy);
-	printf("\n");
+	DBG_PRINT("%s,%d\n", __FUNCTION__, __LINE__);
+	DBG_PRINT("MessageID:%s\n", MessageID);
+	DBG_PRINT("ReplyTo:%s\n", ReplyTo);
+	DBG_PRINT("Types:%s\n", Types);
+	DBG_PRINT("Scopes:%s\n", Scopes);
+	DBG_PRINT("MatchBy:%s\n", MatchBy);
+	DBG_PRINT("\n");
 #endif
 
 	soap->header->wsa__RelatesTo = (struct wsa__Relationship*) soap_malloc(
@@ -303,16 +304,16 @@ soap_wsdd_mode wsdd_event_Probe(struct soap *soap, const char *MessageID,
  
 void wsdd_event_ProbeMatches(struct soap *soap, unsigned int InstanceId, const char *SequenceId, unsigned int MessageNumber, const char *MessageID, const char *RelatesTo, struct wsdd__ProbeMatchesType *matches)
 {
-    printf("%s,%d\n",__FUNCTION__, __LINE__);
+    DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 }
 
 soap_wsdd_mode wsdd_event_Resolve(struct soap *soap, const char *MessageID, const char *ReplyTo, const char *EndpointReference, struct wsdd__ResolveMatchType *match)
 {
-    printf("%s,%d\n",__FUNCTION__, __LINE__);
+    DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
     return 0;
 }
  
 void wsdd_event_ResolveMatches(struct soap *soap, unsigned int InstanceId, const char *SequenceId, unsigned int MessageNumber, const char *MessageID, const char *RelatesTo, struct wsdd__ResolveMatchType *match)
 {
-    printf("%s,%d\n",__FUNCTION__, __LINE__);
+    DBG_PRINT("%s,%d\n",__FUNCTION__, __LINE__);
 }

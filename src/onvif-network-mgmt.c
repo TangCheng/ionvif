@@ -313,14 +313,13 @@ int __tds__GetNetworkInterfaces(struct soap *soap, struct _tds__GetNetworkInterf
 		dhcp = g_str_equal(network_method, "dhcp");
 		addr_obj = json_object_get_object_member(items_obj, "address");
 		if (addr_obj) {
+            hwaddr = json_object_get_string_member(addr_obj, "hwaddr");
 			ipaddr = json_object_get_string_member(addr_obj, "ipaddr");
 			netmask = json_object_get_string_member(addr_obj, "netmask");
 		}
 		json_node_free(response);
 	}
 	g_object_unref(builder);
-
-	hwaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:hwaddr");
 
     Response->__sizeNetworkInterfaces = 1;
     SOAP_CALLOC(soap, Response->NetworkInterfaces, 1);
