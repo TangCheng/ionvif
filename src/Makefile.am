@@ -56,19 +56,21 @@ ionvif_SOURCES = \
 ionvif_DEPENDENCIES = \
 	onvif-generated.h
 
+ionvif_CFLAGS = -I$(GSOAP_DIR)
+
+ionvif_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS)
+
 if ENABLE_OPENSSL
 ionvif_SOURCES += \
 	$(GSOAP_DIR)/plugin/mecevp.c \
 	$(GSOAP_DIR)/plugin/smdevp.c \
 	$(GSOAP_DIR)/plugin/wsseapi.c \
 	$(GSOAP_DIR)/plugin/wsaapi.c
-endif
-
-ionvif_CFLAGS = -I$(GSOAP_DIR)
-
+ionvif_CFLAGS += -DWITH_OPENSSL
+ionvif_LDFLAGS = -L$(top_builddir)/gsoap-2.8/gsoap -lgsoapssl
+else
 ionvif_LDFLAGS = -L$(top_builddir)/gsoap-2.8/gsoap -lgsoap
-
-ionvif_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS)
+endif
 
 WSDL2H = $(GSOAP_DIR)/bin/wsdl2h
 SOAPCPP2 = $(GSOAP_DIR)/bin/soapcpp2

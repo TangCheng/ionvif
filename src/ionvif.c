@@ -39,6 +39,7 @@ struct _IpcamIOnvifPrivate
 	GThread *service_thread;
 	gboolean terminating;
 
+	GHashTable *cached_users_hash;
 	GHashTable *cached_property_hash;
 	GMutex mutex;
 };
@@ -69,6 +70,9 @@ ipcam_ionvif_init (IpcamIOnvif *ipcam_ionvif)
 	ipcam_ionvif->priv->cached_property_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
 	                                                                 config_key_destroy_func,
 	                                                                 config_value_destroy_func);
+	ipcam_ionvif->priv->cached_users_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+																  config_key_destroy_func,
+																  config_value_destroy_func);
 	g_mutex_init(&ipcam_ionvif->priv->mutex);
 }
 
@@ -81,6 +85,7 @@ ipcam_ionvif_finalize (GObject *object)
 	priv->terminating = TRUE;
 	g_thread_join(priv->service_thread);
 	g_hash_table_destroy(priv->cached_property_hash);
+	g_hash_table_destroy(priv->cached_users_hash);
 	g_mutex_clear(&priv->mutex);
 
 	G_OBJECT_CLASS (ipcam_ionvif_parent_class)->finalize (object);
@@ -312,6 +317,64 @@ static void video_message_handler(GObject *obj, IpcamMessage *msg, gboolean time
 	}
 }
 
+void ipcam_ionvif_update_users(IpcamIOnvif *ionvif, JsonNode *body)
+{
+	IpcamIOnvifPrivate *priv = ionvif->priv;
+	JsonArray *items = json_object_get_array_member(json_node_get_object(body), "items");
+	int i;
+
+	g_mutex_lock(&priv->mutex);
+	for (i = 0; i < json_array_get_length(items); i++) {
+		JsonObject *obj = json_array_get_object_element(items, i);
+		const gchar *username = json_object_get_string_member(obj, "username");
+		const gchar *password = json_object_get_string_member(obj, "password");
+
+		if (username && password) {
+			g_hash_table_replace(priv->cached_users_hash, 
+								 g_strdup(username),
+								 g_strdup(password));
+		}
+	}
+	g_mutex_unlock(&priv->mutex);
+}
+
+void ipcam_ionvif_delete_users(IpcamIOnvif *ionvif, JsonNode *body)
+{
+    IpcamIOnvifPrivate *priv = ionvif->priv;
+    JsonArray *item_arr;
+    JsonObject *obj;
+    int i;
+
+    item_arr = json_object_get_array_member(json_node_get_object(body), "items");
+
+	g_mutex_lock(&priv->mutex);
+    for (i = 0; i < json_array_get_length (item_arr); i++) {
+        char *username;
+
+        obj = json_array_get_object_element (item_arr, i);
+        username = json_object_get_string_member(obj, "username");
+
+		if (username)
+			g_hash_table_remove(priv->cached_users_hash, username);
+	}
+	g_mutex_unlock(&priv->mutex);
+}
+
+static void users_message_handler(GObject *obj, IpcamMessage *msg, gboolean timeout)
+{
+	IpcamIOnvif *ionvif = IPCAM_IONVIF(obj);
+	g_assert(IPCAM_IS_IONVIF(ionvif));
+	IpcamIOnvifPrivate *priv = ionvif->priv;
+
+	if (!timeout && msg) {
+		JsonNode *body = NULL;
+		g_object_get(msg, "body", &body, NULL);
+		if (body) {
+			ipcam_ionvif_update_users(ionvif, body);
+		}
+	}
+}
+
 
 static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 {
@@ -328,6 +391,9 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_datetime", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_network", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_video", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "add_users", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "set_users", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
+	ipcam_base_app_register_notice_handler(IPCAM_BASE_APP(ionvif), "del_users", IPCAM_TYPE_IONVIF_EVENT_HANDLER);
 
 	/* Request the Base Information */
 	builder = json_builder_new();
@@ -416,6 +482,24 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                            video_message_handler, 5);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
+
+	/* Request the Video setting */
+	builder = json_builder_new();
+	json_builder_begin_object(builder);
+	json_builder_set_member_name(builder, "items");
+	json_builder_begin_array(builder);
+	json_builder_add_string_value(builder, "password");
+	json_builder_end_array(builder);
+	json_builder_end_object(builder);
+	req_msg = g_object_new(IPCAM_REQUEST_MESSAGE_TYPE,
+	                       "action", "get_users",
+	                       "body", json_builder_get_root(builder),
+	                       NULL);
+	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
+	                            "iconfig", token,
+	                            users_message_handler, 5);
+	g_object_unref(req_msg);
+	g_object_unref(builder);
 }
 
 static void ipcam_ionvif_in_loop(IpcamBaseService *base_service)
@@ -446,4 +530,16 @@ void ipcam_ionvif_set_property(IpcamIOnvif *ionvif, gchar *key, gpointer value)
 	g_mutex_lock(&priv->mutex);
 	g_hash_table_insert(priv->cached_property_hash, (gpointer)key, value);
 	g_mutex_unlock(&priv->mutex);
+}
+
+const gchar *ionvif_get_user_password(IpcamIOnvif *ionvif, const gchar *username)
+{
+	IpcamIOnvifPrivate *priv = ionvif->priv;
+	const gchar *ret = NULL;
+
+	g_mutex_lock(&priv->mutex);
+	ret = g_hash_table_lookup(priv->cached_users_hash, username);
+	g_mutex_unlock(&priv->mutex);
+
+	return ret;
 }

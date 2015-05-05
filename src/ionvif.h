@@ -83,6 +83,7 @@ static inline void ipcam_ionvif_set_int_property(IpcamIOnvif *ionvif, gchar *key
 void ipcam_ionvif_update_base_info_setting(IpcamIOnvif *ionvif, JsonNode *body);
 void ipcam_ionvif_update_network_setting(IpcamIOnvif *ionvif, JsonNode *body);
 void ipcam_ionvif_update_datetime_setting(IpcamIOnvif *ionvif, JsonNode *body);
+const gchar *ionvif_get_user_password(IpcamIOnvif *ionvif, const gchar *username);
 
 G_END_DECLS
 

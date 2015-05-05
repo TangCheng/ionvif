@@ -43,7 +43,11 @@ ionvif_discovery_SOURCES =  \
 
 ionvif_discovery_CFLAGS = -I$(GSOAP_DIR) 
 
+if ENABLE_OPENSSL
+ionvif_discovery_LDFLAGS = -L$(top_builddir)/gsoap-2.8/gsoap -lgsoapssl
+else
 ionvif_discovery_LDFLAGS = -L$(top_builddir)/gsoap-2.8/gsoap -lgsoap
+endif
 
 ionvif_discovery_LDADD = $(IONVIF_LIBS) $(OPENSSL_LIBS)
 

@@ -62,4 +62,10 @@ ipcam_ionvif_event_handler_run_impl(IpcamEventHandler *event_handler, IpcamMessa
         ipcam_ionvif_update_base_info_setting(ionvif, body);
     else if(g_strcmp0(event, "set_video") == 0)
         ipcam_ionvif_update_video_setting(ionvif, body);
+    else if(g_strcmp0(event, "add_users") == 0)
+        ipcam_ionvif_update_users(ionvif, body);
+    else if(g_strcmp0(event, "set_users") == 0)
+        ipcam_ionvif_update_users(ionvif, body);
+    else if(g_strcmp0(event, "del_users") == 0)
+        ipcam_ionvif_delete_users(ionvif, body);
 }

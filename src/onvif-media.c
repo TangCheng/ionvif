@@ -476,11 +476,11 @@ int __timg__GetOptions(struct soap *soap,
 	SOAP_CALLOC_1(soap, Response->ImagingOptions->Contrast);
 
 	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Brightness->Min, 0.0);
-	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Brightness->Max, 100.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Brightness->Max, 255.0);
 	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->ColorSaturation->Min, 0.0);
-	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->ColorSaturation->Max, 100.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->ColorSaturation->Max, 255.0);
 	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Contrast->Min, 0.0);
-	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Contrast->Max, 100.0);
+	SOAP_SET_VALUE_FIELD(soap, Response->ImagingOptions->Contrast->Max, 255.0);
 
 	return SOAP_OK;
 }
