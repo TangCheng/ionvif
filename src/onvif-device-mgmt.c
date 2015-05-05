@@ -217,6 +217,8 @@ int __tds__GetCapabilities(struct soap* soap,
 {
 	struct _tds__GetCapabilitiesResponse *Response = tds__GetCapabilitiesResponse;
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
+	char *xaddrs = NULL;
+	char *ipaddr = NULL;
 
 	SOAP_CALLOC_1(soap, Response->Capabilities);
 	SOAP_CALLOC_1(soap, Response->Capabilities->Imaging);
@@ -232,8 +234,10 @@ int __tds__GetCapabilities(struct soap* soap,
 	SOAP_CALLOC_1(soap, Response->Capabilities->Device->System->SupportedVersions);
 
 
-	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Imaging->XAddr, ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr"));
-	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Media->XAddr, ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr"));
+	ipaddr = ipcam_ionvif_get_string_property(ionvif, "network:address:ipaddr");
+	asprintf(&xaddrs, "http://%s/onvif/device_service", ipaddr);
+	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Imaging->XAddr, xaddrs);
+	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Media->XAddr, xaddrs);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTPMulticast[0], xsd__boolean__false_);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP[0], xsd__boolean__true_);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP[0], xsd__boolean__true_);
@@ -241,6 +245,9 @@ int __tds__GetCapabilities(struct soap* soap,
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Device->System->FirmwareUpgrade, xsd__boolean__true_);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Device->System->SupportedVersions->Major, 2);
 	SOAP_SET_VALUE_FIELD(soap, Response->Capabilities->Device->System->SupportedVersions->Minor, 0);
+	SOAP_SET_STRING_FIELD(soap, Response->Capabilities->Device->XAddr, xaddrs);
+
+	g_free(xaddrs);
 
 	return SOAP_OK;
 }
