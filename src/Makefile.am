@@ -94,7 +94,7 @@ GSOAP_IMPORT = \
 	-I$(GSOAP_DIR)/import
 
 $(BUILT_SOURCES): onvif-generated.h $(SOAPCPP2)
-	$(SOAPCPP2) -c -L -x -w -a -S $(top_srcdir)/src/onvif.h -I. $(GSOAP_IMPORT)
+	$(SOAPCPP2) -2 -c -L -x -w -a -S $(top_srcdir)/src/onvif.h -I. $(GSOAP_IMPORT)
 
 CLEANFILES = onvif-generated.h $(BUILT_SOURCES) $(NSMAP_FILES)
 

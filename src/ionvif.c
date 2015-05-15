@@ -326,11 +326,11 @@ void ipcam_ionvif_update_users(IpcamIOnvif *ionvif, JsonNode *body)
 	g_mutex_lock(&priv->mutex);
 	for (i = 0; i < json_array_get_length(items); i++) {
 		JsonObject *obj = json_array_get_object_element(items, i);
-		const gchar *username = json_object_get_string_member(obj, "username");
-		const gchar *password = json_object_get_string_member(obj, "password");
+		gchar *username = json_object_get_string_member(obj, "username");
+		gchar *password = json_object_get_string_member(obj, "password");
 
 		if (username && password) {
-			g_hash_table_replace(priv->cached_users_hash, 
+			g_hash_table_insert(priv->cached_users_hash, 
 								 g_strdup(username),
 								 g_strdup(password));
 		}
@@ -532,13 +532,13 @@ void ipcam_ionvif_set_property(IpcamIOnvif *ionvif, gchar *key, gpointer value)
 	g_mutex_unlock(&priv->mutex);
 }
 
-const gchar *ionvif_get_user_password(IpcamIOnvif *ionvif, const gchar *username)
+gboolean ionvif_get_user_password(IpcamIOnvif *ionvif, const gchar *username, gchar **password)
 {
 	IpcamIOnvifPrivate *priv = ionvif->priv;
-	const gchar *ret = NULL;
+	gboolean ret = FALSE;
 
 	g_mutex_lock(&priv->mutex);
-	ret = g_hash_table_lookup(priv->cached_users_hash, username);
+	ret = g_hash_table_lookup_extended(priv->cached_users_hash, username, NULL, password);
 	g_mutex_unlock(&priv->mutex);
 
 	return ret;

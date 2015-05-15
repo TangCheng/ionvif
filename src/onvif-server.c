@@ -120,7 +120,9 @@ gpointer onvif_server_thread_func(gpointer data)
 			break;
 		}
 		if (soap_serve(&soap) != SOAP_OK) {
+#ifdef DEBUG
 			soap_print_fault(&soap, stderr);
+#endif
 		}
 		soap_destroy(&soap);
 		soap_end(&soap);

@@ -27,19 +27,18 @@ int onvif_access_control(struct soap* soap)
 {
 #ifdef WITH_OPENSSL
 	IpcamIOnvif *ionvif = (IpcamIOnvif *)soap->user;
-	const char *username = soap_wsse_get_Username(soap);
-	const char *password;
+	gchar *username = soap_wsse_get_Username(soap);
+	gchar *password = NULL;
 
 	if (!username)
 		return soap->error; // no username: return FailedAuthentication
 
-	password = ionvif_get_user_password(ionvif, username); // lookup password of username
-	if (password) {
+	if (ionvif_get_user_password(ionvif, username, &password)) {
 		if (soap_wsse_verify_Password(soap, password))
 			return soap->error; // password verification failed: return FailedAuthentic
 	}
 	else
-		return SOAP_PLUGIN_ERROR;
+		return soap_wsse_fault(soap, wsse__FailedAuthentication, NULL);
 #endif
 
 	return SOAP_OK;
