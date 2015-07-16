@@ -19,6 +19,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ifaddrs.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
 #include <glib-object.h>
 #include <request_message.h>
 #include "soapStub.h"
@@ -68,14 +71,38 @@ gpointer onvif_discovery_server_thread_func(gpointer data)
 	}
 
     /* optionally join a multicast group */
-	if (ONVIF_MULTICAST_GROUP) { 
-		struct ip_mreq mreq;
-		mreq.imr_multiaddr.s_addr = inet_addr(ONVIF_MULTICAST_GROUP);
-		mreq.imr_interface.s_addr = htonl(INADDR_ANY);
-		if (setsockopt(soap.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
-			perror("setsockopt failed:");
-			exit(-1);
-		}
+	if (ONVIF_MULTICAST_GROUP) {
+        struct ifaddrs *ifaddr, *ifa;
+        if (getifaddrs(&ifaddr) == -1) {
+            perror("getifaddrs");
+            exit(-1);
+        }
+        for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+            if (ifa->ifa_addr == NULL)
+                continue;
+            int family = ifa->ifa_addr->sa_family;
+            if ((family == AF_PACKET) && (ifa->ifa_flags & IFF_MULTICAST)) {
+                struct ifreq ifr;
+                struct ip_mreqn mreqn;
+
+                strncpy(ifr.ifr_name, ifa->ifa_name, IFNAMSIZ);
+                if (ioctl(soap.socket, SIOCGIFINDEX, &ifr)) {
+                    perror("ioctl");
+                    continue;
+                }
+                mreqn.imr_multiaddr.s_addr = inet_addr(ONVIF_MULTICAST_GROUP);
+                mreqn.imr_address.s_addr = htonl(INADDR_ANY);
+                mreqn.imr_ifindex = ifr.ifr_ifindex;
+                if (setsockopt(soap.socket, IPPROTO_IP,
+                               IP_ADD_MEMBERSHIP,
+                               &mreqn, sizeof(mreqn)) < 0) {
+                    perror("setsockopt failed:");
+                    continue;
+                }
+                printf("Add %s to multicast group\n", ifa->ifa_name);
+            }
+        }
+        freeifaddrs(ifaddr);
 	}
 
     for (;;) {
