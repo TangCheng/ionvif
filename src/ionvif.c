@@ -416,7 +416,7 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                       NULL);
 	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
 	                            "iconfig", token,
-	                            base_info_message_handler, 5);
+	                            base_info_message_handler, 60);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
 
@@ -437,7 +437,7 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                       NULL);
 	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
 	                            "iconfig", token,
-	                            network_message_handler, 5);
+	                            network_message_handler, 60);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
 
@@ -457,7 +457,7 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                       NULL);
 	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
 	                            "iconfig", token,
-	                            datetime_message_handler, 5);
+	                            datetime_message_handler, 60);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
 
@@ -479,7 +479,7 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                       NULL);
 	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
 	                            "iconfig", token,
-	                            video_message_handler, 5);
+	                            video_message_handler, 60);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
 
@@ -497,7 +497,7 @@ static void ipcam_ionvif_before_start(IpcamBaseService *base_service)
 	                       NULL);
 	ipcam_base_app_send_message(IPCAM_BASE_APP(ionvif), IPCAM_MESSAGE(req_msg),
 	                            "iconfig", token,
-	                            users_message_handler, 5);
+	                            users_message_handler, 60);
 	g_object_unref(req_msg);
 	g_object_unref(builder);
 }
